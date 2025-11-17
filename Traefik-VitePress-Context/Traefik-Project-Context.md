@@ -257,9 +257,7 @@ https://traefik.example.com
 
 ## 🚀 Deploying a Site (Manual Flow)
 
-**Repository**: <https://github.com/joshphillipssr/joshphillipssr.com>
-
-Future plan: Change name of repo to "VitePress Template"
+**Repository**: <https://github.com/joshphillipssr/VitePress-Template>
 
 ### bootstrap_site_on_host.sh (run as deploy — requires limited sudo privileges granted during host_prep1.sh)
 
