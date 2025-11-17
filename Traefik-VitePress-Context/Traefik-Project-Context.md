@@ -31,19 +31,21 @@ Purpose: install & manage Traefik + helper scripts + automation.
 Cloned into `/opt/traefik`.  
 Scripts live at `/opt/traefik/scripts`:
 
-- host_prep1.sh
-- host_prep2.sh
+- host_prep1.sh (or host_prep_root.sh)
+- host_prep2.sh (or host_prep_deploy.sh)
 - create_network.sh
 - traefik_up.sh
-- deploy_site.sh
+- deploy_site.sh (see note below on naming)
 - update_site.sh
 - remove_site.sh
 - hooks_provision.sh
 - cleanup.sh
 
-### **2. joshphillipssr.com Repository**
+**Note:** The script for initial site deployment may be named `deploy_site.sh` in the Traefik-Deployment repository. Site-specific deployment scripts from VitePress-Template (located in `/opt/sites/<SITE_NAME>/scripts/`) are named `deploy_to_host.sh`. Both handle site deployment but from different contexts.
 
-Purpose: the actual site (VitePress), its Dockerfile, GitHub actions, and its own scripts:
+### **2. VitePress-Template Repository**
+
+Purpose: the actual site (VitePress), its Dockerfile, GitHub actions, and its own scripts. This repository was renamed from joshphillipssr.com to VitePress-Template to reflect its function as a generic template.
 
 - `.github/workflows/build-and-push.yml` → builds/pushes Docker image to GHCR
 - `/scripts/deploy_to_host.sh`
@@ -52,7 +54,7 @@ Purpose: the actual site (VitePress), its Dockerfile, GitHub actions, and its ow
 - Dockerfile
 - All VitePress content
 
-Future plan is to make this competely generic (change repo name from joshphillipssr.com to VitaPress Template). This is a public repo template on GitHub, so the name change will reflect the function.
+This is a public repo template on GitHub, designed to be cloned and customized for any VitePress-based site.
 
 ---
 
@@ -147,16 +149,18 @@ Additional variables may be added over time, but all configuration MUST live ins
 
 ## 🧰 Host Prep Flow (Two Scripts)
 
-### **host_prep1.sh** (run as root)
+**Note on Script Naming:** These scripts may be named `host_prep1.sh` and `host_prep2.sh` or `host_prep_root.sh` and `host_prep_deploy.sh` depending on the version of Traefik-Deployment. Both naming conventions refer to the same two-phase setup process described below.
+
+### **host_prep1.sh** (also known as host_prep_root.sh) — run as root
 
 - installs Docker Engine + Compose
 - creates deploy user + sudoers restrictions
-- creates /opt/treafik and /opt/sites
-- gives deploy user full rights to /opt/treafik and /opt/sites
+- creates /opt/traefik and /opt/sites
+- gives deploy user full rights to /opt/traefik and /opt/sites
 - copies traefik.env.sample from online GitHub repo to ~deploy/traefik.env
 - instructs operator to switch to deploy
 
-### **host_prep2.sh** (run as deploy)
+### **host_prep2.sh** (also known as host_prep_deploy.sh) — run as deploy
 
 - sources ~/traefik.env
 - clones Traefik-Deployment repo into /opt/traefik
@@ -190,7 +194,7 @@ traefik.http.routers.<site>.tls.certresolver=cf
 traefik.http.services.<site>.loadbalancer.server.port=80
 ```
 
-These labels are generated automatically by **/opt/traefik/deploy_site.sh**.
+These labels are generated automatically by the deployment script (**/opt/traefik/scripts/deploy_site.sh** or via the site's `/opt/sites/<SITE_NAME>/scripts/deploy_to_host.sh`).
 
 ---
 
@@ -289,7 +293,7 @@ SITE_HOSTS="example.com www.example.com"
 SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 ```
 
-This project no longer embeds site‑specific assumptions. joshphillipssr.com is simply an example VitePress site and the template is intended to work for any number of similar containerized sites.
+This project no longer embeds site‑specific assumptions. VitePress-Template is a fully generic template intended to work for any number of similar containerized sites.
 
 ---
 
@@ -457,9 +461,9 @@ After receiving this summary in a new chat session, ChatGPT should:
 
 ---
 
-## Future Repo Renaming
+## Repository Naming Convention
 
-The joshphillipssr.com repository is evolving into a generic VitePress site template.  
-No documentation or scripts should depend on its name or hostname. All site‑specific  
+The VitePress-Template repository (formerly joshphillipssr.com) is now a fully generic VitePress site template.  
+No documentation or scripts should depend on specific site names or hostnames. All site‑specific  
 configuration (e.g., local hostnames) belongs only in environment variables or per‑site  
 deployment parameters.
