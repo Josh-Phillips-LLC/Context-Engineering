@@ -44,7 +44,7 @@
 | Variable | Purpose | Status | Notes |
 |----------|---------|--------|-------|
 | `SITE_NAME` | Unique identifier for the site container | ✅ Documented | Used as container name and in paths |
-| `SITE_HOSTS` | Space-separated list of hostnames | ✅ Documented | Example: "example.com www.example.com" |
+| `SITE_HOSTS` | Space-separated list of hostnames | ✅ Documented | Example: "example.com <www.example.com>" |
 | `SITE_IMAGE` | Full Docker image URL | ✅ Documented | Example: "ghcr.io/user/site:latest" |
 | `SITE_REPO` | Git repository URL for site content | ✅ Documented | Used during bootstrap |
 | `SITE_DIR` | Target directory for site files | ✅ Documented | Default: /opt/sites/<SITE_NAME> |
@@ -89,16 +89,19 @@
 ## Known Legacy References to Remove
 
 ### Repository Names
+
 - ❌ References to "joshphillipssr.com" as repo name
   - **Status:** ✅ Updated in documentation (Traefik-Project-Context.md)
   - **Action Required:** Verify scripts don't reference old repo name
   
 ### Hostnames
+
 - ❌ Any hardcoded domain names in scripts or configs
   - **Status:** ⏳ Pending script review
   - **Action Required:** Audit all scripts for domain names
 
 ### Paths
+
 - ❌ Any paths not based on `/opt/traefik` or `/opt/sites/<SITE_NAME>`
   - **Status:** ⏳ Pending verification
   - **Action Required:** Ensure all scripts use standard path structure

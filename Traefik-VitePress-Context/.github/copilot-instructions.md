@@ -64,6 +64,8 @@ All scripts must `source ~/traefik.env` or `/home/deploy/traefik.env` before usi
 - Creates `traefik_proxy` network via `create_network.sh`
 - Starts Traefik via `traefik_up.sh`
 
+**Critical**: Repository scripts are named `host_prep_root.sh` and `host_prep_deploy.sh`. Some documentation may reference legacy names `host_prep1.sh`/`host_prep2.sh`—these refer to the same scripts.
+
 This split ensures root does only privileged setup, `deploy` handles operations.
 
 ## Script Patterns & Conventions
@@ -266,11 +268,11 @@ sudo /opt/sites/<site>/scripts/cleanup.sh  # Per-site
 - **Cloudflare API token**: Minimal scope (Zone.DNS:Edit, Zone.Zone:Read only)
 - **Secrets**: Never in repos—only in `~deploy/traefik.env` (mode 0600)
 
-## Site Template Pattern (joshphillipssr.com → VitePress Template)
+## Site Template Pattern (VitePress-Template)
 
-**Current state**: The `joshphillipssr.com` repository is now renamed 'VitePress-Template' so that it is  **generic VitePress template**.
+**Current state**: The VitePress-Template repository (formerly `joshphillipssr.com`) is a **generic VitePress template** for creating new documentation/portfolio sites.
 
-**Design principle**: Template is completely generic—NOT tied to any specific domain or hostname.
+**Design principle**: Template is completely generic—NOT tied to any specific domain or hostname. Clone, customize content, deploy anywhere.
 
 ### Creating New Sites from Template
 
@@ -323,7 +325,8 @@ This scope ensures the project stays clear, maintainable, and focused.
 7. **Wrong event type**: Webhooks ONLY support `workflow_run` events, not `push` or `release`.
 8. **Package visibility**: GHCR packages default to private—must be set to Public for unauthenticated pulls.
 9. **Hardcoded hostnames**: Site templates must never contain hardcoded domains—use env vars.
-10. **Running host_prep2.sh as root**: Must run as `deploy` user after switching from root.
+10. **Running host_prep_deploy.sh as root**: Must run as `deploy` user after switching from root.
+11. **Script name confusion**: Actual scripts are `host_prep_root.sh` and `host_prep_deploy.sh`, not `host_prep1.sh`/`host_prep2.sh`.
 
 ## AI Agent Guidelines
 

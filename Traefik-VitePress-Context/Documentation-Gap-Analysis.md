@@ -9,7 +9,8 @@
 
 This analysis compares the two primary documentation files in this repository to ensure alignment. Traefik-Project-Context.md serves as "the truth" against which all other documentation should be validated.
 
-### Key Findings:
+### Key Findings
+
 1. **Script naming inconsistencies** - Different names used for host preparation scripts
 2. **Legacy repository references** - joshphillipssr.com references need updating
 3. **Missing script documentation** - deploy_site.sh mentioned in Context but not in Instructions
@@ -23,10 +24,12 @@ This analysis compares the two primary documentation files in this repository to
 ### Host Preparation Scripts
 
 **Traefik-Project-Context.md** uses:
+
 - `host_prep1.sh` (run as root)
 - `host_prep2.sh` (run as deploy)
 
 **copilot-instructions.md** uses:
+
 - `host_prep_root.sh` (run as root)
 - `host_prep_deploy.sh` (run as deploy)
 
@@ -39,6 +42,7 @@ This analysis compares the two primary documentation files in this repository to
 ### Missing Script: deploy_site.sh
 
 **Traefik-Project-Context.md** mentions `deploy_site.sh` in multiple places:
+
 - Line 38: Listed as a script in `/opt/traefik/scripts/`
 - Line 193: "These labels are generated automatically by **/opt/traefik/deploy_site.sh**"
 
@@ -55,6 +59,7 @@ This analysis compares the two primary documentation files in this repository to
 ### Legacy joshphillipssr.com References
 
 **Traefik-Project-Context.md** contains mixed references:
+
 - Line 44: "### **2. joshphillipssr.com Repository**"
 - Line 55: "Future plan is to make this competely generic (change repo name from joshphillipssr.com to VitaPress Template)"
 - Line 260: "**Repository**: <https://github.com/joshphillipssr/VitePress-Template>"
@@ -62,12 +67,14 @@ This analysis compares the two primary documentation files in this repository to
 - Line 462: "The joshphillipssr.com repository is evolving into a generic VitePress site template"
 
 **copilot-instructions.md** correctly states:
+
 - Line 269: "## Site Template Pattern (joshphillipssr.com → VitePress Template)"
 - Line 271: "**Current state**: The `joshphillipssr.com` repository is now renamed 'VitePress-Template'"
 
 **Issue:** Traefik-Project-Context.md still treats the rename as "future plan" when it has already happened.
 
 **Recommendation:** Update Traefik-Project-Context.md to reflect that:
+
 1. The repository HAS BEEN renamed to VitePress-Template
 2. Update section heading from "joshphillipssr.com Repository" to "VitePress-Template Repository"
 3. Use past tense: "was renamed" not "is evolving" or "future plan"
@@ -79,6 +86,7 @@ This analysis compares the two primary documentation files in this repository to
 ### Core Variables
 
 Both documents list the same core variables:
+
 - `CF_API_TOKEN`
 - `EMAIL`
 - `USE_STAGING`
@@ -92,6 +100,7 @@ Both documents list the same core variables:
 ### Deployment-Specific Variables
 
 **Traefik-Project-Context.md** shows examples:
+
 ```bash
 SITE_NAME="<your-site>"
 SITE_HOSTS="example.com www.example.com"
@@ -107,6 +116,7 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 **Issue:** Neither document explicitly states which environment variables must be in `traefik.env` vs. which are passed as arguments to scripts.
 
 **Recommendation:** Add a section clarifying:
+
 - Variables that MUST be in `~deploy/traefik.env` (host-level config)
 - Variables that are passed per-site during deployment
 - Variables that scripts derive or compute internally
@@ -115,8 +125,9 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 
 ## 4. Folder Structure Discrepancies
 
-### Traefik-Project-Context.md Structure (Lines 61-94):
-```
+### Traefik-Project-Context.md Structure (Lines 61-94)
+
+```text
 /opt/
   traefik/
     scripts/
@@ -136,8 +147,9 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
       yarn.lock
 ```
 
-### copilot-instructions.md Structure (Lines 21-31):
-```
+### copilot-instructions.md Structure (Lines 21-31)
+
+```text
 /opt/
   traefik/
     docker/docker-compose.yml     # Note: docker/ subdirectory
@@ -160,10 +172,12 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 ### Deployment Workflow Differences
 
 **Traefik-Project-Context.md** describes (Lines 258-280):
+
 1. `bootstrap_site_on_host.sh` - Clones the site repo
 2. `deploy_to_host.sh` - Generates docker-compose.yml, sets labels, starts container
 
 **copilot-instructions.md** describes (Lines 106-122):
+
 1. `bootstrap_site_on_host.sh` - Clones site repo, sets permissions
 2. `deploy_to_host.sh` - First deployment
 3. `update_site.sh` - Subsequent updates
@@ -175,10 +189,12 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 ### Webhook Provisioning
 
 **Traefik-Project-Context.md** (Line 367-370):
+
 - Briefly mentions `hooks_provision.sh`
 - Lists what it creates
 
 **copilot-instructions.md** (Lines 161-168):
+
 - More detailed explanation
 - Includes validation rules
 - Documents security model
@@ -189,19 +205,22 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 
 ## 6. Typos and Minor Issues
 
-### In Traefik-Project-Context.md:
+### In Traefik-Project-Context.md
+
 - Line 55: "competely" → should be "completely"
 - Line 55: "VitaPress" → should be "VitePress"
 - Line 154: "/opt/treafik" → should be "/opt/traefik"
 
-### In copilot-instructions.md:
+### In copilot-instructions.md
+
 - No significant typos identified
 
 ---
 
 ## 7. Architectural Consistency
 
-### Both documents correctly describe:
+### Both documents correctly describe
+
 - Traefik v3 usage
 - Single host, multi-container architecture
 - Docker network: `traefik_proxy`
@@ -216,7 +235,7 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 
 ## 8. Missing Elements
 
-### In Traefik-Project-Context.md (that should be added):
+### In Traefik-Project-Context.md (that should be added)
 
 1. **Script patterns and conventions** - copilot-instructions.md documents:
    - Path resolution patterns
@@ -228,7 +247,7 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 
 3. **Security model details** - copilot-instructions.md explicitly documents UID, permissions, and security boundaries
 
-### In copilot-instructions.md (that should be added):
+### In copilot-instructions.md (that should be added)
 
 1. **Development tasks outstanding** - Traefik-Project-Context.md has a section on pending work
 2. **What the system does NOT manage** - Important scope clarification
@@ -242,15 +261,18 @@ SITE_IMAGE="ghcr.io/youruser/yourimage:latest"
 
 Both documents mention that environment variables should be used instead of hardcoded values, but neither provides a complete migration plan for legacy code.
 
-**Traefik-Project-Context.md** states (Line 108):
+**Traefik-Project-Context.md** states (Line 108)
+
 > "This list is ever growing as env variables are moved from the scripts to traefik.env"
 
-**Issue:** No tracking of:
+**Issue:** No tracking of
+
 - Which scripts still have hardcoded values
 - Which environment variables are planned but not yet implemented
 - Migration progress or checklist
 
-**Recommendation:** Create a separate document or section tracking:
+**Recommendation:** Create a separate document or section tracking
+
 1. Scripts reviewed for hardcoded values
 2. Environment variables needed but not yet added
 3. Migration status for each script
@@ -265,6 +287,7 @@ Both documents mention that environment variables should be used instead of hard
 **Issue:** Neither this repository nor the mentioned external repositories are accessible to verify if Quick-Start.md exists or what it contains.
 
 **Recommendation:** Either:
+
 1. Include Quick-Start.md content in this repository as reference documentation
 2. Remove the reference if Quick-Start.md doesn't exist yet
 3. Create Quick-Start.md in the appropriate repositories
@@ -274,18 +297,21 @@ Both documents mention that environment variables should be used instead of hard
 ## Priority Recommendations
 
 ### High Priority (Affects Functionality)
+
 1. ✅ Resolve script naming: host_prep1/2.sh vs host_prep_root/deploy.sh
 2. ✅ Clarify deploy_site.sh vs deploy_to_host.sh
 3. ✅ Verify and document correct folder structure (docker/ subdirectory or not)
 4. ✅ Update all joshphillipssr.com references to VitePress-Template
 
-### Medium Priority (Affects Clarity)
+   ### Medium Priority (Affects Clarity)
+
 5. ⚠️ Standardize terminology between documents
 6. ⚠️ Create environment variable migration tracking
 7. ⚠️ Add missing sections to each document from the other
 8. ⚠️ Fix typos in Traefik-Project-Context.md
 
-### Low Priority (Nice to Have)
+   ### Low Priority (Nice to Have)
+
 9. 📝 Cross-reference between documents
 10. 📝 Add version/update tracking to documents
 11. 📝 Create Quick-Start.md or remove references to it
@@ -308,6 +334,7 @@ Both documents mention that environment variables should be used instead of hard
 This analysis was performed on the Context-Engineering repository only. The actual Traefik-Deployment and VitePress-Template repositories should be reviewed to verify which documentation is correct when discrepancies exist.
 
 Some inconsistencies may indicate:
+
 - Documentation drift as code evolved
 - Planned changes documented before implementation
 - Different purposes for the two documents (overview vs operational guide)
