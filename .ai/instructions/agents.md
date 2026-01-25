@@ -1,0 +1,21 @@
+# AI Agent Instructions
+
+- Repo purpose: central documentation and decision record for the Traefik + VitePress ecosystem; no code builds here, only authoritative context.
+- Start with Traefik-VitePress-Context/README.md for navigation; it links each document’s status and intended use.
+- Architecture authority: Traefik-VitePress-Context/Traefik-Project-Context.md (host layout, env vars, provisioning, deployment, webhooks, outstanding tasks).
+- Review snapshot: Traefik-VitePress-Context/Documentation-Review-Summary.md (what was reviewed, key issues, priorities).
+- Discrepancy log: Traefik-VitePress-Context/Documentation-Gap-Analysis.md (naming, paths, legacy domains).
+- Env var tracking: Traefik-VitePress-Context/Environment-Variables-Migration-Tracker.md (7 host vars, 5 site vars, script/config checklist).
+- Action plan: Traefik-VitePress-Context/Recommendations.md (prioritized fixes, success criteria, estimates).
+- General project origin: General/Initial Context.md for inception and goals.
+- Cross-repo scope: context here supports Traefik-Deployment (Traefik v3 host), VitePress-Template (site template), and future MCP control-plane work.
+- Always validate changes against the authoritative documents above before touching downstream repos.
+- Document updates: maintain hierarchy (Traefik-Project-Context is source of truth), sync related files together (Context, Recommendations, Gap Analysis, Migration Tracker).
+- Formatting: keep Markdown structure consistent; include **Status** lines and version headers (`Version`, `Last Updated`, `Author(s)`) on policy docs.
+- Referencing: link to evidence (files/lines) when logging gaps or changes; prefer path-based links over prose.
+- Content hygiene: never add secrets; use placeholders like example.com or <SITE_NAME>; avoid hardcoded values—show env-driven patterns.
+- Patterns to preserve from downstream scripts (documented in Traefik-Project-Context): set -euo pipefail, env sourcing from ~deploy/traefik.env, sudo re-exec for root-required steps, Traefik label conventions.
+- Known issues to watch: script naming (`host_prep1.sh` vs `host_prep_root.sh`), docker folder path discrepancies, deploy_site.sh vs deploy_to_host.sh clarity, legacy joshphillipssr.com references.
+- Feedback loop: if you discover a new gap, log it in Documentation-Gap-Analysis.md and adjust Recommendations.md; if variables change, update the migration tracker.
+- Scope discipline: MCP design changes must first update MCP-AI-Control-Plane/planning_canvas.md before downstream deployments change.
+- When directing other agents, point them to this file; keep .github/copilot-instructions.md as a pointer only.
