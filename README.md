@@ -103,9 +103,10 @@ Exact contents may evolve, but the separation of concerns should remain.
 
 This repository is private by design, but still follows strict rules:
 
-- **No secrets, tokens, or credentials** are stored here
-- Sensitivity is explicitly tiered (Public / Internal / Secret)
-- Only Public-tier artifacts are allowed to leave this repo
+- **No secrets or credentials** are stored here
+- Sensitivity is explicitly tiered: **Public, Internal, Secret**
+- Only Public artifacts are allowed to leave this repo
+- Secret (credentials, tokens, PII) is never committed
 - Assume anything copied into a code repo may become public
 
 ---

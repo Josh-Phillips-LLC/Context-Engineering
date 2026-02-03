@@ -14,8 +14,8 @@
 - Commit or PR expectations
 
 ## Safety & Publication
-- Allowed content (Tier 0 only)
-- Redaction rules
+- Allowed content: Public only
+- Redaction rules for Internal and Secret content
 
 ## TODO
 - Insert repo-specific constraints.
