@@ -1,0 +1,26 @@
+---
+name: Repo Publish Request (Plane B → Plane A)
+about: Promote curated artifacts to public-safe repos
+labels: ["publish-request"]
+---
+
+## Source (Plane B)
+- File(s):
+- Session/Canvas:
+
+## Destination (Plane A)
+- Repo:
+- Path(s):
+
+## Publishable Extract
+- Summary of what is safe to publish:
+
+## Redactions
+- What was removed:
+- Reason:
+
+## Definition of Done
+- 
+
+## Notes
+- 
