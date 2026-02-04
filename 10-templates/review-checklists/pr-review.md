@@ -7,6 +7,11 @@
 - [ ] Templates/checklists used instead of long prose where applicable
 - [ ] TODOs added where human judgment is required
 
+## Role Attribution Verification
+- [ ] Commit messages include role prefixes ([Copilot], [Codex], [CEO])
+- [ ] PR title or labels identify the primary actor
+- [ ] CEO approval comment exists when required (protected paths)
+
 ## Protected Changes Logic
 - [ ] If `canvas.md`, `context-flow.md`, or `00-os/` changed → CEO approval required
 - [ ] If Plane A/B boundary changes detected → CEO approval required

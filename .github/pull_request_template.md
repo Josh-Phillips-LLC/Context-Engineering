@@ -4,6 +4,11 @@
 # Issue
 - Linked issue:
 
+# Role Attribution
+- **Primary Actor:** (Copilot / Codex / CEO)
+- [ ] Commit messages include role prefixes ([Copilot], [Codex], [CEO])
+- [ ] CEO approval provided (required for protected paths)
+
 # Review Gate (Minimum)
 - [ ] No secrets, tokens, internal hostnames, or personal data
 - [ ] No new top-level folders without explicit instruction

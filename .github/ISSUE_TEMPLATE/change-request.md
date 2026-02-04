@@ -17,5 +17,9 @@ labels: ["change-request"]
 ## Definition of Done
 - 
 
+## Role Attribution
+- **Proposed Implementer:** (Copilot / Codex / Human)
+- **Expected Reviewer:** (Codex / CEO)
+
 ## Notes
 - 
