@@ -1,5 +1,3 @@
-
-
 # AI Context & Workspace Operating Model
 
 ## Purpose
@@ -26,7 +24,7 @@ The goal is to:
 - Maintains private operational knowledge
 - Prepares sanitized artifacts for publication
 
-### Reviewer / Merge Agent — Codex (optional)
+### Reviewer / Merge Agent — Codex
 - Reviews Copilot/agent pull requests for alignment with this operating model
 - Checks for security leaks, scope creep, and Plane A vs Plane B violations
 - Uses deterministic checklists (not “looks good” intuition)
@@ -104,13 +102,15 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
  - Provide a clear contract between agents and reviewers
 
 ### Default workflow
- 1. **Create an Issue** (CEO or Director) defining: objective, scope, constraints, and definition of done
- 2. **Implement on a branch** (agent or human) with focused commits
- 3. **Open a Pull Request** using templates and checklists
- 4. **Review**
+ 1. **Create an Issue** (CEO, Director, or Agent) defining: objective, scope, constraints, and definition of done
+ 2. **Implement on a branch** (agent or human) with focused commits and role-attributed commit messages
+ 3. **Open a Pull Request** using templates and checklists, including machine-readable PR metadata (see Role Attribution)
+ 4. **Apply PR labels** (agent or human) immediately after PR creation via `gh` to self-identify actor and set initial status
+ 5. **Review**
     - Codex reviews for compliance (structure, security, scope, Plane A/B boundaries)
+    - Reviewer updates PR labels to reflect outcome (approved / changes requested)
     - Director/CEO makes final call for sensitive changes
- 5. **Merge** (human merge for protected changes)
+ 6. **Merge** (human merge for protected changes; update status labels)
 
 ### Protected changes (require CEO approval)
  - `canvas.md` and `context-flow.md`
@@ -142,7 +142,11 @@ The goal is to make it immediately clear:
 
 ### Required attribution mechanisms
 
-At least **one** of the following must be used on every Issue and Pull Request; using multiple is encouraged for clarity.
+At least **two** of the following must be used on every Pull Request (and at least one on every Issue). Using more is encouraged for clarity.
+
+**Required for PRs:**
+- Machine-readable PR metadata (below)
+- GitHub labels (below)
 
 #### 1. Commit message prefixes (preferred)
 Use a clear prefix in commit messages:
@@ -158,26 +162,58 @@ Example:
 [CEO] approve protected-path changes
 ```
 
-#### 2. Pull Request titles
-PR titles should indicate primary actor where appropriate:
+#### 2. Machine-readable PR metadata (required)
+Every PR description must include the following fields (exact keys), so humans and automation can parse intent reliably:
 
-- `Copilot: Scaffold repo structure`
-- `Codex: Address PR review findings`
-- `CEO: Approve protected operating-model changes`
+- `Primary-Actor: Copilot|Codex|CEO`
+- `Reviewed-By: Codex|CEO|N/A`
+- `CEO-Approval: Required|Not-Required|Provided`
+
+These fields do not replace narrative description; they make attribution auditable.
 
 #### 3. GitHub labels (required for PRs)
-Use labels to make role and status visible at a glance.
+Labels make role and status visible at a glance and must be applied on every PR.
 
-Recommended labels:
-- `agent:copilot`
-- `agent:codex-review`
-- `role:CEO-approved`
+**Role labels (pick all that apply):**
+- `agent:copilot` — work primarily authored/scaffolded by Copilot
+- `agent:codex` — work primarily driven by Codex review/fixes
+- `role:CEO` — human-authored or human-directed changes by Josh
+
+**Optional:**
+- `role:CEO-approved` — use when a protected-path CEO approval comment exists (redundant but sometimes convenient)
+
+**Status labels (pick one current status):**
 - `status:needs-review`
-- `status:needs-CEO`
+- `status:changes-requested`
+- `status:approved`
+- `status:merged`
 
-Labels may be applied manually or suggested by agents in PR descriptions.
+**Rule:** Labels should be applied/updated by the actor (Copilot/Codex/CEO) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
 
-#### 4. Explicit PR comments for protected approval
+#### 4. Label application via `gh` (canonical commands)
+Agents may have access to a shell with `gh` configured under the CEO identity. When labeling is required, use these canonical commands:
+
+Apply initial labels after PR creation (example PR #3):
+```bash
+gh pr edit 3 --add-label "agent:copilot" --add-label "status:needs-review"
+```
+
+Update labels after Codex review (REQUEST CHANGES):
+```bash
+gh pr edit 3 --add-label "agent:codex" --add-label "status:changes-requested" --remove-label "status:needs-review"
+```
+
+Update labels after Codex review (APPROVE):
+```bash
+gh pr edit 3 --add-label "agent:codex" --add-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested"
+```
+
+On merge:
+```bash
+gh pr edit 3 --add-label "status:merged" --remove-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested"
+```
+
+#### 5. Explicit PR comments for protected approval
 Protected-path changes **must** include an explicit PR comment from the CEO.
 
 Example:
@@ -188,6 +224,7 @@ Example:
 - GitHub author identity is **not** used to infer role
 - Automated bot identities are optional and not required
 - Attribution must be human-readable and reviewable in the PR timeline
+- Long-term, prefer least-privilege tokens or GitHub automation for agent actions (labeling/commenting) even if they run under the CEO identity today
 
 **Rule:** If an auditor cannot tell *who did what and why* from the PR alone, attribution is insufficient.
 

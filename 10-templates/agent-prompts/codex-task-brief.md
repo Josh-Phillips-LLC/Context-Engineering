@@ -10,6 +10,7 @@
 
 ## Deterministic Checklist
 - [ ] Review gate (minimum) passed
+- [ ] Role attribution verified (commit prefixes, PR metadata, CEO approval if required)
 - [ ] Protected changes detected? If yes → escalate to CEO
 - [ ] Plane A/B boundaries preserved
 - [ ] Templates/checklists used where applicable
