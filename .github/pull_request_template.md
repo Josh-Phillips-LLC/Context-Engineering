@@ -4,9 +4,16 @@
 # Issue
 - Linked issue:
 
+# Machine-Readable Metadata (Required)
+Primary-Actor:
+Reviewed-By:
+CEO-Approval:
+
 # Role Attribution
 - **Primary Actor:** (Copilot / Codex / CEO)
 - [ ] Commit messages include role prefixes ([Copilot], [Codex], [CEO])
+- [ ] At least one role label applied (agent:copilot / agent:codex / role:CEO)
+- [ ] Exactly one status:* label applied
 - [ ] CEO approval provided (required for protected paths)
 
 # Review Gate (Minimum)

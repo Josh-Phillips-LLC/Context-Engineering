@@ -1,5 +1,10 @@
 # PR Review Checklist (Deterministic)
 
+## Blockers (Must Pass)
+- [ ] PR description includes all three exact metadata keys (Primary-Actor:, Reviewed-By:, CEO-Approval:)
+- [ ] At least one role label exists (agent:copilot / agent:codex / role:CEO)
+- [ ] Exactly one status:* label exists
+
 ## Review Gate (Minimum)
 - [ ] No secrets, tokens, internal hostnames, or personal data
 - [ ] No new top-level folders without explicit instruction
