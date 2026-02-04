@@ -170,9 +170,10 @@ gh pr edit <PR_NUMBER> --add-label "status:superseded"
 Delete remote branch:
 
 ```bash
-gh pr view <PR_NUMBER> --json headRefName --jq .headRefName
-# then
-gh api -X DELETE repos/:owner/:repo/git/refs/heads/<branch-name>
+BRANCH_NAME="$(gh pr view <PR_NUMBER> --json headRefName --jq .headRefName)"
+ENCODED_BRANCH_NAME="${BRANCH_NAME//\//%2F}"
+
+gh api -X DELETE "repos/:owner/:repo/git/refs/heads/${ENCODED_BRANCH_NAME}"
 ```
 
 ---
