@@ -1,14 +1,15 @@
 # Sensitivity Tiering
 
+**Note:** Named tiers are authoritative. Numeric labels are intentionally not used to avoid ambiguity.
+
 ## Tiers
-- **Tier 0 (Public)**: Safe for public repositories.
-- **Tier 1 (Internal)**: Non-sensitive but private context.
-- **Tier 2 (Sensitive)**: Operational details, strategy, or internal process.
-- **Tier 3 (Restricted)**: Credentials, PII, customer data (never store here).
+- **Public**: Safe for public repositories.
+- **Internal**: Private repo only. Non-sensitive operational context.
+- **Secret**: Never committed (keys, tokens, credentials, PII, customer data).
 
 ## Rules
-- Plane A: Tier 0 only.
-- Plane B: Tier 0–2 allowed; Tier 3 prohibited.
+- Plane A: Public only.
+- Plane B: Public and Internal allowed; Secret prohibited (never store here).
 - If classification is unclear, default to higher tier and add TODO.
 
 ## TODO
