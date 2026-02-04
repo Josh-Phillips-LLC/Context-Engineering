@@ -1,4 +1,8 @@
-# Codex PR Review Brief (Template)
+# Codex PR Review Checklist (Template)
+
+This file is a checklist + post-review enforcement actions for Codex.
+
+Canonical review brief and required PR Review Report format: `10-templates/codex-pr-review-brief.md` (source of truth: `canvas.md`).
 
 ## PR
 - Link:
