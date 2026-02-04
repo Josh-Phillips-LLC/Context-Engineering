@@ -31,5 +31,27 @@
 - [ ] Request changes (list blockers)
 - [ ] Escalate to CEO
 
+### Required Enforcement Actions (Post-Review)
+
+After issuing a PR review verdict, Codex must enforce PR state via GitHub labels.
+
+**If verdict = REQUEST CHANGES**
+- Apply label `agent:codex`
+- Apply label `status:changes-requested`
+- Remove label `status:needs-review` if present
+
+**If verdict = APPROVE**
+- Apply label `agent:codex`
+- Apply label `status:approved`
+- Remove labels `status:needs-review` and `status:changes-requested` if present
+
+**If PR touches protected paths and an explicit CEO approval comment exists**
+- Optionally apply label `role:CEO-approved`
+
+All label changes must be executed using `gh pr edit`.
+
+Codex must request permission before executing shell commands.
+Codex must not merge the PR.
+
 ## TODO
 - Add repo-specific gates (tests, lint, etc.).
