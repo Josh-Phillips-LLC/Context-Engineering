@@ -131,6 +131,68 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
 
 ---
 
+## Role Attribution & Auditability (Humans vs Agents)
+
+Because all GitHub actions are authenticated under the same human identity (`joshphillipssr`), **explicit role attribution is required** to preserve auditability and intent.
+
+The goal is to make it immediately clear:
+- Who performed the work (Human vs Copilot vs Codex)
+- Who reviewed it
+- Who approved protected changes
+
+### Required attribution mechanisms
+
+At least **one** of the following must be used on every Issue and Pull Request; using multiple is encouraged for clarity.
+
+#### 1. Commit message prefixes (preferred)
+Use a clear prefix in commit messages:
+
+- `[Copilot]` — work generated or scaffolded by Copilot
+- `[Codex]` — review-driven or corrective changes based on Codex analysis
+- `[CEO]` — human decisions, approvals, or direct edits by Josh
+
+Example:
+```
+[Copilot] scaffold Context-Engineering templates
+[Codex] fix tier naming inconsistencies
+[CEO] approve protected-path changes
+```
+
+#### 2. Pull Request titles
+PR titles should indicate primary actor where appropriate:
+
+- `Copilot: Scaffold repo structure`
+- `Codex: Address PR review findings`
+- `CEO: Approve protected operating-model changes`
+
+#### 3. GitHub labels (required for PRs)
+Use labels to make role and status visible at a glance.
+
+Recommended labels:
+- `agent:copilot`
+- `agent:codex-review`
+- `role:CEO-approved`
+- `status:needs-review`
+- `status:needs-CEO`
+
+Labels may be applied manually or suggested by agents in PR descriptions.
+
+#### 4. Explicit PR comments for protected approval
+Protected-path changes **must** include an explicit PR comment from the CEO.
+
+Example:
+> **CEO approval:**  
+> I approve this pull request, including changes under protected paths (`00-os/`), per the Change Management rules defined in `canvas.md`.
+
+### Non-goals
+- GitHub author identity is **not** used to infer role
+- Automated bot identities are optional and not required
+- Attribution must be human-readable and reviewable in the PR timeline
+
+**Rule:** If an auditor cannot tell *who did what and why* from the PR alone, attribution is insufficient.
+
+---
+
 ## Workspace Strategy
 
 - Prefer **small, purpose-based workspaces** (single repo or tightly related repos)
