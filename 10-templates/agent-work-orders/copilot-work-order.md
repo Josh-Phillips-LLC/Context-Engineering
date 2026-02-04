@@ -76,10 +76,10 @@ State the exact PR title and any required PR-body summary.
 - Do not merge the PR
 
 ### Branching (Required)
-Copilot must create a **fresh branch** from the latest `origin/main` for each Issue. **Do not reuse** existing branches.
+Copilot must create a fresh branch from the latest `origin/main` for each Issue. Do not reuse existing branches.
 
 Branch naming:
-- `chore/issue-<ISSUE_NUMBER>-<short-slug>` (example: `chore/issue-12-fresh-branch-rule`)
+- `chore/issue-<ISSUE_NUMBER>-<short-slug>` (example: `chore/issue-10-codex-label-enforcement`)
 
 Required commands (example):
 ```bash
