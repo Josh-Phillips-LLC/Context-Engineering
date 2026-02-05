@@ -1,0 +1,35 @@
+services:
+  agent-workstation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-workstation
+    volumes:
+      # Mount ALL repos
+      - ${PROJECTS_ROOT:-/Users/josh/Projects}:/workspace:cached
+
+      # Persist auth/config between rebuilds
+      - gh_config:/root/.config/gh
+      - git_config:/root/.config/git
+
+      # Optional: persist common caches (uncomment if you want)
+      # - npm_cache:/root/.npm
+      # - pip_cache:/root/.cache/pip
+
+    environment:
+      - GH_TOKEN=${GH_TOKEN}
+
+    # Testing-mode autonomy
+    cap_add:
+      - ALL
+    # If you later need "everything", flip this on:
+    # privileged: true
+
+    init: true
+    command: sleep infinity
+
+volumes:
+  gh_config:
+  git_config:
+  # npm_cache:
+  # pip_cache:
