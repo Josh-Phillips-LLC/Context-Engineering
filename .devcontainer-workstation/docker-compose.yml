@@ -11,6 +11,7 @@ services:
       # Persist auth/config between rebuilds
       - gh_config:/root/.config/gh
       - git_config:/root/.config/git
+      - codex_home:/root/.codex
 
       # Optional: persist common caches (uncomment if you want)
       # - npm_cache:/root/.npm
@@ -18,6 +19,8 @@ services:
 
     environment:
       - GH_TOKEN=${GH_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CODEX_HOME=/root/.codex
 
     # Testing-mode autonomy
     cap_add:
@@ -31,5 +34,6 @@ services:
 volumes:
   gh_config:
   git_config:
+  codex_home:
   # npm_cache:
   # pip_cache:

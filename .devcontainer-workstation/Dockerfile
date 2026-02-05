@@ -2,8 +2,11 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl ca-certificates openssh-client gnupg jq unzip \
+    nodejs npm \
     poppler-utils mupdf-tools \
   && rm -rf /var/lib/apt/lists/*
+
+RUN npm i -g @openai/codex
 
 
 # TODO: Candidate packages discovered by agents
