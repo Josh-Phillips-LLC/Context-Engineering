@@ -135,6 +135,19 @@ Do not bundle unrelated work.
 
 ---
 
+## Required Post-Review Action
+
+After producing the PR Review Report above, you **must** post it as a comment on the pull request.
+
+Use the `gh` CLI to post the report:
+```bash
+gh pr comment <PR_NUMBER> --body-file <path-to-review-report.md>
+```
+
+This is a normative requirement per `canvas.md`.
+
+---
+
 ## Hard rules
 
 - Do **not** suggest changing `canvas.md` unless a contradiction or ambiguity is unavoidable.

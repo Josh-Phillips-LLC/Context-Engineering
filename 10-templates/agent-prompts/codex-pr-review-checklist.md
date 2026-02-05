@@ -37,7 +37,13 @@ Canonical review brief and required PR Review Report format: `10-templates/codex
 
 ### Required Enforcement Actions (Post-Review)
 
-After issuing a PR review verdict, Codex must enforce PR state via GitHub labels.
+After issuing a PR review verdict, Codex must enforce PR state via GitHub labels **and post the PR Review Report as a comment**.
+
+**Required: Post PR Review Report**
+- Post the full PR Review Report as a PR comment using:
+  ```bash
+  gh pr comment <PR_NUMBER> --body-file <path-to-review-report.md>
+  ```
 
 **If verdict = REQUEST CHANGES**
 - Apply label `agent:codex`

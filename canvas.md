@@ -29,6 +29,7 @@ The goal is to:
 - Checks for security leaks, scope creep, and Plane A vs Plane B violations
 - Uses deterministic checklists (not “looks good” intuition)
 - Recommends approve / request changes; does not merge protected changes without CEO sign-off
+- Posts the PR Review Report as a comment on every PR it reviews (required artifact)
 
 ### Agents — Copilot / Codex / Continue / Others
 - Execute tasks using provided context
@@ -108,6 +109,7 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
  4. **Apply PR labels** (agent or human) immediately after PR creation via `gh` to self-identify actor and set initial status
  5. **Review**
     - Codex reviews for compliance (structure, security, scope, Plane A/B boundaries)
+    - Codex posts the PR Review Report as a PR comment on the PR (required)
     - Reviewer updates PR labels to reflect outcome (approved / changes requested)
     - Director/CEO makes final call for sensitive changes
  6. **Merge** (human merge for protected changes; update status labels)
@@ -206,6 +208,11 @@ gh pr edit 3 --add-label "agent:codex" --add-label "status:changes-requested" --
 Update labels after Codex review (APPROVE):
 ```bash
 gh pr edit 3 --add-label "agent:codex" --add-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested"
+```
+
+Post PR Review Report comment (required):
+```bash
+gh pr comment 3 --body-file <path-to-review-report.md>
 ```
 
 On merge:
