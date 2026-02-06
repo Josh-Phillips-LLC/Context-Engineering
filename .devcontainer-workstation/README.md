@@ -30,6 +30,8 @@ $COMPOSE_CMD down -v
 $COMPOSE_CMD up -d --build
 ```
 
+`down -v` removes all named volumes (including `gh_config`), so GitHub auth, cloned repos, and other persisted container state are reset.
+
 Confirm container is running:
 
 ```bash
@@ -51,10 +53,11 @@ The repo root inside the container is `/workspace/Projects` (Docker volume-backe
 docker exec -it agent-workstation bash
 
 # One-time GitHub auth inside container (HTTPS + PAT)
-read -s -p "GitHub PAT: " GH_TOKEN; echo
-printf '%s' "$GH_TOKEN" | gh auth login --hostname github.com --git-protocol https --with-token
+read -s -p "GitHub PAT: " GH_PAT; echo
+printf '%s' "$GH_PAT" | env -u GH_TOKEN gh auth login --hostname github.com --git-protocol https --with-token
 gh auth setup-git
-unset GH_TOKEN
+gh auth status
+unset GH_PAT
 
 cd /workspace/Projects
 git clone https://github.com/joshphillipssr/Context-Engineering.git
