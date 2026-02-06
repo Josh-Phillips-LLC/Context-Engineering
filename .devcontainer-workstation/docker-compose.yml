@@ -8,10 +8,12 @@ services:
       - projects_data:/workspace/Projects
       - gh_config:/root/.config/gh
       - git_config:/root/.config/git
+      - ssh_data:/root/.ssh
       - codex_home:/root/.codex
-      # Forward 1Password SSH agent into container for git commit signing.
+      # Optional: forward host SSH agent into container for commit signing.
+      # Set HOST_SSH_AGENT_SOCK before compose up.
       - type: bind
-        source: /Users/josh/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock
+        source: ${HOST_SSH_AGENT_SOCK:-/tmp/codex-no-ssh-agent}
         target: /ssh-agent
     environment:
       - GH_TOKEN=${GH_TOKEN}
@@ -30,4 +32,5 @@ volumes:
   projects_data:
   gh_config:
   git_config:
+  ssh_data:
   codex_home:
