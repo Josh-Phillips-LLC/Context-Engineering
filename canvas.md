@@ -142,9 +142,9 @@ PRs are not deleted; they are merged or closed. Prefer `gh` over manual UI.
 
 **Closure hygiene (required):**
 1) Leave a final comment stating why it is being closed and (if applicable) what replaces it.
-2) Apply labels:
-   - `status:closed`
-   - `status:superseded` (only if replaced by another PR)
+2) Apply exactly one status label:
+   - `status:closed` (default)
+   - `status:superseded` (use instead of `status:closed` when replaced by another PR)
    - Remove any `status:needs-review`, `status:changes-requested`, `status:approved`
 3) Delete the remote branch after closing unless intentionally retained.
 
@@ -152,29 +152,22 @@ PRs are not deleted; they are merged or closed. Prefer `gh` over manual UI.
 Close with comment:
 
 ```bash
-gh pr close <PR_NUMBER> --comment "Closing PR: <reason>. Superseded by #<NEW_PR_NUMBER> (if applicable)."
+gh pr close <PR_NUMBER> --comment "Closing PR: <reason>. Superseded by #<NEW_PR_NUMBER> (if applicable)." --delete-branch
 ```
 
 Set closed labels:
 
 ```bash
-gh pr edit <PR_NUMBER> --add-label "status:closed" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
+gh pr edit <PR_NUMBER> --add-label "status:closed" --remove-label "status:superseded" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
 ```
 
 Add superseded label (optional):
 
 ```bash
-gh pr edit <PR_NUMBER> --add-label "status:superseded"
+gh pr edit <PR_NUMBER> --add-label "status:superseded" --remove-label "status:closed" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
 ```
 
-Delete remote branch:
-
-```bash
-BRANCH_NAME="$(gh pr view <PR_NUMBER> --json headRefName --jq .headRefName)"
-ENCODED_BRANCH_NAME="${BRANCH_NAME//\//%2F}"
-
-gh api -X DELETE "repos/:owner/:repo/git/refs/heads/${ENCODED_BRANCH_NAME}"
-```
+If the branch should be retained, omit the `--delete-branch` flag.
 
 ---
 
@@ -234,6 +227,8 @@ Labels make role and status visible at a glance and must be applied on every PR.
 - `status:changes-requested`
 - `status:approved`
 - `status:merged`
+- `status:closed`
+- `status:superseded`
 
 **Rule:** Labels should be applied/updated by the actor (Copilot/Codex/CEO) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
 
