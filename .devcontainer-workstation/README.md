@@ -49,10 +49,19 @@ The repo root inside the container is `/workspace/Projects` (Docker volume-backe
 
 ```bash
 docker exec -it agent-workstation bash
+
+# One-time GitHub auth inside container (HTTPS + PAT)
+read -s -p "GitHub PAT: " GH_TOKEN; echo
+printf '%s' "$GH_TOKEN" | gh auth login --hostname github.com --git-protocol https --with-token
+gh auth setup-git
+unset GH_TOKEN
+
 cd /workspace/Projects
 git clone https://github.com/joshphillipssr/Context-Engineering.git
 exit
 ```
+
+`gh` auth is persisted in the `gh_config` volume, so this PAT login should not be required every time.
 
 ## 3) Optional: verify SSH agent forwarding (for signed commits)
 
