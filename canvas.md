@@ -151,6 +151,46 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
 - Templates and checklists preferred over long prose
 - TODOs added where human judgment is needed
 
+### PR lifecycle: close / supersede / cleanup
+PRs are not deleted; they are merged or closed. Prefer `gh` over manual UI.
+
+**Close a PR** when:
+- It is stale/abandoned
+- It is out of scope and rescoping is not worth it
+- It is superseded by another PR
+
+**Prefer rescoping (rewrite/rebase)** when:
+- The PR is fundamentally correct but contains extra commits/files
+
+**Closure hygiene (required):**
+1) Leave a final comment stating why it is being closed and (if applicable) what replaces it.
+2) Apply exactly one status label:
+   - `status:closed` (default)
+   - `status:superseded` (use instead of `status:closed` when replaced by another PR)
+   - Remove any `status:needs-review`, `status:changes-requested`, `status:approved`
+3) Delete the remote branch after closing unless intentionally retained.
+
+**Canonical `gh` commands**
+Close with comment:
+
+```bash
+gh pr close <PR_NUMBER> --comment "Closing PR: <reason>. Superseded by #<NEW_PR_NUMBER> (if applicable)." --delete-branch
+```
+
+Set closed labels:
+
+```bash
+gh pr edit <PR_NUMBER> --add-label "status:closed" --remove-label "status:superseded" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
+```
+
+Add superseded label (optional):
+
+```bash
+gh pr edit <PR_NUMBER> --add-label "status:superseded" --remove-label "status:closed" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
+```
+
+If the branch should be retained, omit the `--delete-branch` flag.
+
 ---
 
 ## Role Attribution & Auditability (Humans vs Agents)
@@ -218,6 +258,8 @@ Labels make role and status visible at a glance and must be applied on every PR.
 - `status:changes-requested`
 - `status:approved`
 - `status:merged`
+- `status:closed`
+- `status:superseded`
 
 **Rule:** Labels should be applied/updated by the actor (Copilot/Codex/CEO) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
 
