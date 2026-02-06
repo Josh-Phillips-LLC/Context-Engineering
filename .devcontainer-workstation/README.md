@@ -31,6 +31,7 @@ $COMPOSE_CMD up -d --build
 ```
 
 `down -v` removes all named volumes (including `gh_config`), so GitHub auth, cloned repos, and other persisted container state are reset.
+Codex config is re-seeded from `.devcontainer-workstation/codex/config.toml` when `/root/.codex` is recreated.
 
 Confirm container is running:
 
@@ -112,4 +113,17 @@ The private key persists across container recreates because `/root/.ssh` is volu
 ```bash
 git commit -S --allow-empty -m "signing test"
 git log --show-signature -1
+```
+
+## 7) Codex config defaults
+
+The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
+
+To update the default Codex settings for this workstation config:
+
+1. Edit `.devcontainer-workstation/codex/config.toml`
+2. Rebuild/restart:
+
+```bash
+$COMPOSE_CMD up -d --build
 ```

@@ -26,7 +26,8 @@ services:
       - ALL
     privileged: true
     init: true
-    command: sleep infinity
+    entrypoint: ["/usr/local/bin/init-codex-config.sh"]
+    command: ["sleep", "infinity"]
 
 volumes:
   projects_data:

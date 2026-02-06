@@ -33,4 +33,8 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get update && apt-get install -y gh \
   && rm -rf /var/lib/apt/lists/*
 
+COPY codex/config.toml /etc/codex/config.toml
+COPY scripts/init-codex-config.sh /usr/local/bin/init-codex-config.sh
+RUN chmod +x /usr/local/bin/init-codex-config.sh
+
 WORKDIR /workspace
