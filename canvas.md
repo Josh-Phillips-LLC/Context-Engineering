@@ -181,13 +181,13 @@ gh pr close <PR_NUMBER> --comment "Closing PR: <reason>. Superseded by #<NEW_PR_
 Set closed labels:
 
 ```bash
-gh pr edit <PR_NUMBER> --add-label "status:closed" --remove-label "status:superseded" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
+gh pr edit <PR_NUMBER> --add-label "status:closed" --remove-label "status:superseded" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved" --remove-label "status:merged"
 ```
 
 Add superseded label (optional):
 
 ```bash
-gh pr edit <PR_NUMBER> --add-label "status:superseded" --remove-label "status:closed" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved"
+gh pr edit <PR_NUMBER> --add-label "status:superseded" --remove-label "status:closed" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved" --remove-label "status:merged"
 ```
 
 If the branch should be retained, omit the `--delete-branch` flag.
@@ -271,19 +271,19 @@ Agents may have access to a shell with `gh` configured under the CEO identity. W
 Apply initial labels after PR creation (example PR #3):
 
 ```bash
-gh pr edit 3 --add-label "agent:copilot" --add-label "status:needs-review"
+gh pr edit 3 --add-label "agent:copilot" --add-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
 Update labels after Codex review (REQUEST CHANGES):
 
 ```bash
-gh pr edit 3 --add-label "agent:codex" --add-label "status:changes-requested" --remove-label "status:needs-review"
+gh pr edit 3 --add-label "agent:codex" --add-label "status:changes-requested" --remove-label "status:needs-review" --remove-label "status:approved" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
 Update labels after Codex review (APPROVE):
 
 ```bash
-gh pr edit 3 --add-label "agent:codex" --add-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested"
+gh pr edit 3 --add-label "agent:codex" --add-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
 Post PR Review Report comment (required):
@@ -294,7 +294,7 @@ gh pr comment <PR_NUMBER> --body-file <PATH_TO_PR_REVIEW_REPORT_MD>
 On merge:
 
 ```bash
-gh pr edit 3 --add-label "status:merged" --remove-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested"
+gh pr edit 3 --add-label "status:merged" --remove-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
 #### 5. Explicit PR comments for protected approval
