@@ -103,3 +103,39 @@ If instructions are ambiguous:
 
 > **Context is infrastructure.**  
 > Optimize for stability, clarity, and reuse — not cleverness.
+
+---
+
+## Execution environment
+
+- You are operating inside the Dev Container named `agent-workstation`.
+- All commands must be run in the VS Code integrated terminal (container terminal), not on the host.
+- Assume you have root inside the container and may install missing tools with `apt-get`.
+
+### Workspace layout
+
+- All repos are mounted at `/workspace`.
+- The current repo is typically `/workspace/Context-Engineering` unless stated otherwise.
+
+### Tools
+
+#### When you need a tool
+
+- If a tool is missing, install it in the container (Ubuntu) using apt:
+  - `apt-get update && apt-get install -y <package>`
+- Prefer CLI tools over GUI tools.
+
+#### Persisting Tools
+
+- Installing via `apt-get` inside a running container is acceptable, but survive container recreation for future agent sessions.
+- Whenever you install anything with `apt-get`, you MUST also record it so a human can decide whether to bake it into the image later.
+-- Whenever a tool is installed via `apt-get` also add it in `.devcontainer-workstation/Dockerfile` under an `# TODO: Candidate packages discovered by agents` block with the exact `apt-get install` line you used.
+
+## PDF handling
+
+- To inspect PDFs, prefer:
+  - `pdftotext` (package: `poppler-utils`)
+  - `pdfinfo` (also in `poppler-utils`)
+  - `mutool` (package: `mupdf-tools`) if needed for rendering/extraction
+- If the PDF is scanned, use OCR as a fallback:
+  - `tesseract-ocr` + `imagemagick` (last resort)
