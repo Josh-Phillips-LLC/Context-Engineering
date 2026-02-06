@@ -212,7 +212,7 @@ gh pr edit 3 --add-label "agent:codex" --add-label "status:approved" --remove-la
 
 Post PR Review Report comment (required):
 ```bash
-gh pr comment 3 --body-file <path-to-review-report.md>
+gh pr comment <PR_NUMBER> --body-file <PATH_TO_PR_REVIEW_REPORT_MD>
 ```
 
 On merge:
