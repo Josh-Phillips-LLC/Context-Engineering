@@ -5,18 +5,10 @@ services:
       dockerfile: Dockerfile
     container_name: agent-workstation
     volumes:
-      # Mount ALL repos
-      - ${PROJECTS_ROOT:-/Users/josh/Projects}:/workspace:cached
-
-      # Persist auth/config between rebuilds
+      - projects_data:/workspace/Projects
       - gh_config:/root/.config/gh
       - git_config:/root/.config/git
       - codex_home:/root/.codex
-
-      # Optional: persist common caches (uncomment if you want)
-      # - npm_cache:/root/.npm
-      # - pip_cache:/root/.cache/pip
-
     environment:
       - GH_TOKEN=${GH_TOKEN}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -25,15 +17,12 @@ services:
     # Testing-mode autonomy
     cap_add:
       - ALL
-    # If you later need "everything", flip this on:
-    # privileged: true
-
+    privileged: true
     init: true
     command: sleep infinity
 
 volumes:
+  projects_data:
   gh_config:
   git_config:
   codex_home:
-  # npm_cache:
-  # pip_cache:
