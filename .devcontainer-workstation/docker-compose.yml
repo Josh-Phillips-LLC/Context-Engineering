@@ -9,10 +9,15 @@ services:
       - gh_config:/root/.config/gh
       - git_config:/root/.config/git
       - codex_home:/root/.codex
+      # Forward 1Password SSH agent into container for git commit signing.
+      - type: bind
+        source: /Users/josh/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock
+        target: /ssh-agent
     environment:
       - GH_TOKEN=${GH_TOKEN}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - CODEX_HOME=/root/.codex
+      - SSH_AUTH_SOCK=/ssh-agent
 
     # Testing-mode autonomy
     cap_add:

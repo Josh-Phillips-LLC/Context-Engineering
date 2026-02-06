@@ -139,4 +139,3 @@ If instructions are ambiguous:
   - `mutool` (package: `mupdf-tools`) if needed for rendering/extraction
 - If the PDF is scanned, use OCR as a fallback:
   - `tesseract-ocr` + `imagemagick` (last resort)
-  
