@@ -34,7 +34,7 @@ RUN mkdir -p /etc/apt/keyrings && \
   && rm -rf /var/lib/apt/lists/*
 
 COPY codex/config.toml /etc/codex/config.toml
-COPY scripts/init-codex-config.sh /usr/local/bin/init-codex-config.sh
-RUN chmod +x /usr/local/bin/init-codex-config.sh
+COPY scripts/init-workstation.sh /usr/local/bin/init-workstation.sh
+RUN chmod +x /usr/local/bin/init-workstation.sh
 
 WORKDIR /workspace

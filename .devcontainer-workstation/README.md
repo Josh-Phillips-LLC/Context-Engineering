@@ -49,11 +49,29 @@ $COMPOSE_CMD logs --tail=200 agent-workstation
 ## 2) Create/clone repos in container-owned storage
 
 The repo root inside the container is `/workspace/Projects` (Docker volume-backed).
+On container startup, the entrypoint tries to clone:
+
+- URL: `https://github.com/joshphillipssr/Context-Engineering.git`
+- Path: `/workspace/Projects/Context-Engineering`
+
+If this repo is private and you are bootstrapping a fresh environment (for example after `down -v`), export `GH_TOKEN` on the host before `up` so startup can authenticate non-interactively:
+
+```bash
+export GH_TOKEN="<your_pat>"
+```
+
+Verify clone status:
+
+```bash
+docker exec -it agent-workstation bash -lc 'ls -la /workspace/Projects/Context-Engineering'
+```
+
+If auto-clone failed, run manual PAT auth and clone inside the container:
 
 ```bash
 docker exec -it agent-workstation bash
 
-# One-time GitHub auth inside container (HTTPS + PAT)
+# One-time fallback auth inside container (HTTPS + PAT)
 read -s -p "GitHub PAT: " GH_PAT; echo
 printf '%s' "$GH_PAT" | env -u GH_TOKEN gh auth login --hostname github.com --git-protocol https --with-token
 gh auth setup-git
@@ -65,7 +83,7 @@ git clone https://github.com/joshphillipssr/Context-Engineering.git
 exit
 ```
 
-`gh` auth is persisted in the `gh_config` volume, so this PAT login should not be required every time.
+`gh` auth is persisted in the `gh_config` volume, so this login should not be required every time.
 
 ## 3) Optional: verify SSH agent forwarding (for signed commits)
 

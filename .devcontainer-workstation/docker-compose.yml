@@ -20,13 +20,16 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - CODEX_HOME=/root/.codex
       - SSH_AUTH_SOCK=/ssh-agent
+      - WORKSPACE_REPO_URL=${WORKSPACE_REPO_URL:-https://github.com/joshphillipssr/Context-Engineering.git}
+      - WORKSPACE_REPO_DIR=/workspace/Projects/Context-Engineering
+      - AUTO_CLONE_WORKSPACE_REPO=${AUTO_CLONE_WORKSPACE_REPO:-true}
 
     # Testing-mode autonomy
     cap_add:
       - ALL
     privileged: true
     init: true
-    entrypoint: ["/usr/local/bin/init-codex-config.sh"]
+    entrypoint: ["/usr/local/bin/init-workstation.sh"]
     command: ["sleep", "infinity"]
 
 volumes:
