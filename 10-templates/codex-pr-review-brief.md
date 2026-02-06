@@ -133,14 +133,13 @@ If appropriate, suggest **small, atomic follow-up PRs** only.
 
 Do not bundle unrelated work.
 
----
-
 ## Hard rules
 
 - Do **not** suggest changing `canvas.md` unless a contradiction or ambiguity is unavoidable.
 - Do **not** propose large refactors or restructuring.
 - Prefer **minimal, reversible changes**.
 - If uncertain, flag as ⚠️ and explain why.
+- After producing the PR Review Report, post it as a comment on the PR (required).
 
 ---
 
