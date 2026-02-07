@@ -27,7 +27,7 @@ List explicit exclusions so Copilot does not “helpfully” expand scope.
 
 - Any files not listed in Scope
 - Protected artifacts unless explicitly included:
-  - `canvas.md`
+  - `governance.md`
   - `context-flow.md`
   - `00-os/**`
 - Automation that merges PRs
