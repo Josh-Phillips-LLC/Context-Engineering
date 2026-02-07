@@ -2,7 +2,7 @@
 
 This file is a checklist + post-review enforcement actions for Codex.
 
-Canonical review brief and required PR Review Report format: `10-templates/codex-pr-review-brief.md` (source of truth: `canvas.md`).
+Canonical review brief and required PR Review Report format: `10-templates/codex-pr-review-brief.md` (source of truth: `governance.md`).
 
 ## PR
 - Link:
@@ -27,7 +27,7 @@ Canonical review brief and required PR Review Report format: `10-templates/codex
 - [ ] CEO approval comment exists when required (protected paths)
 
 ## Protected Changes Logic
-- [ ] `canvas.md`, `context-flow.md`, or `00-os/` touched → CEO approval required
+- [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → CEO approval required
 - [ ] Plane A/B boundary changes detected → CEO approval required
 
 ## Decision

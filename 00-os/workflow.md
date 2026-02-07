@@ -8,7 +8,7 @@
 5. **Merge**: Human merge for protected changes
 
 ## Protected Changes (Require CEO Approval)
-- `canvas.md` and `context-flow.md`
+- `governance.md` and `context-flow.md`
 - Anything under `00-os/`
 - Any change that affects Plane A vs Plane B boundaries
 

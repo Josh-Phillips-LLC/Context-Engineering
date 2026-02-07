@@ -17,7 +17,7 @@
 - [ ] TODOs added where judgment is required
 
 ## Escalation Rules
-- If `canvas.md`, `context-flow.md`, or `00-os/` changed → CEO approval required
+- If `governance.md`, `context-flow.md`, or `00-os/` changed → CEO approval required
 - If Plane A/B boundary changes detected → CEO approval required
 - If any review gate item fails → request changes
 
