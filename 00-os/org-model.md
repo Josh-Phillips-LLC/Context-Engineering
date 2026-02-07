@@ -4,28 +4,31 @@
 - Define roles and responsibilities for the context system.
 
 ## Roles
-- **CEO**
+- **Executive Sponsor**
   - Vision, priorities, constraints
   - Approves publishable extracts
-- **Director of AI Context**
+- **AI Governance Manager**
   - Designs context system
   - Curates and sanitizes outputs
   - Maintains Plane B assets
-- **Reviewer / Merge Agent — Codex (optional)**
-  - Reviews agent PRs for alignment with operating model
+- **Compliance Officer (optional)**
+  - Reviews implementation output for alignment with operating model
   - Uses deterministic checklists (no intuition-only approvals)
   - Flags security leaks, scope creep, Plane A/B violations
   - Recommends approve / request changes
-  - Does not merge protected changes without CEO sign-off
-- **Agents (Copilot/Codex/Continue)**
+  - Does not merge protected changes without Executive Sponsor sign-off
+- **Implementation Specialist**
   - Execute tasks within repo constraints
   - Produce drafts, artifacts, diffs
+- **Business Analyst**
+  - Performs exploratory analysis and planning
+  - Proposes changes and drafts work orders
 
 ## RACI (lightweight)
-- **Strategy**: CEO (A), Director (R)
-- **System design**: Director (A/R)
-- **Execution**: Agents (R), Director (A)
-- **Publication**: Director (R), CEO (A)
+- **Strategy**: Executive Sponsor (A), AI Governance Manager (R)
+- **System design**: AI Governance Manager (A/R)
+- **Execution**: Implementation Specialist (R), AI Governance Manager (A)
+- **Publication**: AI Governance Manager (R), Executive Sponsor (A)
 
 ## Escalation
 - If ambiguity persists, add TODO and request decision.

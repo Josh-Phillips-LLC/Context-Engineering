@@ -1,6 +1,6 @@
 # Codex PR Review Checklist (Template)
 
-This file is a checklist + post-review enforcement actions for Codex.
+This file is a checklist + post-review enforcement actions for the Compliance Officer (Codex assignment).
 
 Canonical review brief and required PR Review Report format: `10-templates/codex-pr-review-brief.md` (source of truth: `governance.md`).
 
@@ -10,8 +10,8 @@ Canonical review brief and required PR Review Report format: `10-templates/codex
 - Scope summary:
 
 ## Blockers (REQUEST CHANGES if any fail)
-- [ ] PR description includes all three exact metadata keys (Primary-Actor:, Reviewed-By:, CEO-Approval:)
-- [ ] At least one role label exists (agent:copilot / agent:codex / role:CEO)
+- [ ] PR description includes all three exact metadata keys (Primary-Role:, Reviewed-By-Role:, Executive-Sponsor-Approval:)
+- [ ] At least one role label exists (role:implementation-specialist / role:compliance-officer / role:ai-governance-manager / role:business-analyst / role:executive-sponsor)
 - [ ] Exactly one status:* label exists
 
 ## Review Gate (Minimum)
@@ -22,18 +22,18 @@ Canonical review brief and required PR Review Report format: `10-templates/codex
 - [ ] TODOs added where human judgment is required
 
 ## Role Attribution Verification
-- [ ] Commit messages include role prefixes ([Copilot], [Codex], [CEO])
-- [ ] PR title or labels identify the primary actor
-- [ ] CEO approval comment exists when required (protected paths)
+- [ ] Commit messages include role prefixes ([Implementation Specialist], [Compliance Officer], [AI Governance Manager], [Business Analyst], [Executive Sponsor])
+- [ ] PR title or labels identify the primary role
+- [ ] Executive Sponsor approval comment exists when required (protected paths)
 
 ## Protected Changes Logic
-- [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → CEO approval required
-- [ ] Plane A/B boundary changes detected → CEO approval required
+- [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → Executive Sponsor approval required
+- [ ] Plane A/B boundary changes detected → Executive Sponsor approval required
 
 ## Decision
 - [ ] Approve
 - [ ] Request changes (list blockers)
-- [ ] Escalate to CEO
+- [ ] Escalate to Executive Sponsor
 
 ### Required Enforcement Actions (Post-Review)
 
@@ -47,22 +47,22 @@ gh pr comment <PR_NUMBER> --body-file <PATH_TO_PR_REVIEW_REPORT_MD>
 ```
 
 **If verdict = REQUEST CHANGES**
-- Apply label `agent:codex`
+- Apply label `role:compliance-officer`
 - Apply label `status:changes-requested`
 - Remove label `status:needs-review` if present
 
 **If verdict = APPROVE**
-- Apply label `agent:codex`
+- Apply label `role:compliance-officer`
 - Apply label `status:approved`
 - Remove labels `status:needs-review` and `status:changes-requested` if present
 
-**If PR touches protected paths and an explicit CEO approval comment exists**
-- Optionally apply label `role:CEO-approved`
+**If PR touches protected paths and an explicit Executive Sponsor approval comment exists**
+- Optionally apply label `role:executive-sponsor-approved`
 
 All label changes must be executed using `gh pr edit`.
 
-Codex must request permission before executing shell commands.
-Codex must not merge the PR.
+Compliance Officer (Codex assignment) must request permission before executing shell commands.
+Compliance Officer (Codex assignment) must not merge the PR.
 
 ## TODO
 - Add repo-specific gates (tests, lint, etc.).

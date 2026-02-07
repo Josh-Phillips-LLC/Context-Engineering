@@ -1,5 +1,10 @@
 # Copilot Instructions (Template)
 
+## Role Framing (Required)
+- Declare your assigned role before task details (role first, tool second)
+- Treat tools as assignment metadata, not role identity
+- Escalate protected-path approvals to the Executive Sponsor
+
 ## Purpose
 - Define how agents should operate in this repo.
 
@@ -16,6 +21,7 @@
 - docs/ai/context.md
 - docs/ai/architecture.md
 - docs/ai/decisions.md
+- 00-os/role-charters/
 
 ## TODO
 - Add repo-specific do/don't rules.

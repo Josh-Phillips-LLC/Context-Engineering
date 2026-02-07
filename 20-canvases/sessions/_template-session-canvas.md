@@ -4,6 +4,9 @@
 - Date:
 - Owner:
 - Goal:
+- Role (optional):
+- Actor (optional):
+- Tool (optional):
 
 ## Inputs
 - Vision/priorities

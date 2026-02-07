@@ -1,15 +1,15 @@
 # Context Flow Map
 
-This diagram shows how vision, context, prompts, and artifacts flow between **Josh (CEO)**, **ChatGPT (Director of AI Context)**, and the **coding agents** (VS Code Copilot / Codex / Continue / future LLMs), with **public vs private context planes** and the **canvas lifecycle**.
+This diagram shows how vision, context, prompts, and artifacts flow between the **Executive Sponsor (Josh)**, **AI Governance Manager (ChatGPT)**, and **Implementation Specialists** (VS Code Copilot / Codex / Continue / future LLMs), with **public vs private context planes** and the **canvas lifecycle**.
 
 ```mermaid
 flowchart TB
   %% =========================
   %% Actors
   %% =========================
-  CEO["CEO: Josh<br/>Vision - Priorities - Constraints"]:::actor
-  DIR["Director of AI Context: ChatGPT<br/>Context design - Prompting - Review"]:::actor
-  AGENTS["Agents: Copilot / Codex / Continue<br/>Execution in VS Code"]:::actor
+  CEO["Executive Sponsor: Josh<br/>Vision - Priorities - Constraints"]:::actor
+  DIR["AI Governance Manager: ChatGPT<br/>Context design - Prompting - Review"]:::actor
+  AGENTS["Implementation Specialists: Copilot / Codex / Continue<br/>Execution in VS Code"]:::actor
 
   %% =========================
   %% Context Planes (Stores)

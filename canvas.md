@@ -3,12 +3,13 @@
 This canvas captures exploratory context, options, and future-looking ideas.
 
 Authoritative, enforceable policy lives in `governance.md`.
+Ratified role definitions live in `governance.md` and `00-os/role-charters/`.
 
 ---
 
 ## Purpose
 
-This document captures the **durable operating model** for how Josh (CEO), ChatGPT (Director of AI Context), and coding agents (VS Code Copilot / Codex / Continue / future LLMs) collaborate.
+This document captures the **durable operating model** for how the Executive Sponsor (Josh), AI Governance Manager (ChatGPT), and Implementation Specialists (VS Code Copilot / Codex / Continue / future LLMs) collaborate.
 
 The goal is to:
 

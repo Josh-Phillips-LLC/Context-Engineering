@@ -45,9 +45,9 @@ These files define the foundation of the system and should change slowly.
 
 - **`context-flow.md`**  
   A visual map of how context, prompts, and artifacts flow between:
-  - CEO (Josh)
-  - Director of AI Context (ChatGPT)
-  - Coding agents  
+  - Executive Sponsor (Josh)
+  - AI Governance Manager (ChatGPT)
+  - Implementation Specialists
   Including how private context becomes public-safe repo context.
 
 ---
@@ -116,12 +116,12 @@ This repository is private by design, but still follows strict rules:
 
 ## How this repo is used in practice
 
-- Josh (CEO) defines goals and constraints
-- ChatGPT (Director of AI Context) helps:
+- The Executive Sponsor (Josh) defines goals and constraints
+- The AI Governance Manager (ChatGPT) helps:
   - design context
   - generate prompts
   - review agent output
-- Agents (Copilot / Codex / Continue) execute using **repo-local, public-safe context**
+- Implementation Specialists (Copilot / Codex / Continue) execute using **repo-local, public-safe context**
 - Durable knowledge always lands in files, not chat logs
 
 ---

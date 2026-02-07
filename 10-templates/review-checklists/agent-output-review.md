@@ -1,4 +1,4 @@
-# Agent Output Review Checklist (Human or Codex)
+# Agent Output Review Checklist (Human or Compliance Officer)
 
 ## Completeness
 - [ ] All requested files created/updated
@@ -18,7 +18,7 @@
 ## Decision
 - [ ] Approve
 - [ ] Request changes (list blockers)
-- [ ] Escalate to CEO (protected changes or boundary shifts)
+- [ ] Escalate to Executive Sponsor (protected changes or boundary shifts)
 
 ## TODO
 - Add any domain-specific review steps.

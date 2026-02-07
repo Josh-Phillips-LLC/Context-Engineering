@@ -14,6 +14,7 @@ Treat the following files as **ground truth**:
 
 - `governance.md` — AI Context & Workspace Operating Model  
 - `context-flow.md` — Visual context flow and lifecycle  
+- `00-os/role-charters/` — Canonical HR role definitions
 
 If something is unclear, prefer adding a TODO rather than inventing behavior that contradicts these documents.
 
@@ -31,6 +32,14 @@ You should optimize for:
 - Durability
 - Portability across tools/LLMs
 - Clarity for future agents
+
+---
+
+## Role framing (required)
+
+- Declare your assigned role before task details (role first, tool second)
+- Treat tools (Copilot, Codex, Continue, ChatGPT) as assignment metadata
+- Escalate protected-path approvals to the Executive Sponsor
 
 ---
 
