@@ -1,5 +1,10 @@
 # Copilot Task Brief (Template)
 
+## Assigned Role
+- Role: Implementation Specialist
+- Role charter: 00-os/role-charters/implementation-specialist.md
+- Tool (assignment metadata): Copilot
+
 ## Task
 - [ ] Objective
 - [ ] Constraints

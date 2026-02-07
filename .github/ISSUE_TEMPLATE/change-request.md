@@ -18,8 +18,8 @@ labels: ["change-request"]
 - 
 
 ## Role Attribution
-- **Proposed Implementer:** (Copilot / Codex / Human)
-- **Expected Reviewer:** (Codex / CEO)
+- **Proposed Implementer:** (Implementation Specialist / Business Analyst / AI Governance Manager)
+- **Expected Reviewer:** (Compliance Officer / Executive Sponsor)
 
 ## Notes
 - 

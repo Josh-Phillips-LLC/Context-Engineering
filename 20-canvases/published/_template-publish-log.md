@@ -4,6 +4,9 @@
 - Date:
 - Publisher:
 - Source session:
+- Publisher Role (optional):
+- Reviewer Role (optional):
+- Approver Role (optional):
 
 ## Changes Published
 - Item:

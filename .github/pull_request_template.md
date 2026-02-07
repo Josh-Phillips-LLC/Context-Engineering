@@ -5,16 +5,16 @@
 - Linked issue:
 
 # Machine-Readable Metadata (Required)
-Primary-Actor:
-Reviewed-By:
-CEO-Approval:
+Primary-Role:
+Reviewed-By-Role:
+Executive-Sponsor-Approval:
 
 # Role Attribution
-- **Primary Actor:** (Copilot / Codex / CEO)
-- [ ] Commit messages include role prefixes ([Copilot], [Codex], [CEO])
-- [ ] At least one role label applied (agent:copilot / agent:codex / role:CEO)
+- **Primary Role:** (Executive Sponsor / AI Governance Manager / Compliance Officer / Business Analyst / Implementation Specialist)
+- [ ] Commit messages include role prefixes ([Executive Sponsor], [AI Governance Manager], [Compliance Officer], [Business Analyst], [Implementation Specialist])
+- [ ] At least one role label applied (role:executive-sponsor / role:ai-governance-manager / role:compliance-officer / role:business-analyst / role:implementation-specialist)
 - [ ] Exactly one status:* label applied
-- [ ] CEO approval provided (required for protected paths)
+- [ ] Executive Sponsor approval provided (required for protected paths)
 
 # Review Gate (Minimum)
 - [ ] No secrets, tokens, internal hostnames, or personal data
@@ -24,8 +24,8 @@ CEO-Approval:
 - [ ] TODOs added where human judgment is required
 
 # Protected Changes Logic
-- [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → CEO approval required
-- [ ] Plane A/B boundary changes detected → CEO approval required
+- [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → Executive Sponsor approval required
+- [ ] Plane A/B boundary changes detected → Executive Sponsor approval required
 
 # Low-Risk Fast-Track
 - [ ] Only low-risk paths changed (10-templates/, 30-vendor-notes/, new 20-canvases/)

@@ -4,10 +4,10 @@
 1. **Issue**: Objective, scope, constraints, definition of done
 2. **Branch**: Focused edits with minimal scope
 3. **Pull Request**: Use templates + checklists
-4. **Review**: Codex review + human decision where required
+4. **Review**: Compliance Officer review + human decision where required
 5. **Merge**: Human merge for protected changes
 
-## Protected Changes (Require CEO Approval)
+## Protected Changes (Require Executive Sponsor Approval)
 - `governance.md` and `context-flow.md`
 - Anything under `00-os/`
 - Any change that affects Plane A vs Plane B boundaries

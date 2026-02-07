@@ -8,32 +8,54 @@ For exploratory ideas, options, and future-looking notes, see `canvas.md`.
 
 ## Organizational Model
 
-### CEO — Josh
+### Executive Sponsor — Josh (current assignment)
 
 - Sets vision, priorities, and constraints
 - Decides what becomes public vs private
 - Approves publishable artifacts
 
-### Director of AI Context — ChatGPT
+### AI Governance Manager — ChatGPT (current assignment)
 
 - Helps design and maintain the context system
 - Produces prompts, reviews agent output, and enforces standards
 - Maintains private operational knowledge
 - Prepares sanitized artifacts for publication
 
-### Reviewer / Merge Agent — Codex
+### Compliance Officer — Codex (current assignment)
 
-- Reviews Copilot/agent pull requests for alignment with this operating model
+- Reviews implementation output for alignment with this operating model
 - Checks for security leaks, scope creep, and Plane A vs Plane B violations
 - Uses deterministic checklists (not “looks good” intuition)
-- Recommends approve / request changes; does not merge protected changes without CEO sign-off
+- Recommends approve / request changes; does not merge protected changes without Executive Sponsor sign-off
 - Posts the PR Review Report as a comment on every PR it reviews (required artifact)
 
-### Agents — Copilot / Codex / Continue / Others
+### Implementation Specialist — Copilot / Codex / Continue / Others (current assignments)
 
 - Execute tasks using provided context
 - Operate primarily on repo-local, public-safe context
 - Do not retain long-term memory; context must be supplied
+
+### Business Analyst (proposal and analysis role)
+
+- Performs exploratory analysis and planning
+- Proposes changes and drafts work orders
+- Does not approve protected changes
+
+### Role assignment principle
+
+- Roles define responsibility, authority, and escalation
+- Tools and humans are assignment metadata, not role identity
+- Canonical role charters live in `00-os/role-charters/`
+
+### Legacy role mapping (for reference)
+
+| Legacy reference | Canonical role | Notes |
+|---|---|---|
+| CEO (Josh) | Executive Sponsor | Final approval responsibility for protected changes |
+| Director of AI Context (ChatGPT) | AI Governance Manager | Context-system ownership and curation |
+| Reviewer / Merge Agent — Codex | Compliance Officer | Deterministic compliance review function |
+| Agents (Copilot/Codex/Continue/Others) | Implementation Specialist | Execution role, tool-agnostic |
+| Exploratory analysis / proposal | Business Analyst | Proposal and planning role |
 
 ---
 
@@ -63,7 +85,7 @@ Purpose:
 
 Includes:
 
-- CEO/Director/Agent operating system
+- Executive Sponsor / AI Governance Manager / Implementation Specialist operating system
 - Prompt templates with internal assumptions
 - Unredacted session canvases
 - Tool behavior notes and quirks
@@ -89,13 +111,13 @@ Purpose:
 
 - Subset of the session canvas
 - Explicitly marked as safe for repo inclusion
-- Reviewed by CEO before publication
+- Reviewed by Executive Sponsor before publication
 
 ### 3. Repo Canvas (Public-Safe)
 
 - Added to the target repo under `docs/ai/`
 - Becomes durable context for agents
-- Used by Copilot / Codex / Continue going forward
+- Used by Implementation Specialists (Copilot / Codex / Continue) going forward
 
 **Rule:** Chat history is ephemeral. Canvases are durable.
 
@@ -112,20 +134,20 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
 - Provide a clear contract between agents and reviewers
 
 ### Default workflow
-1. **Create an Issue** (CEO, Director, or Agent) defining: objective, scope, constraints, and definition of done
-2. **Implement on a branch** (agent or human) with focused commits and role-attributed commit messages
+1. **Create an Issue** (Executive Sponsor, AI Governance Manager, Business Analyst, or Implementation Specialist) defining: objective, scope, constraints, and definition of done
+2. **Implement on a branch** (role occupant) with focused commits and role-attributed commit messages
 3. **Open a Pull Request** using templates and checklists, including machine-readable PR metadata (see Role Attribution)
-4. **Apply PR labels** (agent or human) immediately after PR creation via `gh` to self-identify actor and set initial status
+4. **Apply PR labels** (role occupant) immediately after PR creation via `gh` to self-identify role and set initial status
 5. **Review**
 
-   - Codex reviews for compliance (structure, security, scope, Plane A/B boundaries)
-   - Codex posts the PR Review Report as a PR comment on the PR (required)
+   - Compliance Officer reviews for compliance (structure, security, scope, Plane A/B boundaries)
+   - Compliance Officer posts the PR Review Report as a PR comment on the PR (required)
    - Reviewer updates PR labels to reflect outcome (approved / changes requested)
-   - Director/CEO makes final call for sensitive changes
+   - AI Governance Manager / Executive Sponsor makes final call for sensitive changes
 
 6. **Merge** (human merge for protected changes; update status labels)
 
-### Protected changes (require CEO approval)
+### Protected changes (require Executive Sponsor approval)
 
 - `governance.md` and `context-flow.md`
 - Anything under `00-os/` (operating system & guardrails)
@@ -187,15 +209,15 @@ If the branch should be retained, omit the `--delete-branch` flag.
 
 ---
 
-## Role Attribution & Auditability (Humans vs Agents)
+## Role Attribution & Auditability (Humans vs Tools)
 
 Because all GitHub actions are authenticated under the same human identity (`joshphillipssr`), **explicit role attribution is required** to preserve auditability and intent.
 
 The goal is to make it immediately clear:
 
-- Who performed the work (Human vs Copilot vs Codex)
-- Who reviewed it
-- Who approved protected changes
+- Which role performed the work
+- Which role reviewed it
+- Which role approved protected changes
 
 ### Required attribution mechanisms
 
@@ -210,25 +232,27 @@ At least **two** of the following must be used on every Pull Request (and at lea
 
 Use a clear prefix in commit messages:
 
-- `[Copilot]` — work generated or scaffolded by Copilot
-- `[Codex]` — review-driven or corrective changes based on Codex analysis
-- `[CEO]` — human decisions, approvals, or direct edits by Josh
+- `[Implementation Specialist]` — work generated or scaffolded for execution
+- `[Compliance Officer]` — review-driven or corrective changes based on compliance analysis
+- `[AI Governance Manager]` — context-system ownership and curation changes
+- `[Business Analyst]` — proposal or planning artifacts
+- `[Executive Sponsor]` — approval decisions or direct edits by the sponsor
 
 Example:
 
 ```text
-[Copilot] scaffold Context-Engineering templates
-[Codex] fix tier naming inconsistencies
-[CEO] approve protected-path changes
+[Implementation Specialist] scaffold Context-Engineering templates
+[Compliance Officer] fix tier naming inconsistencies
+[Executive Sponsor] approve protected-path changes
 ```
 
 #### 2. Machine-readable PR metadata (required)
 
 Every PR description must include the following fields (exact keys), so humans and automation can parse intent reliably:
 
-- `Primary-Actor: Copilot|Codex|CEO`
-- `Reviewed-By: Codex|CEO|N/A`
-- `CEO-Approval: Required|Not-Required|Provided`
+- `Primary-Role: Executive Sponsor|AI Governance Manager|Compliance Officer|Business Analyst|Implementation Specialist`
+- `Reviewed-By-Role: Compliance Officer|Executive Sponsor|N/A`
+- `Executive-Sponsor-Approval: Required|Not-Required|Provided`
 
 These fields do not replace narrative description; they make attribution auditable.
 
@@ -238,13 +262,15 @@ Labels make role and status visible at a glance and must be applied on every PR.
 
 **Role labels (pick all that apply):**
 
-- `agent:copilot` — work primarily authored/scaffolded by Copilot
-- `agent:codex` — work primarily driven by Codex review/fixes
-- `role:CEO` — human-authored or human-directed changes by Josh
+- `role:executive-sponsor`
+- `role:ai-governance-manager`
+- `role:compliance-officer`
+- `role:business-analyst`
+- `role:implementation-specialist`
 
 **Optional:**
 
-- `role:CEO-approved` — use when a protected-path CEO approval comment exists (redundant but sometimes convenient)
+- `role:executive-sponsor-approved` — use when a protected-path approval comment exists (redundant but sometimes convenient)
 
 **Status labels (pick one current status):**
 
@@ -255,28 +281,28 @@ Labels make role and status visible at a glance and must be applied on every PR.
 - `status:closed`
 - `status:superseded`
 
-**Rule:** Labels should be applied/updated by the actor (Copilot/Codex/CEO) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
+**Rule:** Labels should be applied/updated by the actor (Implementation Specialist / Compliance Officer / Executive Sponsor) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
 
 #### 4. Label application via `gh` (canonical commands)
 
-Agents may have access to a shell with `gh` configured under the CEO identity. When labeling is required, use these canonical commands:
+Agents may have access to a shell with `gh` configured under the Executive Sponsor identity. When labeling is required, use these canonical commands:
 
 Apply initial labels after PR creation (example PR #3):
 
 ```bash
-gh pr edit 3 --add-label "agent:copilot" --add-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
+gh pr edit 3 --add-label "role:implementation-specialist" --add-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:approved" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
-Update labels after Codex review (REQUEST CHANGES):
+Update labels after Compliance Officer review (REQUEST CHANGES):
 
 ```bash
-gh pr edit 3 --add-label "agent:codex" --add-label "status:changes-requested" --remove-label "status:needs-review" --remove-label "status:approved" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
+gh pr edit 3 --add-label "role:compliance-officer" --add-label "status:changes-requested" --remove-label "status:needs-review" --remove-label "status:approved" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
-Update labels after Codex review (APPROVE):
+Update labels after Compliance Officer review (APPROVE):
 
 ```bash
-gh pr edit 3 --add-label "agent:codex" --add-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
+gh pr edit 3 --add-label "role:compliance-officer" --add-label "status:approved" --remove-label "status:needs-review" --remove-label "status:changes-requested" --remove-label "status:merged" --remove-label "status:closed" --remove-label "status:superseded"
 ```
 
 Post PR Review Report comment (required):
@@ -292,10 +318,10 @@ gh pr edit 3 --add-label "status:merged" --remove-label "status:approved" --remo
 
 #### 5. Explicit PR comments for protected approval
 
-Protected-path changes **must** include an explicit PR comment from the CEO.
+Protected-path changes **must** include an explicit PR comment from the Executive Sponsor.
 
 Example:
-> **CEO approval:**  
+> **Executive Sponsor approval:**  
 > I approve this pull request, including changes under protected paths (`00-os/`), per the Change Management rules defined in `governance.md`.
 
 ### Non-goals
@@ -303,7 +329,7 @@ Example:
 - GitHub author identity is **not** used to infer role
 - Automated bot identities are optional and not required
 - Attribution must be human-readable and reviewable in the PR timeline
-- Long-term, prefer least-privilege tokens or GitHub automation for agent actions (labeling/commenting) even if they run under the CEO identity today
+- Long-term, prefer least-privilege tokens or GitHub automation for agent actions (labeling/commenting) even if they run under the Executive Sponsor identity today
 
 **Rule:** If an auditor cannot tell *who did what and why* from the PR alone, attribution is insufficient.
 

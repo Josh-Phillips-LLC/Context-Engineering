@@ -58,13 +58,13 @@ Use checkboxes. Make these **binary** (pass/fail).
 - [ ] Only files listed in Scope were modified
 - [ ] All required content was added/updated exactly as specified
 - [ ] No secrets, tokens, internal hostnames, IPs, or personal data introduced
-- [ ] Commit message starts with `[Copilot]`
+- [ ] Commit message starts with `[Implementation Specialist]`
 - [ ] PR description includes:
-  - `Primary-Actor: Copilot`
-  - `Reviewed-By: N/A` (or a named reviewer if specified)
-  - `CEO-Approval: Not-Required` (or `Required` / `Provided` if protected paths are touched)
+  - `Primary-Role: Implementation Specialist`
+  - `Reviewed-By-Role: N/A` (or a named reviewer if specified)
+  - `Executive-Sponsor-Approval: Not-Required` (or `Required` / `Provided` if protected paths are touched)
 - [ ] PR labels applied via `gh`:
-  - `agent:copilot`
+  - `role:implementation-specialist`
   - exactly one `status:*` label (`status:needs-review`)
 
 ## PR Instructions
