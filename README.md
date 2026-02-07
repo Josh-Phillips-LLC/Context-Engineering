@@ -36,9 +36,12 @@ It defines **how humans and AI collaborate**, not just what tools are used. Tool
 
 These files define the foundation of the system and should change slowly.
 
+- **`governance.md`**  
+  The authoritative AI Context & Workspace Operating Model  
+  Defines roles, context planes, canvas lifecycle, security model, and persistence strategy.
+
 - **`canvas.md`**  
-  The AI Context & Workspace Operating Model  
-  Describes roles, context planes, canvas lifecycle, security model, and persistence strategy.
+  Exploratory canvas (ideas, rationale, options, roadmap, experiments).
 
 - **`context-flow.md`**  
   A visual map of how context, prompts, and artifacts flow between:
@@ -127,7 +130,7 @@ This repository is private by design, but still follows strict rules:
 
 If you are an AI agent operating in this repo:
 
-- Treat `canvas.md` and `context-flow.md` as authoritative
+- Treat `governance.md` and `context-flow.md` as authoritative
 - Prefer **templates, checklists, and structure** over long prose
 - Do not invent new top-level folders without explicit instruction
 - Do not include secrets or environment-specific data

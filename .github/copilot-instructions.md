@@ -12,7 +12,7 @@ Your job here is to help **build and maintain the context system itself**, not t
 
 Treat the following files as **ground truth**:
 
-- `canvas.md` — AI Context & Workspace Operating Model  
+- `governance.md` — AI Context & Workspace Operating Model  
 - `context-flow.md` — Visual context flow and lifecycle  
 
 If something is unclear, prefer adding a TODO rather than inventing behavior that contradicts these documents.
@@ -40,14 +40,14 @@ You must NOT:
 - Write application code
 - Introduce secrets, tokens, credentials, keys, or environment-specific data
 - Add speculative or “creative” content without instruction
-- Change `canvas.md` or `context-flow.md` unless explicitly asked
+- Change `governance.md`, `canvas.md`, or `context-flow.md` unless explicitly asked
 
 ---
 
 ## Context & security rules
 
 - This repo is private, but **assume all content may be copied into public repos later**
-- Follow the sensitivity tiers defined in `canvas.md`
+- Follow the sensitivity tiers defined in `governance.md`
 - Never include:
   - API keys
   - Internal hostnames
@@ -92,7 +92,7 @@ You must NOT:
 ## Default behavior
 
 If instructions are ambiguous:
-1. Re-read `canvas.md` and `context-flow.md`
+1. Re-read `governance.md` and `context-flow.md`
 2. Choose the option that **preserves separation of Plane A vs Plane B**
 3. Prefer minimal, reversible changes
 4. Add TODOs instead of guessing

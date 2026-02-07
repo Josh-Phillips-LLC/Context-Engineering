@@ -24,7 +24,7 @@ CEO-Approval:
 - [ ] TODOs added where human judgment is required
 
 # Protected Changes Logic
-- [ ] `canvas.md`, `context-flow.md`, or `00-os/` touched → CEO approval required
+- [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → CEO approval required
 - [ ] Plane A/B boundary changes detected → CEO approval required
 
 # Low-Risk Fast-Track

@@ -18,7 +18,7 @@
 - [ ] CEO approval comment exists when required (protected paths)
 
 ## Protected Changes Logic
-- [ ] If `canvas.md`, `context-flow.md`, or `00-os/` changed → CEO approval required
+- [ ] If `governance.md`, `context-flow.md`, or `00-os/` changed → CEO approval required
 - [ ] If Plane A/B boundary changes detected → CEO approval required
 
 ## Low-Risk Fast-Track

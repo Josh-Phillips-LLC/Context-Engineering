@@ -27,7 +27,7 @@ List explicit exclusions so Copilot does not “helpfully” expand scope.
 
 - Any files not listed in Scope
 - Protected artifacts unless explicitly included:
-  - `canvas.md`
+  - `governance.md`
   - `context-flow.md`
   - `00-os/**`
 - Automation that merges PRs
@@ -72,7 +72,7 @@ State the exact PR title and any required PR-body summary.
 
 - Open a PR titled: `Copilot: <short title>`
 - Include a short summary mapping changes to Acceptance Criteria
-- Apply labels using canonical `gh` commands from `canvas.md`
+- Apply labels using canonical `gh` commands from `governance.md`
 - Do not merge the PR
 
 ### Branching (Required)
