@@ -61,7 +61,7 @@ Use checkboxes. Make these **binary** (pass/fail).
 - [ ] Commit message starts with `[Implementation Specialist]`
 - [ ] PR description includes:
   - `Primary-Role: Implementation Specialist`
-  - `Reviewed-By-Role: N/A` (or a named reviewer if specified)
+  - `Reviewed-By-Role: N/A` (or a canonical role if specified)
   - `Executive-Sponsor-Approval: Not-Required` (or `Required` / `Provided` if protected paths are touched)
 - [ ] PR labels applied via `gh`:
   - `role:implementation-specialist`
