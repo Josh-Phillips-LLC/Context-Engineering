@@ -80,7 +80,7 @@ gh auth status
 unset GH_PAT
 
 cd /workspace/Projects
-git clone https://github.com/joshphillipssr/Context-Engineering.git
+git clone https://github.com/Josh-Phillips-LLC/Context-Engineering.git
 exit
 ```
 
