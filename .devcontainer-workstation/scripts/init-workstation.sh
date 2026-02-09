@@ -4,7 +4,7 @@ set -euo pipefail
 CODEX_HOME_DIR="${CODEX_HOME:-/root/.codex}"
 DEFAULT_CONFIG="/etc/codex/config.toml"
 TARGET_CONFIG="${CODEX_HOME_DIR}/config.toml"
-WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/joshphillipssr/Context-Engineering.git}"
+WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/Context-Engineering.git}"
 WORKSPACE_REPO_DIR="${WORKSPACE_REPO_DIR:-/workspace/Projects/Context-Engineering}"
 AUTO_CLONE_WORKSPACE_REPO="${AUTO_CLONE_WORKSPACE_REPO:-true}"
 
