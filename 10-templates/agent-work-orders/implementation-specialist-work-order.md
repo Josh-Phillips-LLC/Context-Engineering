@@ -1,4 +1,4 @@
-# Copilot Work Order (Template)
+# Implementation Specialist Work Order (Template)
 
 Use this template in the **body of a GitHub Issue** when the Issue is intended to be executed directly by Copilot (i.e., “tell Copilot the Issue number and get to work”).
 
@@ -6,7 +6,7 @@ Use this template in the **body of a GitHub Issue** when the Issue is intended t
 
 ---
 
-## Copilot Work Order (Authoritative)
+## Implementation Specialist Work Order (Authoritative)
 
 ## Objective
 Describe the single outcome this work order must achieve (1–3 sentences). Keep it measurable.

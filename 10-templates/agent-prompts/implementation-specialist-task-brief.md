@@ -1,4 +1,4 @@
-# Copilot Task Brief (Template)
+# Implementation Specialist Task Brief (Template)
 
 ## Assigned Role
 - Role: Implementation Specialist

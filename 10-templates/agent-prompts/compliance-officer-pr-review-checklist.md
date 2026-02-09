@@ -1,8 +1,8 @@
-# Codex PR Review Checklist (Template)
+# Compliance Officer PR Review Checklist (Template)
 
 This file is a checklist + post-review enforcement actions for the Compliance Officer (Codex assignment).
 
-Canonical review brief and required PR Review Report format: `10-templates/codex-pr-review-brief.md` (source of truth: `governance.md`).
+Canonical review brief and required PR Review Report format: `10-templates/compliance-officer-pr-review-brief.md` (source of truth: `governance.md`).
 
 ## PR
 - Link:
