@@ -1,4 +1,4 @@
-# Codex Task Brief (Template)
+# Compliance Officer Task Brief (Template)
 
 ## Role
 - Compliance Officer (deterministic)
