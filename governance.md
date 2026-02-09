@@ -47,6 +47,19 @@ For exploratory ideas, options, and future-looking notes, see `canvas.md`.
 - Tools and humans are assignment metadata, not role identity
 - Canonical role charters live in `00-os/role-charters/`
 
+### Canonical role terminology
+
+The canonical role vocabulary for this repo is:
+
+- Executive Sponsor
+- AI Governance Manager
+- Compliance Officer
+- Implementation Specialist
+- Business Analyst
+
+Use canonical role names in PR metadata, labels, approvals, and documentation.
+Legacy role terms are deprecated and must not be introduced in new artifacts.
+
 ### Legacy role mapping (for reference)
 
 | Legacy reference | Canonical role | Notes |
@@ -282,6 +295,12 @@ Labels make role and status visible at a glance and must be applied on every PR.
 - `status:superseded`
 
 **Rule:** Labels should be applied/updated by the actor (Implementation Specialist / Compliance Officer / Executive Sponsor) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
+
+#### Legacy terminology treatment (deprecated)
+
+Legacy role terms are allowed only as historical references (for example, in the legacy mapping table). They are **not** valid for PR metadata or labels.
+
+If a PR description, comment, or label uses legacy role terms (for example: `CEO`, `Director of AI Context`, `role:CEO`, `CEO-Approval`), reviewers must request changes and require replacement with canonical role terminology.
 
 #### 4. Label application via `gh` (canonical commands)
 

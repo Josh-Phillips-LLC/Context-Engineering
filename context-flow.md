@@ -7,8 +7,8 @@ flowchart TB
   %% =========================
   %% Actors
   %% =========================
-  CEO["Executive Sponsor: Josh<br/>Vision - Priorities - Constraints"]:::actor
-  DIR["AI Governance Manager: ChatGPT<br/>Context design - Prompting - Review"]:::actor
+  ES["Executive Sponsor: Josh<br/>Vision - Priorities - Constraints"]:::actor
+  AGM["AI Governance Manager: ChatGPT<br/>Context design - Prompting - Review"]:::actor
   AGENTS["Implementation Specialists: Copilot / Codex / Continue<br/>Execution in VS Code"]:::actor
 
   %% =========================
@@ -33,17 +33,17 @@ flowchart TB
   %% =========================
   %% Main Flow
   %% =========================
-  CEO -->|Vision / goals / constraints| DIR
+  ES -->|Vision / goals / constraints| AGM
 
-  DIR -->|Create / update| PVT_SESS
-  DIR -->|Maintain| PVT_OS
-  DIR -->|Create templates| PVT_TPL
-  DIR -->|Capture tool behavior| PVT_TOOL
+  AGM -->|Create / update| PVT_SESS
+  AGM -->|Maintain| PVT_OS
+  AGM -->|Create templates| PVT_TPL
+  AGM -->|Capture tool behavior| PVT_TOOL
 
   %% Prompting loop
-  DIR -->|Agent briefs: task prompts and repo context| AGENTS
-  AGENTS -->|Work output: code, PRs, notes| DIR
-  DIR -->|Review - refine - report| CEO
+  AGM -->|Agent briefs: task prompts and repo context| AGENTS
+  AGENTS -->|Work output: code, PRs, notes| AGM
+  AGM -->|Review - refine - report| ES
 
   %% =========================
   %% Canvas Lifecycle
@@ -73,7 +73,7 @@ flowchart TB
   %% Guardrails
   %% =========================
   PVT_OS -->|Defines security tiers + publish rules| EXTR
-  PVT_TPL -->|Provides prompt patterns| DIR
+  PVT_TPL -->|Provides prompt patterns| AGM
   RPO_CANV -->|Limits scope + constraints| AGENTS
 
   %% =========================
