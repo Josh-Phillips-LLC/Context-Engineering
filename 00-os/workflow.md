@@ -3,9 +3,9 @@
 ## Default Workflow (Reviewable Changes)
 1. **Issue**: Objective, scope, constraints, definition of done
 2. **Branch**: Focused edits with minimal scope and role-attributed commit messages
-3. **Pull Request**: Use templates + include machine-readable PR metadata (`Primary-Actor` / `Reviewed-By` / `CEO-Approval`)
-4. **Labels**: Apply required PR labels (at least one role label + exactly one `status:*` label) via `gh`
-5. **Review**: Codex review + human decision where required; reviewer updates status labels after verdict
+3. **Pull Request**: Use templates + include machine-readable PR metadata (`Primary-Role` / `Reviewed-By-Role` / `Executive-Sponsor-Approval`)
+4. **Labels**: Apply required PR labels (at least one `role:*` label + exactly one `status:*` label) via `gh` immediately after PR creation
+5. **Review**: Compliance Officer review + human decision where required; Compliance Officer posts PR Review Report comment; reviewer updates status labels after verdict; AI Governance Manager / Executive Sponsor makes final call for sensitive changes
 6. **Merge**: Human merge for protected changes; update status labels
 
 ## Protected Changes (Require Executive Sponsor Approval)
