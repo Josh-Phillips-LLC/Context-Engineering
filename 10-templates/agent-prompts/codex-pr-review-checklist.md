@@ -13,6 +13,7 @@ Canonical review brief and required PR Review Report format: `10-templates/codex
 - [ ] PR description includes all three exact metadata keys (Primary-Role:, Reviewed-By-Role:, Executive-Sponsor-Approval:)
 - [ ] At least one role label exists (role:implementation-specialist / role:compliance-officer / role:ai-governance-manager / role:business-analyst / role:executive-sponsor)
 - [ ] Exactly one status:* label exists
+- [ ] No legacy role terms used in metadata/labels (CEO, Director of AI Context, role:CEO, CEO-Approval)
 
 ## Review Gate (Minimum)
 - [ ] No secrets, tokens, internal hostnames, or personal data

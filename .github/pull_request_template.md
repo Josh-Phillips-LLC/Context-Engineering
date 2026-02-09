@@ -14,6 +14,7 @@ Executive-Sponsor-Approval:
 - [ ] Commit messages include role prefixes ([Executive Sponsor], [AI Governance Manager], [Compliance Officer], [Business Analyst], [Implementation Specialist])
 - [ ] At least one role label applied (role:executive-sponsor / role:ai-governance-manager / role:compliance-officer / role:business-analyst / role:implementation-specialist)
 - [ ] Exactly one status:* label applied
+- [ ] No legacy role terms used in metadata/labels (CEO, Director of AI Context, role:CEO, CEO-Approval)
 - [ ] Executive Sponsor approval provided (required for protected paths)
 
 # Review Gate (Minimum)

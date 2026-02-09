@@ -77,6 +77,7 @@ Verify that the PR:
 - Keeps changes **scoped to the PR’s stated objective**
 - Prefers **templates and checklists over long prose**
 - Adds **TODOs** where human judgment or future work is required
+- Uses **canonical role terminology** in PR metadata, labels, and approval language (no legacy terms like CEO, Director of AI Context, role:CEO, CEO-Approval)
 
 ---
 
