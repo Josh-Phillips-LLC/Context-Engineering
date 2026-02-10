@@ -150,6 +150,12 @@ The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/c
 Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
 If `ROLE_PROFILE` is not set at runtime, it defaults to the image-baked `IMAGE_ROLE_PROFILE` value.
 It also generates a runtime instruction file at `<workspace>/.role.instructions.md`.
+In addition, it generates adapter files at:
+
+- `<workspace>/AGENTS.md`
+- `<workspace>/.github/copilot-instructions.md`
+
+Both adapter files point to `<workspace>/.role.instructions.md` as the canonical runtime role instruction source.
 
 Instruction source resolution order:
 
@@ -162,6 +168,13 @@ Role-specific images bake `/etc/codex/runtime-role-instructions/<role>.md` at bu
 If the workspace repo directory does not exist at startup, the init script creates it so runtime role instructions can still be materialized.
 
 For `Compliance Officer`, the runtime file includes the PR review protocol from `10-templates/compliance-officer-pr-review-brief.md` (or the image fallback copy when the workspace file is not present).
+
+The init script also ensures workspace-level VS Code chat defaults in `<workspace>/.vscode/settings.json`:
+
+- `"github.copilot.chat.codeGeneration.useInstructionFiles": true`
+- `"chat.useAgentsMdFile": true`
+- `"chat.includeApplyingInstructions": true`
+- `"chat.includeReferencedInstructions": true`
 
 ## 5) Centralized role instructions (multi-agent)
 
