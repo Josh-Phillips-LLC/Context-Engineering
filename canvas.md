@@ -1,4 +1,4 @@
-# AI Context Canvas (Exploratory)
+# Repo Canvas (Exploratory)
 
 This canvas captures exploratory context, options, and future-looking ideas that are not yet ratified.
 
