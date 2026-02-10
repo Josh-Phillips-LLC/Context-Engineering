@@ -69,7 +69,7 @@ $COMPOSE_CMD logs --tail=200 compliance-workstation
 The repo root inside the container is `/workspace/Projects` (Docker volume-backed).
 On container startup, the entrypoint tries to clone:
 
-- URL: `https://github.com/joshphillipssr/Context-Engineering.git`
+- URL: `https://github.com/Josh-Phillips-LLC/Context-Engineering.git`
 - Path: `/workspace/Projects/Context-Engineering`
 
 Verify clone status:
