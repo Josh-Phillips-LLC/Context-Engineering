@@ -109,6 +109,17 @@ In local (non-containerized) VS Code:
 
 The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
 Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
+It also generates a runtime instruction file at `/workspace/Projects/Context-Engineering/.role.instructions.md` using centralized sources in `10-templates/agent-instructions/`.
+
+## 5) Centralized role instructions (multi-agent)
+
+Canonical role-based instruction sources live in:
+
+- `10-templates/agent-instructions/base.md`
+- `10-templates/agent-instructions/roles/implementation-specialist.md`
+- `10-templates/agent-instructions/roles/compliance-officer.md`
+
+These files are tool-agnostic and should be reused by non-Codex runtimes (for example, Copilot or Ollama adapters) rather than duplicating role logic in vendor-specific locations.
 
 To update the default Codex settings for this workstation config:
 
