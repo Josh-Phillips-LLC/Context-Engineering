@@ -11,7 +11,7 @@
   - Designs context system
   - Curates and sanitizes outputs
   - Maintains Plane B assets
-- **Compliance Officer (optional)**
+- **Compliance Officer**
   - Reviews implementation output for alignment with operating model
   - Uses deterministic checklists (no intuition-only approvals)
   - Flags security leaks, scope creep, Plane A/B violations
