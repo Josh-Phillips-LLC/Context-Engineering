@@ -20,6 +20,43 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - CODEX_HOME=/root/.codex
       - SSH_AUTH_SOCK=/ssh-agent
+      - ROLE_PROFILE=${ROLE_PROFILE:-implementation-specialist}
+      - WORKSPACE_REPO_URL=${WORKSPACE_REPO_URL:-https://github.com/joshphillipssr/Context-Engineering.git}
+      - WORKSPACE_REPO_DIR=/workspace/Projects/Context-Engineering
+      - AUTO_CLONE_WORKSPACE_REPO=${AUTO_CLONE_WORKSPACE_REPO:-true}
+
+    # Testing-mode autonomy
+    cap_add:
+      - ALL
+    privileged: true
+    init: true
+    entrypoint: ["/usr/local/bin/init-workstation.sh"]
+    command: ["sleep", "infinity"]
+
+  compliance-workstation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: compliance-workstation
+    profiles:
+      - compliance-officer
+    volumes:
+      - projects_data:/workspace/Projects
+      - gh_config:/root/.config/gh
+      - git_config:/root/.config/git
+      - ssh_data:/root/.ssh
+      - codex_home_compliance:/root/.codex
+      # Optional: forward host SSH agent into container for commit signing.
+      # Set HOST_SSH_AGENT_SOCK before compose up.
+      - type: bind
+        source: ${HOST_SSH_AGENT_SOCK:-/tmp/codex-no-ssh-agent}
+        target: /ssh-agent
+    environment:
+      - GH_TOKEN=${GH_TOKEN:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - CODEX_HOME=/root/.codex
+      - SSH_AUTH_SOCK=/ssh-agent
+      - ROLE_PROFILE=compliance-officer
       - WORKSPACE_REPO_URL=${WORKSPACE_REPO_URL:-https://github.com/joshphillipssr/Context-Engineering.git}
       - WORKSPACE_REPO_DIR=/workspace/Projects/Context-Engineering
       - AUTO_CLONE_WORKSPACE_REPO=${AUTO_CLONE_WORKSPACE_REPO:-true}
@@ -38,3 +75,4 @@ volumes:
   git_config:
   ssh_data:
   codex_home:
+  codex_home_compliance:

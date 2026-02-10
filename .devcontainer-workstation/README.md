@@ -1,6 +1,10 @@
 # Devcontainer Workstation Setup
 
 This workflow builds the container from scratch outside VS Code, then attaches VS Code to the running container.
+It supports role-scoped startup for:
+
+- `agent-workstation` (default `Implementation Specialist` profile)
+- `compliance-workstation` (`Compliance Officer` profile)
 
 ## 1) Build and start from host
 
@@ -20,8 +24,12 @@ fi
 
 export GH_TOKEN="<your_pat>"
 
+# Default role-scoped startup (Implementation Specialist)
 $COMPOSE_CMD down
-$COMPOSE_CMD up -d --build
+$COMPOSE_CMD up -d --build agent-workstation
+
+# Optional: Compliance Officer role-scoped container
+$COMPOSE_CMD --profile compliance-officer up -d --build compliance-workstation
 ```
 
 If you exported `GH_TOKEN` for startup bootstrap, clear it after the container is running:
@@ -45,12 +53,14 @@ Confirm container is running:
 ```bash
 $COMPOSE_CMD ps
 docker ps --filter name=agent-workstation
+docker ps --filter name=compliance-workstation
 ```
 
-If `agent-workstation` is not `Up`, inspect logs:
+If a role container is not `Up`, inspect logs:
 
 ```bash
 $COMPOSE_CMD logs --tail=200 agent-workstation
+$COMPOSE_CMD logs --tail=200 compliance-workstation
 ```
 
 ## 2) Create/clone repos in container-owned storage
@@ -92,18 +102,19 @@ In local (non-containerized) VS Code:
 
 1. Open Command Palette
 2. Run `Dev Containers: Attach to Running Container...`
-3. Select `agent-workstation`
+3. Select `agent-workstation` or `compliance-workstation`
 4. Open folder `/workspace/Projects/Context-Engineering`
 
 ## 4) Codex config defaults
 
 The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
+Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
 
 To update the default Codex settings for this workstation config:
 
-1. Edit `.devcontainer-workstation/codex/config.toml`
+1. Edit `.devcontainer-workstation/codex/config.toml` (base defaults) and/or `.devcontainer-workstation/codex/role-profiles/*.env` (role overlay values)
 2. Rebuild/restart:
 
 ```bash
-$COMPOSE_CMD up -d --build
+$COMPOSE_CMD up -d --build agent-workstation
 ```
