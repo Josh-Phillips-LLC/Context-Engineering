@@ -33,6 +33,34 @@ $COMPOSE_CMD up -d --build implementation-workstation
 # $COMPOSE_CMD --profile compliance-officer up -d --build compliance-workstation
 ```
 
+## 1a) Start from published GHCR role packages
+
+Role packages are published by `.github/workflows/publish-role-workstation-images.yml` and can be consumed without local image builds.
+
+```bash
+cd /path/to/Context-Engineering/.devcontainer-workstation
+
+if docker compose version >/dev/null 2>&1; then
+  COMPOSE_CMD="docker compose"
+else
+  COMPOSE_CMD="docker-compose"
+fi
+
+# Optional overrides:
+# export GHCR_OWNER="<github-org-or-user>"
+# export GHCR_IMAGE_TAG="latest"
+
+$COMPOSE_CMD -f docker-compose.ghcr.yml down
+$COMPOSE_CMD -f docker-compose.ghcr.yml up -d implementation-workstation
+# Optional:
+# $COMPOSE_CMD -f docker-compose.ghcr.yml --profile compliance-officer up -d compliance-workstation
+```
+
+Default package names:
+
+- `ghcr.io/josh-phillips-llc/context-engineering-workstation-implementation-specialist:latest`
+- `ghcr.io/josh-phillips-llc/context-engineering-workstation-compliance-officer:latest`
+
 If you exported `GH_TOKEN` for startup bootstrap, clear it after the container is running:
 
 ```bash
@@ -110,12 +138,18 @@ In local (non-containerized) VS Code:
 
 The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
 Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
+If `ROLE_PROFILE` is not set at runtime, it defaults to the image-baked `IMAGE_ROLE_PROFILE` value.
 It also generates a runtime instruction file at `<workspace>/.role.instructions.md`.
 
 Instruction source resolution order:
 
 1. workspace sources (`10-templates/agent-instructions/` plus role-required protocol includes)
-2. image-baked fallback sources (`/etc/codex/agent-instructions/`)
+2. image-baked compiled role instructions (`/etc/codex/runtime-role-instructions/<role>.md`)
+3. image-baked fallback sources (`/etc/codex/agent-instructions/`)
+
+Role-specific images bake `/etc/codex/runtime-role-instructions/<role>.md` at build time from repository-defined instruction sources.
+
+If the workspace repo directory does not exist at startup, the init script creates it so runtime role instructions can still be materialized.
 
 For `Compliance Officer`, the runtime file includes the PR review protocol from `10-templates/compliance-officer-pr-review-brief.md` (or the image fallback copy when the workspace file is not present).
 
@@ -129,6 +163,8 @@ Canonical role-based instruction sources live in:
 - `10-templates/compliance-officer-pr-review-brief.md` (required protocol include for Compliance Officer)
 
 These files are tool-agnostic and should be reused by non-Codex runtimes (for example, Copilot or Ollama adapters) rather than duplicating role logic in vendor-specific locations.
+
+Published GHCR role packages are built from these repository-defined sources, so runtime role instructions stay aligned to repo-governed role definitions.
 
 To update the default Codex settings for this workstation config:
 

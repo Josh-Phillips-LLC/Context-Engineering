@@ -14,6 +14,7 @@ Startup behavior:
 
 - Base config is seeded from `/etc/codex/config.toml` when `/root/.codex/config.toml` does not exist.
 - Role overlays then replace supported keys in `/root/.codex/config.toml`.
-- Runtime role instructions are generated at `<workspace>/.role.instructions.md` from workspace sources first, then image-baked fallback sources.
+- `ROLE_PROFILE` defaults to image-baked `IMAGE_ROLE_PROFILE` when not explicitly set at runtime.
+- Runtime role instructions are generated at `<workspace>/.role.instructions.md` from workspace sources first, then image-baked compiled role instructions, then image-baked fallback sources.
 - Compliance Officer runtime instructions include `10-templates/compliance-officer-pr-review-brief.md` (or image fallback) as a required protocol include.
 - If a role profile is missing, startup falls back to existing config values.

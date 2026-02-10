@@ -11,10 +11,11 @@ fi
 CODEX_HOME_DIR="${CODEX_HOME:-/root/.codex}"
 DEFAULT_CONFIG="/etc/codex/config.toml"
 TARGET_CONFIG="${CODEX_HOME_DIR}/config.toml"
-ROLE_PROFILE="${ROLE_PROFILE:-implementation-specialist}"
+ROLE_PROFILE="${ROLE_PROFILE:-${IMAGE_ROLE_PROFILE:-implementation-specialist}}"
 ROLE_PROFILES_DIR="/etc/codex/role-profiles"
 ROLE_INSTRUCTIONS_DIR_REL="${ROLE_INSTRUCTIONS_DIR_REL:-10-templates/agent-instructions}"
 BAKED_ROLE_INSTRUCTIONS_DIR="${BAKED_ROLE_INSTRUCTIONS_DIR:-/etc/codex/agent-instructions}"
+BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR="${BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR:-/etc/codex/runtime-role-instructions}"
 COMPLIANCE_REVIEW_BRIEF_WORKSPACE_REL="${COMPLIANCE_REVIEW_BRIEF_WORKSPACE_REL:-10-templates/compliance-officer-pr-review-brief.md}"
 COMPLIANCE_REVIEW_BRIEF_BAKED="${COMPLIANCE_REVIEW_BRIEF_BAKED:-/etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md}"
 RUNTIME_ROLE_INSTRUCTIONS_FILE="${RUNTIME_ROLE_INSTRUCTIONS_FILE:-.role.instructions.md}"
@@ -91,9 +92,17 @@ render_runtime_role_instructions() {
   local base_file="${source_dir}/base.md"
   local role_file="${source_dir}/roles/${ROLE_PROFILE}.md"
   local compliance_brief_file="${WORKSPACE_REPO_DIR}/${COMPLIANCE_REVIEW_BRIEF_WORKSPACE_REL}"
+  local compiled_role_file="${BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR}/${ROLE_PROFILE}.md"
   local target_file="${WORKSPACE_REPO_DIR}/${RUNTIME_ROLE_INSTRUCTIONS_FILE}"
 
   if [ ! -f "$base_file" ] || [ ! -f "$role_file" ]; then
+    if [ -f "$compiled_role_file" ]; then
+      cp "$compiled_role_file" "$target_file"
+      chmod 644 "$target_file"
+      echo "Generated runtime role instructions at ${target_file} from baked compiled source ${compiled_role_file}."
+      return
+    fi
+
     source_dir="$BAKED_ROLE_INSTRUCTIONS_DIR"
     source_label="image:${BAKED_ROLE_INSTRUCTIONS_DIR}"
     base_file="${source_dir}/base.md"
@@ -175,10 +184,11 @@ if [ "$AUTO_CLONE_WORKSPACE_REPO" = "true" ]; then
   fi
 fi
 
-if [ -d "$WORKSPACE_REPO_DIR" ]; then
-  render_runtime_role_instructions
-else
-  echo "Warning: workspace repo directory '${WORKSPACE_REPO_DIR}' not found; runtime role instructions not generated." >&2
+if [ ! -d "$WORKSPACE_REPO_DIR" ]; then
+  mkdir -p "$WORKSPACE_REPO_DIR"
+  echo "Created workspace repo directory '${WORKSPACE_REPO_DIR}' for runtime role instruction generation."
 fi
+
+render_runtime_role_instructions
 
 exec "$@"
