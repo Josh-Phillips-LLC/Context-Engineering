@@ -1,8 +1,8 @@
 services:
   agent-workstation:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer-workstation/Dockerfile
     container_name: agent-workstation
     volumes:
       - projects_data:/workspace/Projects
@@ -35,8 +35,8 @@ services:
 
   compliance-workstation:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer-workstation/Dockerfile
     container_name: compliance-workstation
     profiles:
       - compliance-officer

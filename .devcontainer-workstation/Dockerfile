@@ -33,9 +33,11 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get update && apt-get install -y gh \
   && rm -rf /var/lib/apt/lists/*
 
-COPY codex/config.toml /etc/codex/config.toml
-COPY codex/role-profiles /etc/codex/role-profiles
-COPY scripts/init-workstation.sh /usr/local/bin/init-workstation.sh
+COPY .devcontainer-workstation/codex/config.toml /etc/codex/config.toml
+COPY .devcontainer-workstation/codex/role-profiles /etc/codex/role-profiles
+COPY 10-templates/agent-instructions /etc/codex/agent-instructions
+COPY 10-templates/compliance-officer-pr-review-brief.md /etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md
+COPY .devcontainer-workstation/scripts/init-workstation.sh /usr/local/bin/init-workstation.sh
 RUN chmod +x /usr/local/bin/init-workstation.sh
 
 WORKDIR /workspace

@@ -20,6 +20,7 @@ Use it for:
 - Runtime adapters should compose instructions as:
   - `base.md`
   - plus one `roles/<role>.md`
+- plus required role-specific protocol includes (for Compliance Officer: `10-templates/compliance-officer-pr-review-brief.md`)
 
 Codex devcontainer startup currently materializes this composition into:
 

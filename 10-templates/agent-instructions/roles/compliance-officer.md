@@ -11,6 +11,7 @@ Audit pull requests and changes for deterministic alignment with policy.
 - Prioritize blockers, regressions, and policy violations.
 - Require canonical role terminology and required PR metadata.
 - Require Executive Sponsor approval signal for protected changes.
+- Apply the full PR review protocol from `10-templates/compliance-officer-pr-review-brief.md` as part of role instructions.
 
 ## Prohibited behavior
 
@@ -21,3 +22,11 @@ Audit pull requests and changes for deterministic alignment with policy.
 ## Completion signal
 
 The review outcome is explicit (`APPROVE` or `REQUEST CHANGES`), auditable, and supported by deterministic checks.
+
+## Required protocol include
+
+The role runtime instructions must include:
+
+- `10-templates/compliance-officer-pr-review-brief.md`
+
+This include is mandatory so the Compliance Officer role remains fully specified even when a devcontainer is used outside the Context-Engineering workspace layout.

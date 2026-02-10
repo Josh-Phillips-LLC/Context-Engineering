@@ -109,7 +109,14 @@ In local (non-containerized) VS Code:
 
 The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
 Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
-It also generates a runtime instruction file at `/workspace/Projects/Context-Engineering/.role.instructions.md` using centralized sources in `10-templates/agent-instructions/`.
+It also generates a runtime instruction file at `<workspace>/.role.instructions.md`.
+
+Instruction source resolution order:
+
+1. workspace sources (`10-templates/agent-instructions/` plus role-required protocol includes)
+2. image-baked fallback sources (`/etc/codex/agent-instructions/`)
+
+For `Compliance Officer`, the runtime file includes the PR review protocol from `10-templates/compliance-officer-pr-review-brief.md` (or the image fallback copy when the workspace file is not present).
 
 ## 5) Centralized role instructions (multi-agent)
 
@@ -118,6 +125,7 @@ Canonical role-based instruction sources live in:
 - `10-templates/agent-instructions/base.md`
 - `10-templates/agent-instructions/roles/implementation-specialist.md`
 - `10-templates/agent-instructions/roles/compliance-officer.md`
+- `10-templates/compliance-officer-pr-review-brief.md` (required protocol include for Compliance Officer)
 
 These files are tool-agnostic and should be reused by non-Codex runtimes (for example, Copilot or Ollama adapters) rather than duplicating role logic in vendor-specific locations.
 
