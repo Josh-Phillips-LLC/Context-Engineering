@@ -9,7 +9,7 @@ Ratified role definitions live in `governance.md` and `00-os/role-charters/`.
 
 ## Purpose
 
-This document captures the **durable operating model** for how the Executive Sponsor (Josh), AI Governance Manager (ChatGPT), and Implementation Specialists (VS Code Copilot / Codex / Continue / future LLMs) collaborate.
+This document explores a **durable operating model** candidate for how the Executive Sponsor (Josh), AI Governance Manager (ChatGPT), and Implementation Specialists (VS Code Copilot / Codex / Continue / future LLMs) might collaborate.
 
 The goal is to:
 
