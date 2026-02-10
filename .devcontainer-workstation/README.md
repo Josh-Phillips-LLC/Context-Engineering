@@ -3,7 +3,7 @@
 This workflow builds the container from scratch outside VS Code, then attaches VS Code to the running container.
 It supports role-scoped startup for:
 
-- `agent-workstation` (default `Implementation Specialist` profile)
+- `implementation-workstation` (default `Implementation Specialist` profile)
 - `compliance-workstation` (`Compliance Officer` profile)
 
 ## 1) Build and start from host
@@ -26,10 +26,10 @@ export GH_TOKEN="<your_pat>"
 
 # Default role-scoped startup (Implementation Specialist)
 $COMPOSE_CMD down
-$COMPOSE_CMD up -d --build agent-workstation
+$COMPOSE_CMD up -d --build implementation-workstation
 
 # Optional: Compliance Officer role-scoped container
-$COMPOSE_CMD --profile compliance-officer up -d --build compliance-workstation
+# $COMPOSE_CMD --profile compliance-officer up -d --build compliance-workstation
 ```
 
 If you exported `GH_TOKEN` for startup bootstrap, clear it after the container is running:
@@ -52,14 +52,14 @@ Confirm container is running:
 
 ```bash
 $COMPOSE_CMD ps
-docker ps --filter name=agent-workstation
+docker ps --filter name=implementation-workstation
 docker ps --filter name=compliance-workstation
 ```
 
 If a role container is not `Up`, inspect logs:
 
 ```bash
-$COMPOSE_CMD logs --tail=200 agent-workstation
+$COMPOSE_CMD logs --tail=200 implementation-workstation
 $COMPOSE_CMD logs --tail=200 compliance-workstation
 ```
 
@@ -74,13 +74,13 @@ On container startup, the entrypoint tries to clone:
 Verify clone status:
 
 ```bash
-docker exec -it agent-workstation bash -lc 'ls -la /workspace/Projects/Context-Engineering'
+docker exec -it implementation-workstation bash -lc 'ls -la /workspace/Projects/Context-Engineering'
 ```
 
 If auto-clone failed, run manual PAT auth and clone inside the container:
 
 ```bash
-docker exec -it agent-workstation bash
+docker exec -it implementation-workstation bash
 
 # One-time fallback auth inside container (HTTPS + PAT)
 read -s -p "GitHub PAT: " GH_PAT; echo
@@ -102,7 +102,7 @@ In local (non-containerized) VS Code:
 
 1. Open Command Palette
 2. Run `Dev Containers: Attach to Running Container...`
-3. Select `agent-workstation` or `compliance-workstation`
+3. Select `implementation-workstation` or `compliance-workstation`
 4. Open folder `/workspace/Projects/Context-Engineering`
 
 ## 4) Codex config defaults
@@ -135,5 +135,5 @@ To update the default Codex settings for this workstation config:
 2. Rebuild/restart:
 
 ```bash
-$COMPOSE_CMD up -d --build agent-workstation
+$COMPOSE_CMD up -d --build implementation-workstation
 ```
