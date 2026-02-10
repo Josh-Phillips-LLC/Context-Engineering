@@ -136,6 +136,52 @@ Purpose:
 
 ---
 
+## Canvas to Governance Promotion (Formal Process)
+
+Use this process when promoting an idea from `canvas.md` into authoritative policy.
+
+### 1. Promotion eligibility
+
+An idea is eligible for promotion only when:
+
+- Scope and language are stable
+- Governance impact is clear
+- Ownership and approval boundaries are explicit
+- Required supporting artifacts are identified (templates, charters, checklists) where applicable
+
+### 2. Required Issue content
+
+Promotion work is issue-first and the Issue must define:
+
+- Objective (what policy change is being proposed)
+- Source context (link to relevant `canvas.md` section or heading)
+- Scope and constraints
+- Definition of done
+- Required supporting artifact updates (if any)
+
+### 3. Required implementation and PR flow
+
+1. Create the Issue
+2. Create the branch from the Issue using `gh issue develop <ISSUE_NUMBER> --checkout`
+3. Implement the governance change with minimal scope
+4. Remove or reduce the promoted idea in `canvas.md` so only unresolved exploratory content remains
+5. Open a PR that links/closes the Issue and includes required role attribution metadata and labels
+6. Complete Compliance Officer review, including the required PR Review Report comment
+
+### 4. Approval and merge requirements
+
+- Changes to `governance.md` are protected changes
+- Executive Sponsor approval is required before merge
+- Merge only after required review and approval signals are present
+
+### 5. Post-merge hygiene
+
+- Ensure `canvas.md` no longer contains ratified policy language that now lives in `governance.md`
+- If only part of an idea was promoted, keep only the remaining open questions in `canvas.md`
+- Update related references (for example, glossary, templates, or role charters) only when required by the promoted change
+
+---
+
 ## Change Management: Issue / PR Process (reviewable edits)
 
 All meaningful changes in this repo should be **reviewable**. The default workflow is **Issue → Branch → Pull Request → Review → Merge**.
