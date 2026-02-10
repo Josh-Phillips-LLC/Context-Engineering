@@ -63,7 +63,7 @@ Use checkboxes. Make these **binary** (pass/fail).
   - `Primary-Role: Implementation Specialist`
   - `Reviewed-By-Role: N/A` (or a canonical role if specified)
   - `Executive-Sponsor-Approval: Not-Required` (or `Required` / `Provided` if protected paths are touched)
-- [ ] PR labels applied via `gh`:
+- [ ] PR labels applied using GitHub UI, API/automation, or `gh`:
   - `role:implementation-specialist`
   - exactly one `status:*` label (`status:needs-review`)
 
@@ -73,7 +73,7 @@ State the exact PR title and any required PR-body summary.
 - Open a PR titled: `Copilot: <short title>`
 - Include a short summary mapping changes to Acceptance Criteria
 - Link and close the Issue in the PR description (example: `Closes #<ISSUE_NUMBER>`)
-- Apply labels using canonical `gh` commands from `governance.md`
+- Apply labels (canonical `gh` commands in `governance.md` are optional examples)
 - Do not merge the PR
 
 ### Branching (Required)

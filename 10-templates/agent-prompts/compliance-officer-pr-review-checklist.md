@@ -62,7 +62,7 @@ gh pr comment <PR_NUMBER> --body-file <PATH_TO_PR_REVIEW_REPORT_MD>
 **If PR touches protected paths and an explicit Executive Sponsor approval comment exists**
 - Optionally apply label `role:executive-sponsor-approved`
 
-All label changes must be executed using `gh pr edit`.
+Label changes may be executed using GitHub UI, API/automation, or `gh`. If using `gh`, apply changes with `gh pr edit`.
 
 Compliance Officer (Codex assignment) must request permission before executing shell commands.
 Compliance Officer (Codex assignment) must not merge the PR.
