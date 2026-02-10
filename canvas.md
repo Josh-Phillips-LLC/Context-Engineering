@@ -38,8 +38,6 @@ The goal is to:
 
 ## Next Artifacts to Create
 
-- `Context-Engineering/00-os/org-model.md`
-- `Context-Engineering/00-os/security.md`
 - Repo template: `docs/ai/context.md`
 - Repo template: `.github/copilot-instructions.md`
 
