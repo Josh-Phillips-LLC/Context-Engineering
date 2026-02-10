@@ -23,6 +23,7 @@ fi
 # and you want non-interactive auth/auto-clone on first boot.
 
 export GH_TOKEN="<your_pat>"
+export WORKSTATION_DEBUG="true" # optional: verbose init-workstation logging
 
 # Default role-scoped startup (Implementation Specialist)
 $COMPOSE_CMD down

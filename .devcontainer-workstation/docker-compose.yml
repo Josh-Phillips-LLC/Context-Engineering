@@ -18,6 +18,7 @@ services:
     environment:
       - GH_TOKEN=${GH_TOKEN:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       # - SSH_AUTH_SOCK=/ssh-agent
       - ROLE_PROFILE=${ROLE_PROFILE:-implementation-specialist}
@@ -54,6 +55,7 @@ services:
     environment:
       - GH_TOKEN=${GH_TOKEN:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       # - SSH_AUTH_SOCK=/ssh-agent
       - ROLE_PROFILE=compliance-officer

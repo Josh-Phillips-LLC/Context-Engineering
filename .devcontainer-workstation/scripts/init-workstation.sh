@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+WORKSTATION_DEBUG="${WORKSTATION_DEBUG:-false}"
+
+if [ "$WORKSTATION_DEBUG" = "true" ]; then
+  set -x
+  echo "Debug mode enabled for init-workstation.sh"
+fi
+
 CODEX_HOME_DIR="${CODEX_HOME:-/root/.codex}"
 DEFAULT_CONFIG="/etc/codex/config.toml"
 TARGET_CONFIG="${CODEX_HOME_DIR}/config.toml"
