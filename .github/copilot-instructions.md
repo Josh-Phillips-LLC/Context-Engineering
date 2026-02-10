@@ -15,6 +15,7 @@ Treat the following files as **ground truth**:
 - `governance.md` — AI Context & Workspace Operating Model  
 - `context-flow.md` — Visual context flow and lifecycle  
 - `00-os/role-charters/` — Canonical HR role definitions
+- `10-templates/agent-instructions/` — Centralized, tool-agnostic role instruction source
 
 If something is unclear, prefer adding a TODO rather than inventing behavior that contradicts these documents.
 

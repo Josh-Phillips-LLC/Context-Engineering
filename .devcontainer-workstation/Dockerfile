@@ -1,5 +1,7 @@
 FROM ubuntu:24.04
 
+ARG IMAGE_ROLE_PROFILE=implementation-specialist
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl ca-certificates openssh-client gnupg jq unzip \
     nodejs npm \
@@ -33,8 +35,40 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get update && apt-get install -y gh \
   && rm -rf /var/lib/apt/lists/*
 
-COPY codex/config.toml /etc/codex/config.toml
-COPY scripts/init-workstation.sh /usr/local/bin/init-workstation.sh
+COPY .devcontainer-workstation/codex/config.toml /etc/codex/config.toml
+COPY .devcontainer-workstation/codex/role-profiles /etc/codex/role-profiles
+COPY 10-templates/agent-instructions /etc/codex/agent-instructions
+COPY 10-templates/compliance-officer-pr-review-brief.md /etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md
+RUN set -eux; \
+    base_file="/etc/codex/agent-instructions/base.md"; \
+    role_file="/etc/codex/agent-instructions/roles/${IMAGE_ROLE_PROFILE}.md"; \
+    compliance_brief_file="/etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md"; \
+    target_dir="/etc/codex/runtime-role-instructions"; \
+    target_file="${target_dir}/${IMAGE_ROLE_PROFILE}.md"; \
+    test -f "$base_file"; \
+    test -f "$role_file"; \
+    mkdir -p "$target_dir"; \
+    { \
+      echo "# Runtime Role Instructions"; \
+      echo; \
+      echo "Generated at image build time by .devcontainer-workstation/Dockerfile"; \
+      echo "Role profile: ${IMAGE_ROLE_PROFILE}"; \
+      echo "Source: image:/etc/codex/agent-instructions"; \
+      echo; \
+      cat "$base_file"; \
+      echo; \
+      cat "$role_file"; \
+      if [ "$IMAGE_ROLE_PROFILE" = "compliance-officer" ]; then \
+        test -f "$compliance_brief_file"; \
+        echo; \
+        echo "# Embedded Compliance Review Brief"; \
+        echo; \
+        cat "$compliance_brief_file"; \
+      fi; \
+    } > "$target_file"; \
+    chmod 644 "$target_file"
+COPY .devcontainer-workstation/scripts/init-workstation.sh /usr/local/bin/init-workstation.sh
 RUN chmod +x /usr/local/bin/init-workstation.sh
+ENV IMAGE_ROLE_PROFILE=${IMAGE_ROLE_PROFILE}
 
 WORKDIR /workspace

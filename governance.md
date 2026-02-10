@@ -439,6 +439,29 @@ Example:
 - Copilot, Continue, Codex each consume context differently
 - Repo context is the shared baseline
 
+### Role-scoped instruction derivation (required)
+
+For role-scoped devcontainers and agent runtimes, the instruction set for an assigned role must be derived from repository-defined role artifacts.
+
+`AGENT INSTRUCTIONS = ROLE-BASED JOB DESCRIPTION`
+
+Required source artifacts:
+
+- `governance.md`
+- `00-os/role-charters/`
+- centralized role instruction sources (for example, `10-templates/agent-instructions/`)
+
+The resulting instruction set must clearly define:
+
+- role purpose and responsibilities
+- explicit non-responsibilities
+- authority boundaries and escalation conditions
+- what the role can and cannot do
+
+Tool-specific adapters (Codex, Copilot, Ollama, others) may transform format, but must not change role meaning or authority boundaries defined by repository sources.
+
+If runtime instructions conflict with repository role definitions, repository definitions are authoritative and runtime instructions must be corrected.
+
 ---
 
 ## Security Model

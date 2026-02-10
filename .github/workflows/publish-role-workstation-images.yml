@@ -1,0 +1,97 @@
+name: Publish Role Workstation Images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .devcontainer-workstation/**
+      - 10-templates/agent-instructions/**
+      - 10-templates/compliance-officer-pr-review-brief.md
+      - .github/workflows/publish-role-workstation-images.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - role_profile: implementation-specialist
+            image_suffix: implementation-specialist
+          - role_profile: compliance-officer
+            image_suffix: compliance-officer
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate role instruction artifacts
+        run: |
+          set -euo pipefail
+          test -f 10-templates/agent-instructions/base.md
+          test -f "10-templates/agent-instructions/roles/${{ matrix.role_profile }}.md"
+
+          if [ "${{ matrix.role_profile }}" = "compliance-officer" ]; then
+            test -f 10-templates/compliance-officer-pr-review-brief.md
+          fi
+
+      - name: Normalize package image name
+        id: image
+        run: |
+          owner="$(printf '%s' "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
+          image="ghcr.io/${owner}/context-engineering-workstation-${{ matrix.image_suffix }}"
+          echo "owner=${owner}" >> "$GITHUB_OUTPUT"
+          echo "name=${image}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Authenticate to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ matrix.image_suffix }}-latest
+            type=sha,format=short,prefix=${{ matrix.image_suffix }}-
+          labels: |
+            org.opencontainers.image.title=Context Engineering Role Workstation (${{ matrix.role_profile }})
+            org.opencontainers.image.description=Role-scoped workstation image with baked role instructions for ${{ matrix.role_profile }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            io.context_engineering.role_profile=${{ matrix.role_profile }}
+
+      - name: Build and publish role package
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: .devcontainer-workstation/Dockerfile
+          push: true
+          build-args: |
+            IMAGE_ROLE_PROFILE=${{ matrix.role_profile }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Publish summary
+        run: |
+          {
+            echo "### Published role package"
+            echo
+            echo "- Role: \`${{ matrix.role_profile }}\`"
+            echo "- Image: \`${{ steps.image.outputs.name }}\`"
+            echo "- Digest: \`${{ steps.build.outputs.digest }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
