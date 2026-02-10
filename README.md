@@ -36,6 +36,9 @@ It defines **how humans and AI collaborate**, not just what tools are used. Tool
 
 These files define the foundation of the system and should change slowly.
 
+- **`index.md`**  
+  Repository map (link-first entry point).
+
 - **`governance.md`**  
   The authoritative AI Context & Workspace Operating Model  
   Defines roles, context planes, canvas lifecycle, security model, and persistence strategy.
