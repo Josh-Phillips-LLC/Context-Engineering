@@ -151,7 +151,7 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
 2. **Create the branch from the Issue** using `gh issue develop <ISSUE_NUMBER> --checkout` (role occupant)
 3. **Implement on the branch** with focused commits and role-attributed commit messages
 4. **Open a Pull Request** using templates and checklists, including machine-readable PR metadata (see Role Attribution). PR description must link and close the Issue (example: `Closes #<ISSUE_NUMBER>`)
-5. **Apply PR labels** (role occupant) immediately after PR creation via `gh` to self-identify role and set initial status
+5. **Apply PR labels** (role occupant) immediately after PR creation using GitHub UI, API/automation, or `gh` to self-identify role and set initial status
 6. **Review**
 
    - Compliance Officer reviews for compliance (structure, security, scope, Plane A/B boundaries)
@@ -305,7 +305,7 @@ Labels make role and status visible at a glance and must be applied on every PR.
 - `status:closed`
 - `status:superseded`
 
-**Rule:** Labels should be applied/updated by the actor (Implementation Specialist / Compliance Officer / Executive Sponsor) via `gh` as part of the workflow — manual labeling is the exception, not the norm.
+**Rule:** Labels must be applied/updated by the actor (Implementation Specialist / Compliance Officer / Executive Sponsor) using GitHub UI, API/automation, or `gh` as part of the workflow.
 
 #### Legacy terminology treatment (deprecated)
 
@@ -313,7 +313,9 @@ Legacy role terms are allowed only as historical references (for example, in the
 
 If a PR description, comment, or label uses legacy role terms (for example: `CEO`, `Director of AI Context`, `role:CEO`, `CEO-Approval`), reviewers must request changes and require replacement with canonical role terminology.
 
-#### 4. Label application via `gh` (canonical commands)
+#### 4. Label application methods (UI/API/`gh`) with canonical `gh` examples
+
+The allowed methods are GitHub UI, GitHub API/automation, or `gh`. The commands below are optional examples, not exclusive requirements.
 
 Agents may have access to a shell with `gh` configured under the Executive Sponsor identity. When labeling is required, use these canonical commands:
 
