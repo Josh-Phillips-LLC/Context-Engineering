@@ -61,6 +61,13 @@ Default package names:
 - `ghcr.io/josh-phillips-llc/context-engineering-workstation-implementation-specialist:latest`
 - `ghcr.io/josh-phillips-llc/context-engineering-workstation-compliance-officer:latest`
 
+Verify the published platforms include both `linux/amd64` and `linux/arm64`:
+
+```bash
+docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-workstation-implementation-specialist:latest
+docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-workstation-compliance-officer:latest
+```
+
 If you exported `GH_TOKEN` for startup bootstrap, clear it after the container is running:
 
 ```bash
