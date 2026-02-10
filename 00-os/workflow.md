@@ -2,11 +2,16 @@
 
 ## Default Workflow (Reviewable Changes)
 1. **Issue**: Objective, scope, constraints, definition of done
-2. **Branch**: Focused edits with minimal scope and role-attributed commit messages
-3. **Pull Request**: Use templates + include machine-readable PR metadata (`Primary-Role` / `Reviewed-By-Role` / `Executive-Sponsor-Approval`)
-4. **Labels**: Apply required PR labels (at least one `role:*` label + exactly one `status:*` label) via `gh` immediately after PR creation
-5. **Review**: Compliance Officer review + human decision where required; Compliance Officer posts PR Review Report comment; reviewer updates status labels after verdict; AI Governance Manager / Executive Sponsor makes final call for sensitive changes
-6. **Merge**: Human merge for protected changes; update status labels
+2. **Branch (required)**: Create from the Issue via `gh issue develop <ISSUE_NUMBER> --checkout`
+3. **Implementation**: Focused edits with minimal scope and role-attributed commit messages
+4. **Pull Request**: Use templates + include machine-readable PR metadata (`Primary-Role` / `Reviewed-By-Role` / `Executive-Sponsor-Approval`) and link/close the Issue (example: `Closes #<ISSUE_NUMBER>`)
+5. **Labels**: Apply required PR labels (at least one `role:*` label + exactly one `status:*` label) via `gh` immediately after PR creation
+6. **Review**: Compliance Officer review + human decision where required; Compliance Officer posts PR Review Report comment; reviewer updates status labels after verdict; AI Governance Manager / Executive Sponsor makes final call for sensitive changes
+7. **Merge**: Human merge for protected changes; update status labels
+
+## Required Rules
+- Every PR must map to an existing Issue.
+- Branch creation for Issue work must use `gh issue develop <ISSUE_NUMBER> --checkout` (no manual `git checkout -b`).
 
 ## Protected Changes (Require Executive Sponsor Approval)
 - `governance.md` and `context-flow.md`

@@ -2,7 +2,12 @@
 - 
 
 # Issue
-- Linked issue:
+- Linked issue (must close):
+- Closes #
+
+# Issue-Backed Branching (Required)
+- [ ] Branch created via `gh issue develop <ISSUE_NUMBER> --checkout`
+- [ ] PR description links and closes the Issue (example: `Closes #<ISSUE_NUMBER>`)
 
 # Machine-Readable Metadata (Required)
 Primary-Role:

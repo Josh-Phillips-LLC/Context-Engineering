@@ -72,21 +72,17 @@ State the exact PR title and any required PR-body summary.
 
 - Open a PR titled: `Copilot: <short title>`
 - Include a short summary mapping changes to Acceptance Criteria
+- Link and close the Issue in the PR description (example: `Closes #<ISSUE_NUMBER>`)
 - Apply labels using canonical `gh` commands from `governance.md`
 - Do not merge the PR
 
 ### Branching (Required)
-Copilot must create a fresh branch from the latest `origin/main` for each Issue. Do not reuse existing branches.
-
-Branch naming:
-- `chore/issue-<ISSUE_NUMBER>-<short-slug>` (example: `chore/issue-10-codex-label-enforcement`)
+Copilot must create a fresh branch for each Issue using GitHub CLI default naming. Do not reuse existing branches.
+Manual `git checkout -b` is not allowed for Issue-driven work.
 
 Required commands (example):
 ```bash
-git fetch origin
-git checkout main
-git pull --ff-only origin main
-git checkout -b chore/issue-<N>-<slug>
+gh issue develop <ISSUE_NUMBER> --checkout
 ```
 
 Before committing, Copilot must verify it is on the correct branch:
