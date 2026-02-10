@@ -81,7 +81,7 @@ $COMPOSE_CMD down -v
 $COMPOSE_CMD up -d --build
 ```
 
-`down -v` removes all named volumes (including `gh_config`), so GitHub auth, cloned repos, and other persisted container state are reset.
+`down -v` removes all role-prefixed named volumes (for example, `implementation_gh_config` and `compliance_gh_config`), so GitHub auth, cloned repos, and other persisted container state are reset.
 Codex config is re-seeded from `.devcontainer-workstation/codex/config.toml` when `/root/.codex` is recreated.
 
 Role containers now use role-prefixed named volumes, so running multiple role containers at once does not share `/workspace/Projects` or runtime config state between roles.
