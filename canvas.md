@@ -36,6 +36,58 @@ The goal is to:
 
 ---
 
+## Role-Scoped Devcontainers (Exploratory)
+
+Proposed direction: the workflow should terminate in **self-contained, role-specific development containers**.
+
+Each container represents a *single role* (as defined by a Role Charter), not a person or a tool.
+
+### Concept
+
+- Each role has a dedicated devcontainer (or container profile)
+- Opening the container in VS Code immediately places the user or AI agent *inside that role’s operating context*
+- The container becomes the primary delivery mechanism for:
+  - explicit role instructions
+  - constraints and guardrails
+  - allowed tools and extensions
+  - environment-level defaults
+
+### What a Role Container Includes
+
+At minimum:
+
+- Role Charter (concise, authoritative job description)
+- Explicit instructions for that role (do / do not)
+- Pointers to relevant governance sections
+- Tooling and extensions appropriate to the role
+- Optional: validation or linting rules aligned to role responsibilities
+
+### What a Role Container Does *Not* Do
+
+- It does not define identity (human vs AI)
+- It does not assume a specific LLM or vendor
+- It does not embed secrets or credentials
+- It does not bypass governance or approval rules
+
+### Benefits
+
+- Strong separation of concerns
+- Reduced cognitive load when switching roles
+- Clear boundary enforcement for AI agents
+- Portable across:
+  - VS Code + Copilot
+  - Codex
+  - Continue
+  - future agent runtimes
+
+### Open Questions
+
+- One container per role vs shared base + overlays?
+- How are approval-only roles represented (read-only containers)?
+- Should role containers be mandatory for certain operations?
+
+---
+
 ## Next Artifacts to Create
 
 - Repo template: `docs/ai/context.md`
