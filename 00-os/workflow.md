@@ -12,6 +12,12 @@
 ## Required Rules
 - Every PR must map to an existing Issue.
 - Branch creation for Issue work must use `gh issue develop <ISSUE_NUMBER> --checkout` (no manual `git checkout -b`).
+- Issues must define objective, scope, constraints, and definition of done.
+
+## Issue/PR Triage
+- **Blocker**: must be resolved in the current PR before approval/merge.
+- **Follow-up**: create a linked Issue; keep the current PR scoped.
+- **Note**: keep as a note/checklist/comment; no new Issue required unless promoted to follow-up.
 
 ## Protected Changes (Require Executive Sponsor Approval)
 - `governance.md` and `context-flow.md`

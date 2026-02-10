@@ -165,6 +165,15 @@ All meaningful changes in this repo should be **reviewable**. The default workfl
 - Issue-first: every PR maps to an existing Issue.
 - Branch creation for Issue work must use `gh issue develop <ISSUE_NUMBER> --checkout`.
 - No manual `git checkout -b` for Issue-driven PR work.
+- Issues must define objective, scope, constraints, and definition of done.
+
+### Issue/PR triage (blocker vs follow-up vs note)
+
+Use the following triage classes for in-flight findings during Issue/PR work:
+
+- **Blocker:** must be resolved in the current PR before approval/merge.
+- **Follow-up:** create a linked Issue; keep the current PR scoped.
+- **Note:** keep as a note/checklist/comment; no new Issue required unless promoted to follow-up.
 
 **If no Issue exists (fallback sequence):**
 1) `gh issue create ...`
