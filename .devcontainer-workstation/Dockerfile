@@ -1,12 +1,37 @@
 FROM ubuntu:24.04
 
 ARG IMAGE_ROLE_PROFILE=implementation-specialist
+ARG NODE_VERSION=20.19.0
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl ca-certificates openssh-client gnupg jq unzip \
-    nodejs npm \
-    poppler-utils mupdf-tools \
-  && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    APT_OPTIONS="-o Acquire::Retries=5 -o Acquire::http::No-Cache=true -o Acquire::http::Pipeline-Depth=0"; \
+    for attempt in 1 2 3 4 5; do \
+      if apt-get ${APT_OPTIONS} update && \
+         apt-get ${APT_OPTIONS} install -y --no-install-recommends \
+           git curl ca-certificates openssh-client gnupg jq unzip \
+           poppler-utils mupdf-tools; then \
+        break; \
+      fi; \
+      if [ "${attempt}" -eq 5 ]; then \
+        exit 1; \
+      fi; \
+      rm -rf /var/lib/apt/lists/*; \
+      sleep $((attempt * 3)); \
+    done; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "${arch}" in \
+      amd64) node_arch="x64" ;; \
+      arm64) node_arch="arm64" ;; \
+      *) echo "Unsupported architecture: ${arch}" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSLO "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${node_arch}.tar.gz"; \
+    tar -xzf "node-v${NODE_VERSION}-linux-${node_arch}.tar.gz" -C /usr/local --strip-components=1 --no-same-owner; \
+    rm "node-v${NODE_VERSION}-linux-${node_arch}.tar.gz"; \
+    node --version; \
+    npm --version
 
 RUN npm i -g @openai/codex
 
