@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  render-role-repo-template.sh \
+    --role-slug <role-slug> \
+    --repo-name <repo-name> \
+    --output-dir <output-dir> \
+    [--source-ref <source-ref>] \
+    [--force]
+
+Example:
+  render-role-repo-template.sh \
+    --role-slug implementation-specialist \
+    --repo-name context-engineering-role-implementation-specialist \
+    --output-dir /tmp/context-engineering-role-implementation-specialist \
+    --source-ref main
+USAGE
+}
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TEMPLATE_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../../../.." && pwd)"
+
+ROLE_SLUG=""
+ROLE_NAME=""
+REPO_NAME=""
+OUTPUT_DIR=""
+SOURCE_REF=""
+FORCE="false"
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --role-slug)
+      ROLE_SLUG="$2"
+      shift 2
+      ;;
+    --role-name)
+      ROLE_NAME="$2"
+      shift 2
+      ;;
+    --repo-name)
+      REPO_NAME="$2"
+      shift 2
+      ;;
+    --output-dir)
+      OUTPUT_DIR="$2"
+      shift 2
+      ;;
+    --source-ref)
+      SOURCE_REF="$2"
+      shift 2
+      ;;
+    --force)
+      FORCE="true"
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+if [ -z "$ROLE_SLUG" ] || [ -z "$REPO_NAME" ] || [ -z "$OUTPUT_DIR" ]; then
+  echo "Missing required arguments." >&2
+  usage
+  exit 1
+fi
+
+if [ -z "$SOURCE_REF" ]; then
+  if git -C "$REPO_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    SOURCE_REF="$(git -C "$REPO_ROOT" rev-parse --short HEAD)"
+  else
+    SOURCE_REF="unknown"
+  fi
+fi
+
+if [ -z "$ROLE_NAME" ]; then
+  case "$ROLE_SLUG" in
+    implementation-specialist)
+      ROLE_NAME="Implementation Specialist"
+      ;;
+    compliance-officer)
+      ROLE_NAME="Compliance Officer"
+      ;;
+    *)
+      ROLE_NAME="$(echo "$ROLE_SLUG" | tr '-' ' ' | awk '{for (i=1; i<=NF; i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')"
+      ;;
+  esac
+fi
+
+BASE_FILE="${REPO_ROOT}/10-templates/agent-instructions/base.md"
+ROLE_FILE="${REPO_ROOT}/10-templates/agent-instructions/roles/${ROLE_SLUG}.md"
+COMPLIANCE_BRIEF_FILE="${REPO_ROOT}/10-templates/compliance-officer-pr-review-brief.md"
+
+if [ ! -f "$BASE_FILE" ]; then
+  echo "Missing source file: $BASE_FILE" >&2
+  exit 1
+fi
+
+if [ ! -f "$ROLE_FILE" ]; then
+  echo "Missing role source file: $ROLE_FILE" >&2
+  exit 1
+fi
+
+if [ -d "$OUTPUT_DIR" ] && [ -n "$(ls -A "$OUTPUT_DIR" 2>/dev/null || true)" ] && [ "$FORCE" != "true" ]; then
+  echo "Output directory is not empty: $OUTPUT_DIR" >&2
+  echo "Use --force to overwrite generated files in an existing directory." >&2
+  exit 1
+fi
+
+mkdir -p "$OUTPUT_DIR/.github" "$OUTPUT_DIR/.vscode"
+
+GENERATED_AT_UTC="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+COMPILED_INSTRUCTIONS_FILE="$(mktemp)"
+trap 'rm -f "$COMPILED_INSTRUCTIONS_FILE"' EXIT
+
+{
+  echo "# Role Instruction Set"
+  echo
+  echo "Role: ${ROLE_NAME}"
+  echo "Role-Slug: ${ROLE_SLUG}"
+  echo "Source-Repo: Context-Engineering"
+  echo "Source-Ref: ${SOURCE_REF}"
+  echo "Generated-At-UTC: ${GENERATED_AT_UTC}"
+  echo
+  cat "$BASE_FILE"
+  echo
+  cat "$ROLE_FILE"
+
+  if [ "$ROLE_SLUG" = "compliance-officer" ]; then
+    if [ ! -f "$COMPLIANCE_BRIEF_FILE" ]; then
+      echo "Missing compliance review brief source: $COMPLIANCE_BRIEF_FILE" >&2
+      exit 1
+    fi
+
+    echo
+    echo "# Embedded Compliance Review Brief"
+    echo
+    cat "$COMPLIANCE_BRIEF_FILE"
+  fi
+} > "$COMPILED_INSTRUCTIONS_FILE"
+
+escape_sed_replacement() {
+  printf '%s' "$1" | sed -e 's/[&@]/\\&/g'
+}
+
+ROLE_NAME_ESCAPED="$(escape_sed_replacement "$ROLE_NAME")"
+ROLE_SLUG_ESCAPED="$(escape_sed_replacement "$ROLE_SLUG")"
+REPO_NAME_ESCAPED="$(escape_sed_replacement "$REPO_NAME")"
+SOURCE_REF_ESCAPED="$(escape_sed_replacement "$SOURCE_REF")"
+GENERATED_AT_ESCAPED="$(escape_sed_replacement "$GENERATED_AT_UTC")"
+
+render_template() {
+  local template_file="$1"
+  local output_file="$2"
+
+  sed \
+    -e "s@{{ROLE_NAME}}@${ROLE_NAME_ESCAPED}@g" \
+    -e "s@{{ROLE_SLUG}}@${ROLE_SLUG_ESCAPED}@g" \
+    -e "s@{{REPO_NAME}}@${REPO_NAME_ESCAPED}@g" \
+    -e "s@{{SOURCE_REF}}@${SOURCE_REF_ESCAPED}@g" \
+    -e "s@{{GENERATED_AT_UTC}}@${GENERATED_AT_ESCAPED}@g" \
+    "$template_file" \
+  | sed "/{{ROLE_INSTRUCTIONS}}/r ${COMPILED_INSTRUCTIONS_FILE}" \
+  | sed "s/{{ROLE_INSTRUCTIONS}}//g" \
+  > "$output_file"
+}
+
+render_template "${TEMPLATE_ROOT}/templates/AGENTS.md.tmpl" "${OUTPUT_DIR}/AGENTS.md"
+render_template "${TEMPLATE_ROOT}/templates/.github/copilot-instructions.md.tmpl" "${OUTPUT_DIR}/.github/copilot-instructions.md"
+render_template "${TEMPLATE_ROOT}/templates/README.md.tmpl" "${OUTPUT_DIR}/README.md"
+render_template "${TEMPLATE_ROOT}/templates/.vscode/settings.json.tmpl" "${OUTPUT_DIR}/.vscode/settings.json"
+
+echo "Generated role repo scaffold: ${OUTPUT_DIR}"
+echo "Role: ${ROLE_NAME} (${ROLE_SLUG})"
+echo "Source ref: ${SOURCE_REF}"
