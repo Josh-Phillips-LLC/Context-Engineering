@@ -61,3 +61,43 @@ Optional args:
   --repo-name context-engineering-role-implementation-specialist \
   --output-dir /tmp/context-engineering-role-implementation-specialist
 ```
+
+## Public Repo Creation Workflow
+
+Script:
+
+- `scripts/create-public-role-repo.sh`
+
+This script composes the renderer and creates a **public** GitHub repository with an initial commit and push.
+
+Required args:
+
+- `--role-slug`
+- `--owner` (organization or user)
+
+Optional args:
+
+- `--repo-name` (defaults to `context-engineering-role-<role-slug>`)
+- `--role-name`
+- `--description`
+- `--output-dir`
+- `--source-ref`
+- `--force`
+- `--dry-run`
+
+Example:
+
+```bash
+10-templates/repo-starters/role-repo-template/scripts/create-public-role-repo.sh \
+  --role-slug implementation-specialist \
+  --owner Josh-Phillips-LLC
+```
+
+Dry-run example:
+
+```bash
+10-templates/repo-starters/role-repo-template/scripts/create-public-role-repo.sh \
+  --role-slug compliance-officer \
+  --owner Josh-Phillips-LLC \
+  --dry-run
+```
