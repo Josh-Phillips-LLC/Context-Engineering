@@ -64,10 +64,12 @@ COPY .devcontainer-workstation/codex/config.toml /etc/codex/config.toml
 COPY .devcontainer-workstation/codex/role-profiles /etc/codex/role-profiles
 COPY 10-templates/agent-instructions /etc/codex/agent-instructions
 COPY 10-templates/compliance-officer-pr-review-brief.md /etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md
+COPY .devcontainer-workstation/generated/runtime-role-instructions /tmp/generated/runtime-role-instructions
 RUN set -eux; \
     base_file="/etc/codex/agent-instructions/base.md"; \
     role_file="/etc/codex/agent-instructions/roles/${IMAGE_ROLE_PROFILE}.md"; \
     compliance_brief_file="/etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md"; \
+    generated_role_file="/tmp/generated/runtime-role-instructions/${IMAGE_ROLE_PROFILE}.md"; \
     target_dir="/etc/codex/runtime-role-instructions"; \
     target_file="${target_dir}/${IMAGE_ROLE_PROFILE}.md"; \
     test -f "$base_file"; \
@@ -91,6 +93,10 @@ RUN set -eux; \
         cat "$compliance_brief_file"; \
       fi; \
     } > "$target_file"; \
+    if [ -f "$generated_role_file" ]; then \
+      cp "$generated_role_file" "$target_file"; \
+      echo "Overrode runtime role instructions from generated role-repo source: ${generated_role_file}"; \
+    fi; \
     chmod 644 "$target_file"
 COPY .devcontainer-workstation/scripts/init-workstation.sh /usr/local/bin/init-workstation.sh
 RUN chmod +x /usr/local/bin/init-workstation.sh

@@ -186,3 +186,27 @@ Optional variable:
 - `ROLE_REPO_OWNER`
 
 If `ROLE_REPO_OWNER` is unset, workflow defaults to `github.repository_owner`.
+
+## GitHub Actions GHCR Publish Path
+
+Workflow:
+
+- `.github/workflows/publish-role-workstation-images.yml`
+
+Behavior:
+
+- Builds one image per role profile.
+- Pulls role-repo `AGENTS.md` from:
+  - `context-engineering-role-implementation-specialist`
+  - `context-engineering-role-compliance-officer`
+- Bakes role-repo `AGENTS.md` into `/etc/codex/runtime-role-instructions/<role>.md`.
+- Falls back to Context-Engineering instruction sources only when role-repo artifacts are unavailable in build context.
+
+Naming and versioning conventions:
+
+- Role repo names: `context-engineering-role-<role-slug>`
+- Image names: `ghcr.io/<owner>/context-engineering-workstation-<role-slug>`
+- Published tags:
+  - `latest`
+  - `<role-slug>-latest`
+  - `<role-slug>-<short-sha>`

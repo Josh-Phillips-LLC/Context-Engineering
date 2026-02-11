@@ -20,7 +20,7 @@ else
 fi
 
 # Optional: set this before startup when the workspace repo is private
-# and you want non-interactive auth/auto-clone on first boot.
+# or you want non-interactive auth/auto-clone on first boot.
 
 export GH_TOKEN="<your_pat>"
 export WORKSTATION_DEBUG="true" # optional: verbose init-workstation logging
@@ -49,6 +49,7 @@ fi
 # Optional overrides:
 # export GHCR_OWNER="<github-org-or-user>"
 # export GHCR_IMAGE_TAG="latest"
+# export WORKSPACE_REPO_OWNER="Josh-Phillips-LLC"
 
 $COMPOSE_CMD -f docker-compose.ghcr.yml down
 $COMPOSE_CMD -f docker-compose.ghcr.yml up -d implementation-workstation
@@ -60,6 +61,15 @@ Default package names:
 
 - `ghcr.io/josh-phillips-llc/context-engineering-workstation-implementation-specialist:latest`
 - `ghcr.io/josh-phillips-llc/context-engineering-workstation-compliance-officer:latest`
+
+Release naming and versioning conventions:
+
+- Role repo names: `context-engineering-role-<role-slug>`
+- Image names: `ghcr.io/<owner>/context-engineering-workstation-<role-slug>`
+- Image tags:
+  - `latest`
+  - `<role-slug>-latest`
+  - `<role-slug>-<short-sha>`
 
 Verify the published platforms include both `linux/amd64` and `linux/arm64`:
 
@@ -102,18 +112,23 @@ $COMPOSE_CMD logs --tail=200 implementation-workstation
 $COMPOSE_CMD logs --tail=200 compliance-workstation
 ```
 
-## 2) Create/clone repos in container-owned storage
+## 2) Clone role repos into container-owned storage
 
 The workspace root inside the container is `/workspace` (Docker volume-backed).
-On container startup, the entrypoint tries to clone:
+On container startup, each role container auto-clones its role repo by default:
 
-- URL: `https://github.com/Josh-Phillips-LLC/Context-Engineering.git`
-- Path: `/workspace/Projects/Context-Engineering`
+- `implementation-workstation`
+  - URL: `https://github.com/Josh-Phillips-LLC/context-engineering-role-implementation-specialist.git`
+  - Path: `/workspace/Projects/context-engineering-role-implementation-specialist`
+- `compliance-workstation`
+  - URL: `https://github.com/Josh-Phillips-LLC/context-engineering-role-compliance-officer.git`
+  - Path: `/workspace/Projects/context-engineering-role-compliance-officer`
 
 Verify clone status:
 
 ```bash
-docker exec -it implementation-workstation bash -lc 'ls -la /workspace/Projects/Context-Engineering'
+docker exec -it implementation-workstation bash -lc 'ls -la /workspace/Projects/context-engineering-role-implementation-specialist'
+docker exec -it compliance-workstation bash -lc 'ls -la /workspace/Projects/context-engineering-role-compliance-officer'
 ```
 
 If auto-clone failed, run manual PAT auth and clone inside the container:
@@ -129,11 +144,17 @@ gh auth status
 unset GH_PAT
 
 cd /workspace/Projects
-git clone https://github.com/Josh-Phillips-LLC/Context-Engineering.git
+git clone https://github.com/Josh-Phillips-LLC/context-engineering-role-implementation-specialist.git
 exit
 ```
 
 `gh` auth is persisted in each role's role-prefixed gh config volume, so this login should not be required every time for that role.
+If needed, you can override default role repo targets with:
+
+- `IMPLEMENTATION_WORKSPACE_REPO_URL`
+- `COMPLIANCE_WORKSPACE_REPO_URL`
+- `IMPLEMENTATION_WORKSPACE_REPO_DIR_NAME`
+- `COMPLIANCE_WORKSPACE_REPO_DIR_NAME`
 
 ## 3) Attach VS Code to running container
 
@@ -142,7 +163,9 @@ In local (non-containerized) VS Code:
 1. Open Command Palette
 2. Run `Dev Containers: Attach to Running Container...`
 3. Select `implementation-workstation` or `compliance-workstation`
-4. Open folder `/workspace/Projects/Context-Engineering`
+4. Open folder matching the role container:
+   - `/workspace/Projects/context-engineering-role-implementation-specialist`
+   - `/workspace/Projects/context-engineering-role-compliance-officer`
 
 ## 4) Codex config defaults
 
@@ -155,15 +178,13 @@ In addition, it generates adapter files at:
 - `/workspace/instructions/AGENTS.md`
 - `/workspace/instructions/copilot-instructions.md`
 
-Repo-tracked loader files at `.github/copilot-instructions.md` and `AGENTS.md` are static and point to `/workspace/instructions/role-instructions.md` as the canonical runtime source.
-
 Instruction source resolution order:
 
-1. workspace sources (`10-templates/agent-instructions/` plus role-required protocol includes)
+1. role repo `AGENTS.md` (`<workspace-role-repo>/AGENTS.md`)
 2. image-baked compiled role instructions (`/etc/codex/runtime-role-instructions/<role>.md`)
 3. image-baked fallback sources (`/etc/codex/agent-instructions/`)
 
-Role-specific images bake `/etc/codex/runtime-role-instructions/<role>.md` at build time from repository-defined instruction sources.
+Role-specific images bake `/etc/codex/runtime-role-instructions/<role>.md` from role-repo artifacts when available at build time, and fall back to repository-defined instruction sources when unavailable.
 
 If the workspace repo directory does not exist at startup (for example, clone failure), the init script does not create it; runtime role instructions are still materialized from baked sources.
 
@@ -176,7 +197,7 @@ The init script also ensures VS Code chat defaults at `/workspace/settings/vscod
 - `"chat.includeApplyingInstructions": true`
 - `"chat.includeReferencedInstructions": true`
 
-## 5) Centralized role instructions (multi-agent)
+## 5) Source-of-truth model (multi-agent)
 
 Canonical role-based instruction sources live in:
 
@@ -187,7 +208,11 @@ Canonical role-based instruction sources live in:
 
 These files are tool-agnostic and should be reused by non-Codex runtimes (for example, Copilot or Ollama adapters) rather than duplicating role logic in vendor-specific locations.
 
-Published GHCR role packages are built from these repository-defined sources, so runtime role instructions stay aligned to repo-governed role definitions.
+Published GHCR role packages are role-repo driven:
+
+- Build pipeline fetches each role repo and uses role-repo `AGENTS.md` as runtime instruction source for that role image.
+- If role-repo source is unavailable in build context, image build falls back to repository-governed instruction sources in `Context-Engineering`.
+- Governance remains authoritative in `Context-Engineering`; role repos are generated/synced distribution artifacts.
 
 To update the default Codex settings for this workstation config:
 

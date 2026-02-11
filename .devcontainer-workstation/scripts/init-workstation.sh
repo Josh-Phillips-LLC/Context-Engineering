@@ -9,10 +9,10 @@ if [ "$WORKSTATION_DEBUG" = "true" ]; then
 fi
 
 CODEX_HOME_DIR="${CODEX_HOME:-/root/.codex}"
-DEFAULT_CONFIG="/etc/codex/config.toml"
+DEFAULT_CONFIG="${DEFAULT_CONFIG:-/etc/codex/config.toml}"
 TARGET_CONFIG="${CODEX_HOME_DIR}/config.toml"
 ROLE_PROFILE="${ROLE_PROFILE:-${IMAGE_ROLE_PROFILE:-implementation-specialist}}"
-ROLE_PROFILES_DIR="/etc/codex/role-profiles"
+ROLE_PROFILES_DIR="${ROLE_PROFILES_DIR:-/etc/codex/role-profiles}"
 ROLE_INSTRUCTIONS_DIR_REL="${ROLE_INSTRUCTIONS_DIR_REL:-10-templates/agent-instructions}"
 BAKED_ROLE_INSTRUCTIONS_DIR="${BAKED_ROLE_INSTRUCTIONS_DIR:-/etc/codex/agent-instructions}"
 BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR="${BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR:-/etc/codex/runtime-role-instructions}"
@@ -22,8 +22,10 @@ RUNTIME_ROLE_INSTRUCTIONS_FILE="${RUNTIME_ROLE_INSTRUCTIONS_FILE:-/workspace/ins
 RUNTIME_AGENTS_ADAPTER_FILE="${RUNTIME_AGENTS_ADAPTER_FILE:-/workspace/instructions/AGENTS.md}"
 RUNTIME_COPILOT_INSTRUCTIONS_FILE="${RUNTIME_COPILOT_INSTRUCTIONS_FILE:-/workspace/instructions/copilot-instructions.md}"
 RUNTIME_VSCODE_SETTINGS_FILE="${RUNTIME_VSCODE_SETTINGS_FILE:-/workspace/settings/vscode/settings.json}"
-WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/Context-Engineering.git}"
-WORKSPACE_REPO_DIR="${WORKSPACE_REPO_DIR:-/workspace/Projects/Context-Engineering}"
+WORKSPACE_REPO_OWNER="${WORKSPACE_REPO_OWNER:-Josh-Phillips-LLC}"
+WORKSPACE_REPO_NAME_DEFAULT="${WORKSPACE_REPO_NAME_DEFAULT:-context-engineering-role-${ROLE_PROFILE}}"
+WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/${WORKSPACE_REPO_OWNER}/${WORKSPACE_REPO_NAME_DEFAULT}.git}"
+WORKSPACE_REPO_DIR="${WORKSPACE_REPO_DIR:-/workspace/Projects/${WORKSPACE_REPO_NAME_DEFAULT}}"
 AUTO_CLONE_WORKSPACE_REPO="${AUTO_CLONE_WORKSPACE_REPO:-true}"
 
 replace_string_setting() {
@@ -90,6 +92,7 @@ apply_role_profile() {
 
 render_runtime_role_instructions() {
   local workspace_source_dir="${WORKSPACE_REPO_DIR}/${ROLE_INSTRUCTIONS_DIR_REL}"
+  local workspace_agents_file="${WORKSPACE_REPO_DIR}/AGENTS.md"
   local source_dir="$workspace_source_dir"
   local source_label="workspace:${ROLE_INSTRUCTIONS_DIR_REL}"
   local base_file="${source_dir}/base.md"
@@ -99,6 +102,13 @@ render_runtime_role_instructions() {
   local target_file="${RUNTIME_ROLE_INSTRUCTIONS_FILE}"
 
   mkdir -p "$(dirname "$target_file")"
+
+  if [ -f "$workspace_agents_file" ]; then
+    cp "$workspace_agents_file" "$target_file"
+    chmod 444 "$target_file"
+    echo "Generated runtime role instructions at ${target_file} from workspace role repo AGENTS.md."
+    return
+  fi
 
   if [ ! -f "$base_file" ] || [ ! -f "$role_file" ]; then
     if [ -f "$compiled_role_file" ]; then
