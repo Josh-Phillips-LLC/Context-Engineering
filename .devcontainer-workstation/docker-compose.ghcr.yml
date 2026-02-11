@@ -14,8 +14,9 @@ services:
       - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       - ROLE_PROFILE=${ROLE_PROFILE:-implementation-specialist}
-      - WORKSPACE_REPO_URL=${WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/Context-Engineering.git}
-      - WORKSPACE_REPO_DIR=/workspace/Projects/Context-Engineering
+      - WORKSPACE_REPO_OWNER=${WORKSPACE_REPO_OWNER:-Josh-Phillips-LLC}
+      - WORKSPACE_REPO_URL=${IMPLEMENTATION_WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/context-engineering-role-implementation-specialist.git}
+      - WORKSPACE_REPO_DIR=/workspace/Projects/${IMPLEMENTATION_WORKSPACE_REPO_DIR_NAME:-context-engineering-role-implementation-specialist}
       - AUTO_CLONE_WORKSPACE_REPO=${AUTO_CLONE_WORKSPACE_REPO:-true}
 
     cap_add:
@@ -42,8 +43,9 @@ services:
       - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       - ROLE_PROFILE=compliance-officer
-      - WORKSPACE_REPO_URL=${WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/Context-Engineering.git}
-      - WORKSPACE_REPO_DIR=/workspace/Projects/Context-Engineering
+      - WORKSPACE_REPO_OWNER=${WORKSPACE_REPO_OWNER:-Josh-Phillips-LLC}
+      - WORKSPACE_REPO_URL=${COMPLIANCE_WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/context-engineering-role-compliance-officer.git}
+      - WORKSPACE_REPO_DIR=/workspace/Projects/${COMPLIANCE_WORKSPACE_REPO_DIR_NAME:-context-engineering-role-compliance-officer}
       - AUTO_CLONE_WORKSPACE_REPO=${AUTO_CLONE_WORKSPACE_REPO:-true}
 
     cap_add:

@@ -24,22 +24,58 @@ jobs:
         include:
           - role_profile: implementation-specialist
             image_suffix: implementation-specialist
+            role_repo: context-engineering-role-implementation-specialist
           - role_profile: compliance-officer
             image_suffix: compliance-officer
+            role_repo: context-engineering-role-compliance-officer
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate role instruction artifacts
+      - name: Resolve role repository owner
+        id: role_repo_owner
+        env:
+          VARIABLE_OWNER: ${{ vars.ROLE_REPO_OWNER }}
+          FALLBACK_OWNER: ${{ github.repository_owner }}
         run: |
           set -euo pipefail
-          test -f 10-templates/agent-instructions/base.md
-          test -f "10-templates/agent-instructions/roles/${{ matrix.role_profile }}.md"
-
-          if [ "${{ matrix.role_profile }}" = "compliance-officer" ]; then
-            test -f 10-templates/compliance-officer-pr-review-brief.md
+          owner="$VARIABLE_OWNER"
+          if [ -z "$owner" ]; then
+            owner="$FALLBACK_OWNER"
           fi
+          if [ -z "$owner" ]; then
+            echo "Unable to resolve role repository owner"
+            exit 1
+          fi
+          echo "owner=$owner" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout role repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.role_repo_owner.outputs.owner }}/${{ matrix.role_repo }}
+          path: role-repo
+          token: ${{ secrets.ROLE_REPO_READ_TOKEN || secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+
+      - name: Validate role repository artifacts
+        run: |
+          set -euo pipefail
+          test -f "role-repo/AGENTS.md"
+          test -f "role-repo/.github/copilot-instructions.md"
+          test -f "role-repo/.vscode/settings.json"
+
+      - name: Prepare generated runtime role instructions
+        id: role_repo_source
+        run: |
+          set -euo pipefail
+          mkdir -p .devcontainer-workstation/generated/runtime-role-instructions
+          cp "role-repo/AGENTS.md" ".devcontainer-workstation/generated/runtime-role-instructions/${{ matrix.role_profile }}.md"
+          role_sha="$(git -C role-repo rev-parse --short HEAD)"
+          role_url="https://github.com/${{ steps.role_repo_owner.outputs.owner }}/${{ matrix.role_repo }}"
+          echo "sha=$role_sha" >> "$GITHUB_OUTPUT"
+          echo "url=$role_url" >> "$GITHUB_OUTPUT"
+          echo "Prepared generated runtime role instructions from ${role_url}@${role_sha}"
 
       - name: Normalize package image name
         id: image
@@ -75,9 +111,11 @@ jobs:
             type=sha,format=short,prefix=${{ matrix.image_suffix }}-
           labels: |
             org.opencontainers.image.title=Context Engineering Role Workstation (${{ matrix.role_profile }})
-            org.opencontainers.image.description=Role-scoped workstation image with baked role instructions for ${{ matrix.role_profile }}
+            org.opencontainers.image.description=Role-scoped workstation image baked from role-repo AGENTS for ${{ matrix.role_profile }}
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             io.context_engineering.role_profile=${{ matrix.role_profile }}
+            io.context_engineering.role_repo=${{ matrix.role_repo }}
+            io.context_engineering.role_repo_ref=${{ steps.role_repo_source.outputs.sha }}
 
       - name: Build and publish role package
         id: build
@@ -114,4 +152,5 @@ jobs:
             echo "- Role: \`${{ matrix.role_profile }}\`"
             echo "- Image: \`${{ steps.image.outputs.name }}\`"
             echo "- Digest: \`${{ steps.build.outputs.digest }}\`"
+            echo "- Role repo source: \`${{ steps.role_repo_source.outputs.url }}@${{ steps.role_repo_source.outputs.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
