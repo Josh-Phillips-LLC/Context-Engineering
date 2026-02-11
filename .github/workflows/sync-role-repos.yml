@@ -1,0 +1,134 @@
+name: Sync Role Repositories
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - governance.md
+      - 00-os/role-charters/**
+      - 10-templates/agent-instructions/**
+      - 10-templates/compliance-officer-pr-review-brief.md
+      - 10-templates/job-description-spec/**
+      - 10-templates/repo-starters/role-repo-template/templates/**
+      - 10-templates/repo-starters/role-repo-template/scripts/build-agent-job-description.py
+      - 10-templates/repo-starters/role-repo-template/scripts/render-role-repo-template.sh
+      - 10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh
+      - .github/workflows/sync-role-repos.yml
+  workflow_dispatch:
+    inputs:
+      role:
+        description: Role slug to sync
+        required: true
+        type: choice
+        default: all
+        options:
+          - all
+          - implementation-specialist
+          - compliance-officer
+      owner:
+        description: Optional GitHub owner override
+        required: false
+        type: string
+      source_ref:
+        description: Optional source ref label for sync commit
+        required: false
+        type: string
+      dry_run:
+        description: Prepare sync commit only (no push, no PR)
+        required: false
+        type: boolean
+        default: false
+      no_pr:
+        description: Push sync branch only (skip PR creation)
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.role == 'all' || github.event.inputs.role == matrix.role_slug }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - role_slug: implementation-specialist
+            repo_name: context-engineering-role-implementation-specialist
+          - role_slug: compliance-officer
+            repo_name: context-engineering-role-compliance-officer
+
+    env:
+      GH_TOKEN: ${{ secrets.ROLE_REPO_SYNC_TOKEN }}
+
+    steps:
+      - name: Validate sync token is configured
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "Missing secret ROLE_REPO_SYNC_TOKEN"
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure git auth for gh operations
+        run: |
+          set -euo pipefail
+          gh auth status --hostname github.com
+          gh auth setup-git
+
+      - name: Resolve target owner
+        id: owner
+        env:
+          INPUT_OWNER: ${{ github.event.inputs.owner }}
+          VARIABLE_OWNER: ${{ vars.ROLE_REPO_OWNER }}
+          FALLBACK_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          owner="$INPUT_OWNER"
+          if [ -z "$owner" ]; then
+            owner="$VARIABLE_OWNER"
+          fi
+          if [ -z "$owner" ]; then
+            owner="$FALLBACK_OWNER"
+          fi
+          if [ -z "$owner" ]; then
+            echo "Unable to resolve target role repo owner"
+            exit 1
+          fi
+          echo "owner=$owner" >> "$GITHUB_OUTPUT"
+
+      - name: Sync role repository
+        env:
+          SOURCE_REF_INPUT: ${{ github.event.inputs.source_ref }}
+          DRY_RUN_INPUT: ${{ github.event.inputs.dry_run }}
+          NO_PR_INPUT: ${{ github.event.inputs.no_pr }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          source_ref="$SOURCE_REF_INPUT"
+          if [ -z "$source_ref" ]; then
+            source_ref="$(printf '%s' "$GIT_SHA" | cut -c1-7)"
+          fi
+
+          args=(
+            --role-slug "${{ matrix.role_slug }}"
+            --owner "${{ steps.owner.outputs.owner }}"
+            --repo-name "${{ matrix.repo_name }}"
+            --source-ref "$source_ref"
+          )
+
+          if [ "$DRY_RUN_INPUT" = "true" ]; then
+            args+=(--dry-run)
+          fi
+
+          if [ "$NO_PR_INPUT" = "true" ]; then
+            args+=(--no-pr)
+          fi
+
+          10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh "${args[@]}"

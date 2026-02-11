@@ -118,3 +118,71 @@ Dry-run example:
   --owner Josh-Phillips-LLC \
   --dry-run
 ```
+
+## Role Repo Sync Workflow
+
+Script:
+
+- `scripts/sync-role-repo.sh`
+
+This script syncs managed role-repo artifacts from Context-Engineering source into an existing public role repository and opens or updates a sync PR.
+
+Required args:
+
+- `--role-slug`
+- `--owner`
+
+Optional args:
+
+- `--repo-name` (defaults to `context-engineering-role-<role-slug>`)
+- `--role-name`
+- `--base-branch` (defaults to `main`)
+- `--source-ref`
+- `--sync-branch` (defaults to `sync/role-repo/<role-slug>`)
+- `--pr-title`
+- `--work-dir`
+- `--no-pr`
+- `--dry-run`
+
+Example:
+
+```bash
+10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh \
+  --role-slug implementation-specialist \
+  --owner Josh-Phillips-LLC
+```
+
+Dry-run example:
+
+```bash
+10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh \
+  --role-slug compliance-officer \
+  --owner Josh-Phillips-LLC \
+  --dry-run
+```
+
+## GitHub Actions Sync Automation
+
+Workflow:
+
+- `.github/workflows/sync-role-repos.yml`
+
+Behavior:
+
+- Runs on `main` pushes that touch role instruction source inputs.
+- Supports manual runs via `workflow_dispatch`.
+- Syncs matrix roles:
+  - `implementation-specialist`
+  - `compliance-officer`
+
+Required secret:
+
+- `ROLE_REPO_SYNC_TOKEN`
+
+`ROLE_REPO_SYNC_TOKEN` should be a token with access to target role repositories and permissions to push branches and open/edit pull requests.
+
+Optional variable:
+
+- `ROLE_REPO_OWNER`
+
+If `ROLE_REPO_OWNER` is unset, workflow defaults to `github.repository_owner`.
