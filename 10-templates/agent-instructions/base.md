@@ -1,6 +1,6 @@
 # Shared Role Instructions
 
-You are operating inside `Context-Engineering`, the private Plane B repository for context-system design and governance operations.
+You are operating inside `Context-Engineering`, the public-safe governance/control-plane repository for context-system design and governance operations.
 
 ## Mandatory authority order
 

@@ -10,7 +10,7 @@
 - **AI Governance Manager**
   - Designs context system
   - Curates and sanitizes outputs
-  - Maintains Plane B assets
+  - Maintains Plane B assets in private systems
 - **Compliance Officer**
   - Reviews implementation output for alignment with operating model
   - Uses deterministic checklists (no intuition-only approvals)

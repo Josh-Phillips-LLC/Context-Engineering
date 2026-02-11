@@ -9,7 +9,8 @@
 
 ## Rules
 - Plane A: Public only.
-- Plane B: Public and Internal allowed; Secret prohibited (never store here).
+- Plane B: Public and Internal allowed in private systems; Secret prohibited (never store anywhere here).
+- This repository stays Public-only; store Internal material outside this repo.
 - If classification is unclear, default to higher tier and add TODO.
 
 ## TODO

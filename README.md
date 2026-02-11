@@ -2,7 +2,7 @@
 
 # Context-Engineering
 
-This repository is the **private system-of-record** for how AI context is designed, curated, reviewed, and published across Josh’s projects.
+This repository is the **governance and control-plane system of record** for how AI context is designed, curated, reviewed, and published across Josh's projects.
 
 It defines **how humans and AI collaborate**, not just what tools are used. Tools are replaceable; **context structure is not**.
 
@@ -16,7 +16,7 @@ It defines **how humans and AI collaborate**, not just what tools are used. Tool
   - Context design patterns
   - Prompt and review templates
   - Session canvases and publication records
-- A **Plane B (Private / Operational Context)** repository
+- A public-safe governance repository that documents both Plane A and Plane B practices
 - Designed to be durable across:
   - VS Code Copilot
   - Codex
@@ -66,10 +66,10 @@ This system is built around **two explicit planes of context**:
 - This is what agents consume by default
 
 ### Plane B — Private / Operational Context
-- Lives in this repository
+- Lives in private operational systems (not this repo)
 - May contain sensitive assumptions, internal workflows, and unredacted canvases
 - Feeds curated, sanitized artifacts into Plane A
-- This repo **is Plane B**
+- This repo defines the Plane B policy and guardrails
 
 **Rule:** Nothing moves from Plane B to Plane A without intentional curation.
 
@@ -99,7 +99,7 @@ You will see folders such as:
 - `10-templates/` — repo starters, prompt templates, review checklists
 - `20-canvases/` — session canvases and publication logs
 - `30-vendor-notes/` — tool-specific behaviors and quirks
-- `40-private/` — explicitly internal-only material
+- `40-private/` — policy boundary marker for non-public content
 
 Exact contents may evolve, but the separation of concerns should remain.
 
@@ -107,13 +107,14 @@ Exact contents may evolve, but the separation of concerns should remain.
 
 ## Security posture
 
-This repository is private by design, but still follows strict rules:
+This repository is designed to be public-safe, but still follows strict rules:
 
 - **No secrets or credentials** are stored here
 - Sensitivity is explicitly tiered: **Public, Internal, Secret**
 - Only Public artifacts are allowed to leave this repo
 - Secret (credentials, tokens, PII) is never committed
 - Assume anything copied into a code repo may become public
+- Truly private operational material belongs outside this repo
 
 ---
 

@@ -75,7 +75,7 @@ This is a candidate extension of role-scoped containers, not ratified policy.
 
 Proposed target model:
 
-- `Context-Engineering` remains the private governance/control-plane repo
+- `Context-Engineering` remains the governance/control-plane repo (public-safe)
 - Create one public role repo per canonical role (initially `Implementation Specialist` and `Compliance Officer`)
 - Each role repo is self-contained for IDE agents and includes:
   - `AGENTS.md` with role-compiled instructions
