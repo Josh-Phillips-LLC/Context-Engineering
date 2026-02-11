@@ -73,3 +73,11 @@ The required review artifact posted by the Compliance Officer on each PR it revi
 ## Issue-first workflow
 
 The default change flow: Issue, branch, pull request, review, merge. See [Change Management](governance.md#change-management-issue--pr-process-reviewable-edits).
+
+## Agent Job Description
+
+The canonical, role-scoped instruction contract for an agent, published as `AGENTS.md` in role repositories and derived from governance, role charters, and approved templates. See [Instruction Layering](governance.md#instruction-layering).
+
+## Instruction Adapter
+
+A tool-specific instruction file (for example, `.github/copilot-instructions.md`) that points to canonical `AGENTS.md` and must not redefine role authority or responsibilities.
