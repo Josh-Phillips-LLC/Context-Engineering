@@ -7,7 +7,7 @@ services:
         IMAGE_ROLE_PROFILE: implementation-specialist
     container_name: implementation-workstation
     volumes:
-      - implementation_projects_data:/workspace/Projects
+      - implementation_projects_data:/workspace
       - implementation_gh_config:/root/.config/gh
       - implementation_git_config:/root/.config/git
       # - ssh_data:/root/.ssh
@@ -46,7 +46,7 @@ services:
     profiles:
       - compliance-officer
     volumes:
-      - compliance_projects_data:/workspace/Projects
+      - compliance_projects_data:/workspace
       - compliance_gh_config:/root/.config/gh
       - compliance_git_config:/root/.config/git
       # - ssh_data:/root/.ssh
