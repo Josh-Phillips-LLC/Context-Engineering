@@ -106,7 +106,6 @@ Open questions:
 - What are final repo names and org ownership conventions?
 - Should role repos release from `main` only or versioned tags?
 - Should sync automation direct-push changes or always open bot PRs?
-- Should `AGENTS.md` and `.github/copilot-instructions.md` both hold full compiled instructions, or should one delegate to the other?
 - Which minimum file set must exist in each role repo to be considered production-ready?
 
 ### Role Model Extensions (Optional)

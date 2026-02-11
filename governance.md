@@ -246,6 +246,17 @@ Use the following triage classes for in-flight findings during Issue/PR work:
 - Templates and checklists preferred over long prose
 - TODOs added where human judgment is needed
 
+### Role-repo instruction publication gate (required)
+
+Any PR that changes role-instruction generation logic, role-repo templates, or generated `AGENTS.md` contract content must include:
+
+- clear scope tied to an Issue
+- explicit mapping to affected role(s)
+- deterministic validation evidence (for example, render output checks)
+- Compliance Officer review for governance alignment
+
+Until a dedicated HR role is ratified, Compliance Officer is the required reviewer for instruction-contract alignment.
+
 ### PR lifecycle: close / supersede / cleanup
 PRs are not deleted; they are merged or closed. Prefer `gh` over manual UI.
 
@@ -439,28 +450,51 @@ Example:
 - Copilot, Continue, Codex each consume context differently
 - Repo context is the shared baseline
 
-### Role-scoped instruction derivation (required)
-
-For role-scoped devcontainers and agent runtimes, the instruction set for an assigned role must be derived from repository-defined role artifacts.
+### Agent Job Description Contract (required)
 
 `AGENT INSTRUCTIONS = ROLE-BASED JOB DESCRIPTION`
 
-Required source artifacts:
+For role repositories, the canonical instruction artifact is:
 
-- `governance.md`
-- `00-os/role-charters/`
-- centralized role instruction sources (for example, `10-templates/agent-instructions/`)
+- `AGENTS.md` at repository root
 
-The resulting instruction set must clearly define:
+`AGENTS.md` must be generated from repository-governed role sources and treated as a role contract, not free-form prompt text.
 
-- role purpose and responsibilities
-- explicit non-responsibilities
-- authority boundaries and escalation conditions
-- what the role can and cannot do
+Required source chain (authoritative order):
 
-Tool-specific adapters (Codex, Copilot, Ollama, others) may transform format, but must not change role meaning or authority boundaries defined by repository sources.
+1. `governance.md`
+2. `00-os/role-charters/`
+3. approved role-instruction templates (for example, `10-templates/agent-instructions/`)
+4. generated role-repo `AGENTS.md`
 
-If runtime instructions conflict with repository role definitions, repository definitions are authoritative and runtime instructions must be corrected.
+If any lower layer conflicts with a higher layer, the higher layer is authoritative.
+
+#### Required AGENTS.md structure
+
+Each generated role-repo `AGENTS.md` must define, at minimum:
+
+1. Role mission and purpose
+2. Responsibilities
+3. Explicit non-responsibilities
+4. Authority boundaries and approval limits
+5. Required operating workflow
+6. Escalation triggers
+7. Prohibited actions
+8. Output and quality standards
+9. Source metadata (generation source/ref/time)
+
+#### Ambiguity control
+
+`AGENTS.md` must use deterministic language (`must`, `must not`, `should`) and avoid ambiguous authority boundaries.
+If an instruction cannot be interpreted deterministically, the assigned agent must escalate.
+
+#### Tool adapter policy
+
+Tool-specific instruction files are adapters, not alternate policy sources.
+
+- `AGENTS.md` is canonical.
+- `.github/copilot-instructions.md` must point to `AGENTS.md` and must not redefine role authority.
+- Other adapters (Codex, Ollama, etc.) may reformat but must preserve role meaning and boundaries.
 
 ---
 
