@@ -19,7 +19,10 @@ The renderer writes this minimum file set to a target role repo:
 - `.vscode/settings.json`
 - `README.md`
 
-Both instruction files include the same compiled role instruction set so either instruction consumer has complete role context.
+Instruction model:
+
+- `AGENTS.md` is the canonical compiled role instruction set.
+- `.github/copilot-instructions.md` is a lightweight adapter that points to `AGENTS.md`.
 
 ## Source Inputs
 
