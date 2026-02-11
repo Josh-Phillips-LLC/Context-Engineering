@@ -69,6 +69,46 @@ Open questions:
 - Should role-scoped containers be mandatory for certain operations?
 - What is the minimum viable rollout plan (pilot role, success criteria, fallback path)?
 
+#### Role-Based Repo Distribution Plan (Proposed)
+
+This is a candidate extension of role-scoped containers, not ratified policy.
+
+Proposed target model:
+
+- `Context-Engineering` remains the private governance/control-plane repo
+- Create one public role repo per canonical role (initially `Implementation Specialist` and `Compliance Officer`)
+- Each role repo is self-contained for IDE agents and includes:
+  - `AGENTS.md` with role-compiled instructions
+  - `.github/copilot-instructions.md` aligned to the same role instruction set
+  - `.vscode/settings.json` defaults that keep instruction files in scope
+  - Minimal role-specific bootstrap/config files only
+
+Candidate build/publish flow:
+
+1. Governance changes are merged in `Context-Engineering`
+2. A role-instruction compiler pipeline generates role-specific outputs
+3. CI opens/updates PRs in each public role repo with regenerated artifacts
+4. Role repos produce release tags (or equivalent release signal)
+5. GHCR role images are built/published from role repos
+6. Workstation runtime clones role repo content and minimizes runtime instruction assembly logic
+
+Candidate workstream breakdown:
+
+1. Define architecture conventions (naming, ownership, visibility, versioning)
+2. Scaffold role repo for `Implementation Specialist`
+3. Scaffold role repo for `Compliance Officer`
+4. Add sync automation from control-plane repo to role repos
+5. Add GHCR build/publish automation from role repos
+6. Update workstation runtime to consume role repos by role
+
+Open questions:
+
+- What are final repo names and org ownership conventions?
+- Should role repos release from `main` only or versioned tags?
+- Should sync automation direct-push changes or always open bot PRs?
+- Should `AGENTS.md` and `.github/copilot-instructions.md` both hold full compiled instructions, or should one delegate to the other?
+- Which minimum file set must exist in each role repo to be considered production-ready?
+
 ### Role Model Extensions (Optional)
 
 Canonical roles are already defined in governance. This section tracks only potential additions or refinements.
