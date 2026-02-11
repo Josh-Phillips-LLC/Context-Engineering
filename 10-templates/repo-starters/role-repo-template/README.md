@@ -26,20 +26,37 @@ Instruction model:
 
 ## Source Inputs
 
-Role instructions are compiled from:
+Role `AGENTS.md` job descriptions are assembled from structured spec inputs:
 
+- `10-templates/job-description-spec/global.json`
+- `10-templates/job-description-spec/roles/<role-slug>.json`
+
+Canonical governance artifacts are also required as source-of-truth anchors:
+
+- `governance.md`
+- `00-os/role-charters/<role-slug>.md`
 - `10-templates/agent-instructions/base.md`
 - `10-templates/agent-instructions/roles/<role-slug>.md`
 
-For `compliance-officer`, the renderer also embeds:
+For `compliance-officer`, required protocol includes are embedded from:
 
 - `10-templates/compliance-officer-pr-review-brief.md`
+
+## Builder
+
+Script:
+
+- `scripts/build-agent-job-description.py`
+
+This script merges global + role spec, validates required contract sections, and emits deterministic `AGENTS.md` job description content.
 
 ## Renderer
 
 Script:
 
 - `scripts/render-role-repo-template.sh`
+
+This script calls the builder and renders final repository files from templates.
 
 Required args:
 

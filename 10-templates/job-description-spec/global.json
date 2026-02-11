@@ -1,0 +1,29 @@
+{
+  "authority_boundaries": [
+    "Operate within the authority chain defined by governance artifacts and assigned issue scope.",
+    "Treat governance.md and role charters as authoritative when conflicts occur.",
+    "Require Executive Sponsor approval for protected-path changes before merge."
+  ],
+  "required_workflow": [
+    "Follow the issue-first workflow: Issue -> branch -> PR -> review -> merge.",
+    "Create issue branches with `gh issue develop <ISSUE_NUMBER> --checkout`.",
+    "Apply role attribution metadata and required status labels on PRs.",
+    "Keep changes minimal, scoped, and reversible."
+  ],
+  "escalation_triggers": [
+    "Instructions conflict with governance or role charter requirements.",
+    "Scope expansion is requested without issue updates.",
+    "Protected paths are touched without required approval signals.",
+    "Any uncertainty around safety, publication boundaries, or role authority."
+  ],
+  "prohibited_actions": [
+    "Do not introduce secrets, credentials, tokens, internal hostnames, or personal data.",
+    "Do not bypass governance, approval, or review gates.",
+    "Do not reinterpret role authority boundaries ad hoc."
+  ],
+  "output_quality_standards": [
+    "Outputs must be deterministic, auditable, and tied to explicit requirements.",
+    "Changes must be review-ready with clear rationale and minimal drift.",
+    "Use canonical role terminology consistently across artifacts."
+  ]
+}

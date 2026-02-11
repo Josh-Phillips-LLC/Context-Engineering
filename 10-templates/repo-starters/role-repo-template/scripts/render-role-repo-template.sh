@@ -23,6 +23,7 @@ USAGE
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEMPLATE_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../../../.." && pwd)"
+JOB_DESCRIPTION_BUILDER="${SCRIPT_DIR}/build-agent-job-description.py"
 
 ROLE_SLUG=""
 ROLE_NAME=""
@@ -97,17 +98,13 @@ if [ -z "$ROLE_NAME" ]; then
   esac
 fi
 
-BASE_FILE="${REPO_ROOT}/10-templates/agent-instructions/base.md"
-ROLE_FILE="${REPO_ROOT}/10-templates/agent-instructions/roles/${ROLE_SLUG}.md"
-COMPLIANCE_BRIEF_FILE="${REPO_ROOT}/10-templates/compliance-officer-pr-review-brief.md"
-
-if [ ! -f "$BASE_FILE" ]; then
-  echo "Missing source file: $BASE_FILE" >&2
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "python3 is required to build AGENTS job descriptions." >&2
   exit 1
 fi
 
-if [ ! -f "$ROLE_FILE" ]; then
-  echo "Missing role source file: $ROLE_FILE" >&2
+if [ ! -x "$JOB_DESCRIPTION_BUILDER" ]; then
+  echo "Job description builder not found or not executable: $JOB_DESCRIPTION_BUILDER" >&2
   exit 1
 fi
 
@@ -124,29 +121,12 @@ COMPILED_INSTRUCTIONS_FILE="$(mktemp)"
 trap 'rm -f "$COMPILED_INSTRUCTIONS_FILE"' EXIT
 
 {
-  echo "# Role Instruction Set"
-  echo
-  echo "Role: ${ROLE_NAME}"
-  echo "Role-Slug: ${ROLE_SLUG}"
-  echo "Source-Repo: Context-Engineering"
-  echo "Source-Ref: ${SOURCE_REF}"
-  echo "Generated-At-UTC: ${GENERATED_AT_UTC}"
-  echo
-  cat "$BASE_FILE"
-  echo
-  cat "$ROLE_FILE"
-
-  if [ "$ROLE_SLUG" = "compliance-officer" ]; then
-    if [ ! -f "$COMPLIANCE_BRIEF_FILE" ]; then
-      echo "Missing compliance review brief source: $COMPLIANCE_BRIEF_FILE" >&2
-      exit 1
-    fi
-
-    echo
-    echo "# Embedded Compliance Review Brief"
-    echo
-    cat "$COMPLIANCE_BRIEF_FILE"
-  fi
+  python3 "$JOB_DESCRIPTION_BUILDER" \
+    --role-slug "$ROLE_SLUG" \
+    --role-name "$ROLE_NAME" \
+    --source-ref "$SOURCE_REF" \
+    --generated-at-utc "$GENERATED_AT_UTC" \
+    --repo-root "$REPO_ROOT"
 } > "$COMPILED_INSTRUCTIONS_FILE"
 
 escape_sed_replacement() {
