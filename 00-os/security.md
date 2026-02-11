@@ -4,6 +4,7 @@
 - Assume future public exposure.
 - Minimize sensitive details.
 - Separate Plane A (public) vs Plane B (private).
+- Keep this repo public-safe; store truly private material outside it.
 
 ## Prohibited Content
 - API keys, secrets, tokens

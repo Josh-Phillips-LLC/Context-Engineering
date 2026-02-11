@@ -94,7 +94,7 @@ Purpose:
 
 ### Plane B — Private / Operational Context
 
-**Lives in a private Context-Engineering repo.**
+**Lives in private operational systems (outside this repo).**
 
 Includes:
 
@@ -435,9 +435,9 @@ Example:
 
 ## Instruction Layering
 
-### Global (Private)
+### Global (Governance)
 
-- Stored in Context-Engineering
+- Stored in Context-Engineering as public-safe governance
 - Principles, standards, prompt patterns
 
 ### Repo-Specific (Public-Safe)
@@ -503,7 +503,7 @@ Tool-specific instruction files are adapters, not alternate policy sources.
 ### Sensitivity Tiers
 
 1. **Public** — safe for public repos
-2. **Internal** — private repo only
+2. **Internal** — private systems only (not public repos)
 3. **Secret** — never committed (keys, tokens)
 
 ### Practices
@@ -511,6 +511,7 @@ Tool-specific instruction files are adapters, not alternate policy sources.
 - Secrets scanning on public repos
 - Publishable Extract section required for promotion
 - Assume Plane A is always world-readable
+- Before any visibility change to public, run a full git-history secret scan and resolve findings (tool-agnostic).
 
 ---
 

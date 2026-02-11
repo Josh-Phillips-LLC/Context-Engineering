@@ -4,7 +4,7 @@ Canonical terms for this repository. Definitions link to authoritative sources.
 
 ## Context-Engineering
 
-The private system-of-record for how AI context is designed, curated, reviewed, and published. See [README.md](README.md).
+The governance and control-plane system of record for how AI context is designed, curated, reviewed, and published. See [README.md](README.md).
 
 ## Plane A (Public / Portable Context)
 
@@ -12,7 +12,7 @@ Public-safe context that lives with code repositories. See [Two-Plane Context Mo
 
 ## Plane B (Private / Operational Context)
 
-Private operational context that lives in this repository and feeds curated artifacts into Plane A. See [Two-Plane Context Model](governance.md#two-plane-context-model).
+Private operational context that lives in private systems and feeds curated artifacts into Plane A. This repo defines Plane B policy and guardrails. See [Two-Plane Context Model](governance.md#two-plane-context-model).
 
 ## Session Canvas
 

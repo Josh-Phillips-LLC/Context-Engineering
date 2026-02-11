@@ -1,14 +1,14 @@
 ---
-name: Repo Publish Request (Plane B → Plane A)
+name: Repo Publish Request (Governance to Public)
 about: Promote curated artifacts to public-safe repos
 labels: ["publish-request"]
 ---
 
-## Source (Plane B)
+## Source (Governance Repository)
 - File(s):
 - Session/Canvas:
 
-## Destination (Plane A)
+## Destination (Public Repo)
 - Repo:
 - Path(s):
 
