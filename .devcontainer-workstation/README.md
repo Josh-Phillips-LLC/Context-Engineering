@@ -84,7 +84,7 @@ $COMPOSE_CMD up -d --build
 `down -v` removes all role-prefixed named volumes (for example, `implementation_gh_config` and `compliance_gh_config`), so GitHub auth, cloned repos, and other persisted container state are reset.
 Codex config is re-seeded from `.devcontainer-workstation/codex/config.toml` when `/root/.codex` is recreated.
 
-Role containers now use role-prefixed named volumes, so running multiple role containers at once does not share `/workspace/Projects` or runtime config state between roles.
+Role containers now use role-prefixed named volumes, so running multiple role containers at once does not share `/workspace` or runtime config state between roles.
 Each role has isolated volumes for workspace data, GitHub auth config, git config, and codex home.
 
 Confirm container is running:
@@ -104,7 +104,7 @@ $COMPOSE_CMD logs --tail=200 compliance-workstation
 
 ## 2) Create/clone repos in container-owned storage
 
-The repo root inside the container is `/workspace/Projects` (Docker volume-backed).
+The workspace root inside the container is `/workspace` (Docker volume-backed).
 On container startup, the entrypoint tries to clone:
 
 - URL: `https://github.com/Josh-Phillips-LLC/Context-Engineering.git`
@@ -149,13 +149,13 @@ In local (non-containerized) VS Code:
 The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
 Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
 If `ROLE_PROFILE` is not set at runtime, it defaults to the image-baked `IMAGE_ROLE_PROFILE` value.
-It also generates a runtime instruction file at `/workstation/instructions/role-instructions.md` and creates a workspace shim at `<workspace>/.role.instructions.md` that links to the canonical file.
+It also generates a runtime instruction file at `/workspace/instructions/role-instructions.md`.
 In addition, it generates adapter files at:
 
-- `/workstation/instructions/AGENTS.md`
-- `/workstation/instructions/copilot-instructions.md`
+- `/workspace/instructions/AGENTS.md`
+- `/workspace/instructions/copilot-instructions.md`
 
-Workspace shims at `<workspace>/AGENTS.md` and `<workspace>/.github/copilot-instructions.md` link to these adapters, which reference `/workstation/instructions/role-instructions.md` as the canonical runtime role instruction source.
+Repo-tracked loader files at `.github/copilot-instructions.md` and `AGENTS.md` are static and point to `/workspace/instructions/role-instructions.md` as the canonical runtime source.
 
 Instruction source resolution order:
 
@@ -165,11 +165,11 @@ Instruction source resolution order:
 
 Role-specific images bake `/etc/codex/runtime-role-instructions/<role>.md` at build time from repository-defined instruction sources.
 
-If the workspace repo directory does not exist at startup, the init script creates it so runtime role instructions can still be materialized.
+If the workspace repo directory does not exist at startup (for example, clone failure), the init script does not create it; runtime role instructions are still materialized from baked sources.
 
 For `Compliance Officer`, the runtime file includes the PR review protocol from `10-templates/compliance-officer-pr-review-brief.md` (or the image fallback copy when the workspace file is not present).
 
-The init script also ensures VS Code chat defaults at `/workstation/settings/vscode/settings.json` and creates a workspace shim at `<workspace>/.vscode/settings.json`:
+The init script also ensures VS Code chat defaults at `/workspace/settings/vscode/settings.json`:
 
 - `"github.copilot.chat.codeGeneration.useInstructionFiles": true`
 - `"chat.useAgentsMdFile": true`

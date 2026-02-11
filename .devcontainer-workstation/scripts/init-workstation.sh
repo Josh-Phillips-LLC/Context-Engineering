@@ -18,14 +18,10 @@ BAKED_ROLE_INSTRUCTIONS_DIR="${BAKED_ROLE_INSTRUCTIONS_DIR:-/etc/codex/agent-ins
 BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR="${BAKED_COMPILED_ROLE_INSTRUCTIONS_DIR:-/etc/codex/runtime-role-instructions}"
 COMPLIANCE_REVIEW_BRIEF_WORKSPACE_REL="${COMPLIANCE_REVIEW_BRIEF_WORKSPACE_REL:-10-templates/compliance-officer-pr-review-brief.md}"
 COMPLIANCE_REVIEW_BRIEF_BAKED="${COMPLIANCE_REVIEW_BRIEF_BAKED:-/etc/codex/agent-instructions/references/compliance-officer-pr-review-brief.md}"
-RUNTIME_ROLE_INSTRUCTIONS_FILE="${RUNTIME_ROLE_INSTRUCTIONS_FILE:-/workstation/instructions/role-instructions.md}"
-RUNTIME_AGENTS_ADAPTER_FILE="${RUNTIME_AGENTS_ADAPTER_FILE:-/workstation/instructions/AGENTS.md}"
-RUNTIME_COPILOT_INSTRUCTIONS_FILE="${RUNTIME_COPILOT_INSTRUCTIONS_FILE:-/workstation/instructions/copilot-instructions.md}"
-RUNTIME_VSCODE_SETTINGS_FILE="${RUNTIME_VSCODE_SETTINGS_FILE:-/workstation/settings/vscode/settings.json}"
-WORKSPACE_ROLE_INSTRUCTIONS_SHIM_REL=".role.instructions.md"
-WORKSPACE_AGENTS_ADAPTER_SHIM_REL="AGENTS.md"
-WORKSPACE_COPILOT_INSTRUCTIONS_SHIM_REL=".github/copilot-instructions.md"
-WORKSPACE_VSCODE_SETTINGS_SHIM_REL=".vscode/settings.json"
+RUNTIME_ROLE_INSTRUCTIONS_FILE="${RUNTIME_ROLE_INSTRUCTIONS_FILE:-/workspace/instructions/role-instructions.md}"
+RUNTIME_AGENTS_ADAPTER_FILE="${RUNTIME_AGENTS_ADAPTER_FILE:-/workspace/instructions/AGENTS.md}"
+RUNTIME_COPILOT_INSTRUCTIONS_FILE="${RUNTIME_COPILOT_INSTRUCTIONS_FILE:-/workspace/instructions/copilot-instructions.md}"
+RUNTIME_VSCODE_SETTINGS_FILE="${RUNTIME_VSCODE_SETTINGS_FILE:-/workspace/settings/vscode/settings.json}"
 WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/Context-Engineering.git}"
 WORKSPACE_REPO_DIR="${WORKSPACE_REPO_DIR:-/workspace/Projects/Context-Engineering}"
 AUTO_CLONE_WORKSPACE_REPO="${AUTO_CLONE_WORKSPACE_REPO:-true}"
@@ -234,60 +230,6 @@ ensure_workspace_vscode_settings() {
   echo "Ensured workstation VS Code chat settings at ${settings_file}."
 }
 
-ensure_git_exclude_line() {
-  local exclude_file="$1"
-  local entry="$2"
-
-  if ! grep -qxF "$entry" "$exclude_file"; then
-    echo "$entry" >> "$exclude_file"
-  fi
-}
-
-ensure_workspace_git_excludes() {
-  local exclude_file="${WORKSPACE_REPO_DIR}/.git/info/exclude"
-
-  if [ ! -f "$exclude_file" ]; then
-    return
-  fi
-
-  ensure_git_exclude_line "$exclude_file" "$WORKSPACE_ROLE_INSTRUCTIONS_SHIM_REL"
-  ensure_git_exclude_line "$exclude_file" "$WORKSPACE_AGENTS_ADAPTER_SHIM_REL"
-  ensure_git_exclude_line "$exclude_file" "$WORKSPACE_COPILOT_INSTRUCTIONS_SHIM_REL"
-  ensure_git_exclude_line "$exclude_file" "$WORKSPACE_VSCODE_SETTINGS_SHIM_REL"
-}
-
-ensure_workspace_symlink() {
-  local workspace_path="$1"
-  local target_path="$2"
-  local link_target
-
-  mkdir -p "$(dirname "$workspace_path")"
-
-  if [ -e "$workspace_path" ] || [ -L "$workspace_path" ]; then
-    if [ -L "$workspace_path" ]; then
-      link_target="$(readlink "$workspace_path")"
-      if [ "$link_target" = "$target_path" ]; then
-        return
-      fi
-
-      echo "Warning: workspace shim ${workspace_path} exists but does not point to ${target_path}. Remove it to allow shim creation." >&2
-      exit 1
-    fi
-
-    echo "Warning: workspace shim path ${workspace_path} exists and is not a symlink. Remove it to allow shim creation." >&2
-    exit 1
-  fi
-
-  ln -s "$target_path" "$workspace_path"
-  echo "Created workspace shim ${workspace_path} -> ${target_path}."
-}
-
-ensure_workspace_shims() {
-  ensure_workspace_symlink "${WORKSPACE_REPO_DIR}/${WORKSPACE_ROLE_INSTRUCTIONS_SHIM_REL}" "$RUNTIME_ROLE_INSTRUCTIONS_FILE"
-  ensure_workspace_symlink "${WORKSPACE_REPO_DIR}/${WORKSPACE_AGENTS_ADAPTER_SHIM_REL}" "$RUNTIME_AGENTS_ADAPTER_FILE"
-  ensure_workspace_symlink "${WORKSPACE_REPO_DIR}/${WORKSPACE_COPILOT_INSTRUCTIONS_SHIM_REL}" "$RUNTIME_COPILOT_INSTRUCTIONS_FILE"
-  ensure_workspace_symlink "${WORKSPACE_REPO_DIR}/${WORKSPACE_VSCODE_SETTINGS_SHIM_REL}" "$RUNTIME_VSCODE_SETTINGS_FILE"
-}
 
 mkdir -p "$CODEX_HOME_DIR"
 
@@ -325,16 +267,8 @@ if [ "$AUTO_CLONE_WORKSPACE_REPO" = "true" ]; then
   fi
 fi
 
-if [ ! -d "$WORKSPACE_REPO_DIR" ]; then
-  mkdir -p "$WORKSPACE_REPO_DIR"
-  echo "Created workspace repo directory '${WORKSPACE_REPO_DIR}' for runtime role instruction generation."
-fi
-
-ensure_workspace_git_excludes
-
 render_runtime_role_instructions
 render_instruction_adapter_files
 ensure_workspace_vscode_settings
-ensure_workspace_shims
 
 exec "$@"
