@@ -149,13 +149,13 @@ In local (non-containerized) VS Code:
 The container seeds `/root/.codex/config.toml` from `.devcontainer-workstation/codex/config.toml` when the target file is missing.
 Then `init-workstation.sh` applies role overlays from `.devcontainer-workstation/codex/role-profiles/` based on `ROLE_PROFILE`.
 If `ROLE_PROFILE` is not set at runtime, it defaults to the image-baked `IMAGE_ROLE_PROFILE` value.
-It also generates a runtime instruction file at `<workspace>/.role.instructions.md`.
+It also generates a runtime instruction file at `/workstation/instructions/role-instructions.md` and creates a workspace shim at `<workspace>/.role.instructions.md` that links to the canonical file.
 In addition, it generates adapter files at:
 
-- `<workspace>/AGENTS.md`
-- `<workspace>/.github/copilot-instructions.md`
+- `/workstation/instructions/AGENTS.md`
+- `/workstation/instructions/copilot-instructions.md`
 
-Both adapter files point to `<workspace>/.role.instructions.md` as the canonical runtime role instruction source.
+Workspace shims at `<workspace>/AGENTS.md` and `<workspace>/.github/copilot-instructions.md` link to these adapters, which reference `/workstation/instructions/role-instructions.md` as the canonical runtime role instruction source.
 
 Instruction source resolution order:
 
@@ -169,7 +169,7 @@ If the workspace repo directory does not exist at startup, the init script creat
 
 For `Compliance Officer`, the runtime file includes the PR review protocol from `10-templates/compliance-officer-pr-review-brief.md` (or the image fallback copy when the workspace file is not present).
 
-The init script also ensures workspace-level VS Code chat defaults in `<workspace>/.vscode/settings.json`:
+The init script also ensures VS Code chat defaults at `/workstation/settings/vscode/settings.json` and creates a workspace shim at `<workspace>/.vscode/settings.json`:
 
 - `"github.copilot.chat.codeGeneration.useInstructionFiles": true`
 - `"chat.useAgentsMdFile": true`
