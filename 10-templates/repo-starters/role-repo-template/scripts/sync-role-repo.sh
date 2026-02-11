@@ -225,7 +225,14 @@ if [ "$DRY_RUN" = "true" ]; then
   exit 0
 fi
 
-git -C "$TARGET_DIR" push origin "$SYNC_BRANCH" --force-with-lease >/dev/null
+remote_ref="refs/heads/${SYNC_BRANCH}"
+remote_sha="$(git -C "$TARGET_DIR" ls-remote --heads origin "$SYNC_BRANCH" | awk '{print $1}')"
+
+if [ -n "$remote_sha" ]; then
+  git -C "$TARGET_DIR" push origin "$SYNC_BRANCH" --force-with-lease="${remote_ref}:${remote_sha}" >/dev/null
+else
+  git -C "$TARGET_DIR" push origin "$SYNC_BRANCH" >/dev/null
+fi
 
 if [ "$CREATE_PR" = "false" ]; then
   echo "Pushed sync branch without PR creation: ${FULL_REPO}:${SYNC_BRANCH}"
@@ -239,7 +246,7 @@ Reviewed-By-Role: Compliance Officer
 Executive-Sponsor-Approval: Not-Required
 
 ## Summary
-Automated sync of role-repo managed artifacts from Context-Engineering source `${SOURCE_REF}` for role `${ROLE_SLUG}`.
+Automated sync of role-repo managed artifacts from Context-Engineering source \`${SOURCE_REF}\` for role \`${ROLE_SLUG}\`.
 
 ## Managed Files Updated
 - \`AGENTS.md\`
@@ -252,14 +259,28 @@ Generated via:
 - \`10-templates/repo-starters/role-repo-template/scripts/build-agent-job-description.py\`
 PRBODY
 
-existing_pr="$(gh pr list --repo "$FULL_REPO" --state open --head "${OWNER}:${SYNC_BRANCH}" --json number -q '.[0].number')"
+existing_pr="$(gh pr list --repo "$FULL_REPO" --state open --head "$SYNC_BRANCH" --json number -q '.[0].number')"
+
+if [ -z "$existing_pr" ] || [ "$existing_pr" = "null" ]; then
+  existing_pr="$(gh pr list --repo "$FULL_REPO" --state open --head "${OWNER}:${SYNC_BRANCH}" --json number -q '.[0].number')"
+fi
 
 if [ -n "$existing_pr" ] && [ "$existing_pr" != "null" ]; then
   gh pr edit --repo "$FULL_REPO" "$existing_pr" --title "$PR_TITLE" --body-file "$PR_BODY_FILE" >/dev/null
   pr_number="$existing_pr"
 else
-  pr_url="$(gh pr create --repo "$FULL_REPO" --base "$BASE_BRANCH" --head "$SYNC_BRANCH" --title "$PR_TITLE" --body-file "$PR_BODY_FILE")"
-  pr_number="$(printf '%s' "$pr_url" | awk -F'/' '{print $NF}')"
+  create_err_file="$(mktemp "/tmp/${ROLE_SLUG}-pr-create-XXXXXX.err")"
+  if pr_url="$(gh pr create --repo "$FULL_REPO" --base "$BASE_BRANCH" --head "$SYNC_BRANCH" --title "$PR_TITLE" --body-file "$PR_BODY_FILE" 2>"$create_err_file")"; then
+    pr_number="$(printf '%s' "$pr_url" | awk -F'/' '{print $NF}')"
+  else
+    existing_pr="$(gh pr list --repo "$FULL_REPO" --state open --head "$SYNC_BRANCH" --json number -q '.[0].number')"
+    if [ -n "$existing_pr" ] && [ "$existing_pr" != "null" ]; then
+      pr_number="$existing_pr"
+    else
+      cat "$create_err_file" >&2
+      exit 1
+    fi
+  fi
 fi
 
 # Best-effort labeling. If labels are missing in target repos, do not fail sync.
