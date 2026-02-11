@@ -1,6 +1,6 @@
 # Implementation Specialist Work Order (Template)
 
-Use this template in the **body of a GitHub Issue** when the Issue is intended to be executed directly by Copilot (i.e., “tell Copilot the Issue number and get to work”).
+Use this template in the **body of a GitHub Issue** when the Issue is intended to be executed directly by the Implementation Specialist (i.e., “assign the Implementation Specialist the Issue number and get to work”).
 
 **Rule:** Section headings in this template are **normative**. Do not rename them.
 
@@ -12,18 +12,18 @@ Use this template in the **body of a GitHub Issue** when the Issue is intended t
 Describe the single outcome this work order must achieve (1–3 sentences). Keep it measurable.
 
 ## Scope (Allowed Changes)
-List the **only** files/folders Copilot may modify.
+List the **only** files/folders the Implementation Specialist may modify.
 
-- Copilot may ONLY modify:
+- The Implementation Specialist may ONLY modify:
   - `path/to/file.md`
   - `path/to/folder/**`
 
 State whether new files may be created (default: **No**).
 
-Copilot must not infer additional scope beyond what is explicitly listed here.
+The Implementation Specialist must not infer additional scope beyond what is explicitly listed here.
 
 ## Out of Scope
-List explicit exclusions so Copilot does not “helpfully” expand scope.
+List explicit exclusions so the Implementation Specialist does not “helpfully” expand scope.
 
 - Any files not listed in Scope
 - Protected artifacts unless explicitly included:
@@ -33,7 +33,7 @@ List explicit exclusions so Copilot does not “helpfully” expand scope.
 - Automation that merges PRs
 - Unrelated refactors / formatting-only changes
 
-Copilot must not modify any file or path not explicitly listed in Scope.
+The Implementation Specialist must not modify any file or path not explicitly listed in Scope.
 
 ## Implementation Requirements
 Provide deterministic, step-by-step edits. Prefer “insert this block verbatim” and “replace this exact text with…” over prose.
@@ -70,14 +70,14 @@ Use checkboxes. Make these **binary** (pass/fail).
 ## PR Instructions
 State the exact PR title and any required PR-body summary.
 
-- Open a PR titled: `Copilot: <short title>`
+- Open a PR titled: `Implementation Specialist: <short title>`
 - Include a short summary mapping changes to Acceptance Criteria
 - Link and close the Issue in the PR description (example: `Closes #<ISSUE_NUMBER>`)
 - Apply labels (canonical `gh` commands in `governance.md` are optional examples)
 - Do not merge the PR
 
 ### Branching (Required)
-Copilot must create a fresh branch for each Issue using GitHub CLI default naming. Do not reuse existing branches.
+The Implementation Specialist must create a fresh branch for each Issue using GitHub CLI default naming. Do not reuse existing branches.
 Manual `git checkout -b` is not allowed for Issue-driven work.
 
 Required commands (example):
@@ -91,14 +91,14 @@ git branch --show-current
 ```
 
 Stop Condition:
-- If Copilot is not on a fresh Issue branch, it must stop and request human input before proceeding.
+- If the Implementation Specialist is not on a fresh Issue branch, it must stop and request human input before proceeding.
 
 ## Stop Conditions
-Copilot must stop execution immediately and request human input if:
+The Implementation Specialist must stop execution immediately and request human input if:
 - Required sections already exist but conflict with these instructions
 - The change would require modifying files outside Scope
 - Repo policy conflicts prevent deterministic execution
-- Any instruction is ambiguous (Copilot must ask, not guess)
+- Any instruction is ambiguous (the Implementation Specialist must ask, not guess)
 
 ---
 
