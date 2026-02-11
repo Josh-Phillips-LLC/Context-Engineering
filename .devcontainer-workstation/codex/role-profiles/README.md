@@ -1,5 +1,11 @@
 # Role Profiles
 
+This directory is **Codex-specific**.
+These `.env` files only control Codex runtime configuration overlays in workstation containers (via `/root/.codex/config.toml`).
+They do not define tool-agnostic role responsibilities or governance policy.
+
+Canonical role responsibilities and instruction content live in repository-governed sources (for example, `10-templates/agent-instructions/**`).
+
 Role profiles are lightweight overlays applied by `init-workstation.sh` at container startup.
 
 Each role profile is an `.env` file named `<role>.env` and may set:
