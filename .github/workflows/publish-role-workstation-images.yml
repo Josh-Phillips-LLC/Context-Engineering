@@ -28,6 +28,9 @@ jobs:
           - role_profile: compliance-officer
             image_suffix: compliance-officer
             role_repo: context-engineering-role-compliance-officer
+          - role_profile: systems-architect
+            image_suffix: systems-architect
+            role_repo: context-engineering-role-systems-architect
 
     steps:
       - name: Checkout repository

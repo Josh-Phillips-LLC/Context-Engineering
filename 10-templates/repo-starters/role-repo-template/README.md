@@ -174,6 +174,7 @@ Behavior:
 - Syncs matrix roles:
   - `implementation-specialist`
   - `compliance-officer`
+  - `systems-architect`
 
 Required secret:
 
@@ -199,6 +200,7 @@ Behavior:
 - Pulls role-repo `AGENTS.md` from:
   - `context-engineering-role-implementation-specialist`
   - `context-engineering-role-compliance-officer`
+  - `context-engineering-role-systems-architect`
 - Bakes role-repo `AGENTS.md` into `/etc/codex/runtime-role-instructions/<role>.md`.
 - Falls back to Context-Engineering instruction sources only when role-repo artifacts are unavailable in build context.
 

@@ -5,6 +5,7 @@ It supports role-scoped startup for:
 
 - `implementation-workstation` (default `Implementation Specialist` profile)
 - `compliance-workstation` (`Compliance Officer` profile)
+- `systems-architect-workstation` (`Systems Architect` profile)
 
 ## 1) Build and start from host
 
@@ -31,6 +32,9 @@ $COMPOSE_CMD up -d --build implementation-workstation
 
 # Optional: Compliance Officer role-scoped container
 # $COMPOSE_CMD --profile compliance-officer up -d --build compliance-workstation
+
+# Optional: Systems Architect role-scoped container
+# $COMPOSE_CMD --profile systems-architect up -d --build systems-architect-workstation
 ```
 
 ## 1a) Start from published GHCR role packages
@@ -55,12 +59,14 @@ $COMPOSE_CMD -f docker-compose.ghcr.yml down
 $COMPOSE_CMD -f docker-compose.ghcr.yml up -d implementation-workstation
 # Optional:
 # $COMPOSE_CMD -f docker-compose.ghcr.yml --profile compliance-officer up -d compliance-workstation
+# $COMPOSE_CMD -f docker-compose.ghcr.yml --profile systems-architect up -d systems-architect-workstation
 ```
 
 Default package names:
 
 - `ghcr.io/josh-phillips-llc/context-engineering-workstation-implementation-specialist:latest`
 - `ghcr.io/josh-phillips-llc/context-engineering-workstation-compliance-officer:latest`
+- `ghcr.io/josh-phillips-llc/context-engineering-workstation-systems-architect:latest`
 
 Release naming and versioning conventions:
 
@@ -76,6 +82,7 @@ Verify the published platforms include both `linux/amd64` and `linux/arm64`:
 ```bash
 docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-workstation-implementation-specialist:latest
 docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-workstation-compliance-officer:latest
+docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-workstation-systems-architect:latest
 ```
 
 If you exported `GH_TOKEN` for startup bootstrap, clear it after the container is running:
@@ -123,12 +130,16 @@ On container startup, each role container auto-clones its role repo by default:
 - `compliance-workstation`
   - URL: `https://github.com/Josh-Phillips-LLC/context-engineering-role-compliance-officer.git`
   - Path: `/workspace/Projects/context-engineering-role-compliance-officer`
+- `systems-architect-workstation`
+  - URL: `https://github.com/Josh-Phillips-LLC/context-engineering-role-systems-architect.git`
+  - Path: `/workspace/Projects/context-engineering-role-systems-architect`
 
 Verify clone status:
 
 ```bash
 docker exec -it implementation-workstation bash -lc 'ls -la /workspace/Projects/context-engineering-role-implementation-specialist'
 docker exec -it compliance-workstation bash -lc 'ls -la /workspace/Projects/context-engineering-role-compliance-officer'
+docker exec -it systems-architect-workstation bash -lc 'ls -la /workspace/Projects/context-engineering-role-systems-architect'
 ```
 
 If auto-clone failed, run manual PAT auth and clone inside the container:
@@ -153,8 +164,10 @@ If needed, you can override default role repo targets with:
 
 - `IMPLEMENTATION_WORKSPACE_REPO_URL`
 - `COMPLIANCE_WORKSPACE_REPO_URL`
+- `SYSTEMS_ARCHITECT_WORKSPACE_REPO_URL`
 - `IMPLEMENTATION_WORKSPACE_REPO_DIR_NAME`
 - `COMPLIANCE_WORKSPACE_REPO_DIR_NAME`
+- `SYSTEMS_ARCHITECT_WORKSPACE_REPO_DIR_NAME`
 
 ## 3) Attach VS Code to running container
 
@@ -162,10 +175,11 @@ In local (non-containerized) VS Code:
 
 1. Open Command Palette
 2. Run `Dev Containers: Attach to Running Container...`
-3. Select `implementation-workstation` or `compliance-workstation`
+3. Select `implementation-workstation`, `compliance-workstation`, or `systems-architect-workstation`
 4. Open folder matching the role container:
    - `/workspace/Projects/context-engineering-role-implementation-specialist`
    - `/workspace/Projects/context-engineering-role-compliance-officer`
+  - `/workspace/Projects/context-engineering-role-systems-architect`
 
 ## 4) Codex config defaults
 
