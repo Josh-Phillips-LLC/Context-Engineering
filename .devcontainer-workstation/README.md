@@ -104,7 +104,7 @@ If role GitHub App auth is configured, verify the role identity inside the conta
 
 ```bash
 gh auth status --hostname github.com
-gh api /user --jq '.login'
+gh api graphql -f query='{viewer{login}}' --jq '.data.viewer.login'
 ```
 
 If App auth variables are missing, startup logs a warning and continues without App auth.
