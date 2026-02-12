@@ -26,15 +26,16 @@ export GH_BOOTSTRAP_TOKEN="<your_pat>"
 export WORKSTATION_DEBUG="true" # optional: verbose init-workstation logging
 
 # Optional: role GitHub App auth (preferred for role-attributable actions)
-# ROLE_GITHUB_AUTH_MODE defaults to "app" in role profiles. If you are not
-# providing App credentials, set ROLE_GITHUB_AUTH_MODE="user" to skip.
+# Role app IDs and installation IDs are preconfigured per workstation service
+# in docker-compose files. Set only the private key path for the role you start.
 # Keep GH_TOKEN/GITHUB_TOKEN unset in app mode; those env vars override
 # role-app identity for gh/MCP calls when present in container env.
 # The private key path must be mounted into the container (file path only).
-# export ROLE_GITHUB_AUTH_MODE="app"
-# export ROLE_GITHUB_APP_ID="<app-id>"
-# export ROLE_GITHUB_APP_INSTALLATION_ID="<installation-id>"
-# export ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+# export IMPLEMENTATION_ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+# export COMPLIANCE_ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+# export SYSTEMS_ARCHITECT_ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+# Optional override when needed:
+# export COMPLIANCE_ROLE_GITHUB_AUTH_MODE="user"
 
 # Default role-scoped startup (Implementation Specialist)
 $COMPOSE_CMD down
@@ -64,6 +65,11 @@ fi
 # export GHCR_OWNER="<github-org-or-user>"
 # export GHCR_IMAGE_TAG="latest"
 # export WORKSPACE_REPO_OWNER="Josh-Phillips-LLC"
+# Role app IDs and installation IDs are preconfigured per workstation service.
+# Set only the private key path for the role you start.
+# export IMPLEMENTATION_ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+# export COMPLIANCE_ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+# export SYSTEMS_ARCHITECT_ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
 
 $COMPOSE_CMD -f docker-compose.ghcr.yml down
 $COMPOSE_CMD -f docker-compose.ghcr.yml up -d implementation-workstation
