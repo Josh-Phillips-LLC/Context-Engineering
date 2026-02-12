@@ -97,6 +97,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Authenticate to GHCR
+        # TODO(implementation-specialist): GHCR publish uses the repository automation identity
+        # (GITHUB_TOKEN) because GHCR write permissions are scoped to the workflow's repo
+        # and environment. Role GitHub App auth is not feasible here without separate
+        # app-granted package permissions and additional secret distribution.
         uses: docker/login-action@v3
         with:
           registry: ghcr.io

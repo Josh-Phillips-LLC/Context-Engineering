@@ -16,10 +16,19 @@ Each role profile is an `.env` file named `<role>.env` and may set:
 - `ROLE_WRITABLE_ROOTS` (JSON array string)
 - `ROLE_PROJECT_DOC_FALLBACK_FILENAMES` (JSON array string)
 
+Optional GitHub role auth values:
+
+- `ROLE_GITHUB_AUTH_MODE` (`app` or `user`, default `app`)
+- `ROLE_GITHUB_APP_ID`
+- `ROLE_GITHUB_APP_INSTALLATION_ID`
+- `ROLE_GITHUB_APP_PRIVATE_KEY_PATH` (path to a mounted private key file)
+
 Startup behavior:
 
 - Base config is seeded from `/etc/codex/config.toml` when `/root/.codex/config.toml` does not exist.
 - Role overlays then replace supported keys in `/root/.codex/config.toml`.
+- If `ROLE_GITHUB_AUTH_MODE=app` and all `ROLE_GITHUB_APP_*` values are set, startup runs the role GitHub App auth helper to mint a short-lived installation token and configure `gh`.
+- If any required `ROLE_GITHUB_APP_*` values are missing, startup prints a warning and continues without App auth.
 - `ROLE_PROFILE` defaults to image-baked `IMAGE_ROLE_PROFILE` when not explicitly set at runtime.
 - Runtime role instructions are generated at `/workspace/instructions/role-instructions.md` from role-repo `AGENTS.md` first, then image-baked compiled role instructions, then image-baked fallback sources.
 - Default runtime clone targets are role repos by role:

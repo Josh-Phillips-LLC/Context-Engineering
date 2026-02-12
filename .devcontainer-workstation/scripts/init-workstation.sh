@@ -8,6 +8,8 @@ if [ "$WORKSTATION_DEBUG" = "true" ]; then
   echo "Debug mode enabled for init-workstation.sh"
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 CODEX_HOME_DIR="${CODEX_HOME:-/root/.codex}"
 DEFAULT_CONFIG="${DEFAULT_CONFIG:-/etc/codex/config.toml}"
 TARGET_CONFIG="${CODEX_HOME_DIR}/config.toml"
@@ -27,6 +29,7 @@ WORKSPACE_REPO_NAME_DEFAULT="${WORKSPACE_REPO_NAME_DEFAULT:-context-engineering-
 WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/${WORKSPACE_REPO_OWNER}/${WORKSPACE_REPO_NAME_DEFAULT}.git}"
 WORKSPACE_REPO_DIR="${WORKSPACE_REPO_DIR:-/workspace/Projects/${WORKSPACE_REPO_NAME_DEFAULT}}"
 AUTO_CLONE_WORKSPACE_REPO="${AUTO_CLONE_WORKSPACE_REPO:-true}"
+ROLE_GITHUB_APP_AUTH_SCRIPT="${ROLE_GITHUB_APP_AUTH_SCRIPT:-${SCRIPT_DIR}/setup-role-github-app-auth.sh}"
 
 replace_string_setting() {
   local key="$1"
@@ -250,6 +253,29 @@ if [ ! -f "$TARGET_CONFIG" ]; then
 fi
 
 apply_role_profile
+
+if [ "${ROLE_GITHUB_AUTH_MODE:-}" = "app" ]; then
+  missing_vars=()
+  if [ -z "${ROLE_GITHUB_APP_ID:-}" ]; then
+    missing_vars+=("ROLE_GITHUB_APP_ID")
+  fi
+  if [ -z "${ROLE_GITHUB_APP_INSTALLATION_ID:-}" ]; then
+    missing_vars+=("ROLE_GITHUB_APP_INSTALLATION_ID")
+  fi
+  if [ -z "${ROLE_GITHUB_APP_PRIVATE_KEY_PATH:-}" ]; then
+    missing_vars+=("ROLE_GITHUB_APP_PRIVATE_KEY_PATH")
+  fi
+
+  if [ "${#missing_vars[@]}" -gt 0 ]; then
+    printf 'Warning: ROLE_GITHUB_AUTH_MODE=app but missing %s; skipping role app auth.\n' "${missing_vars[*]}" >&2
+  else
+    if [ -x "$ROLE_GITHUB_APP_AUTH_SCRIPT" ]; then
+      "$ROLE_GITHUB_APP_AUTH_SCRIPT"
+    else
+      echo "Warning: role GitHub App auth helper not found at ${ROLE_GITHUB_APP_AUTH_SCRIPT}; skipping." >&2
+    fi
+  fi
+fi
 
 if [ -n "${GH_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
   if ! gh auth status --hostname github.com >/dev/null 2>&1; then
