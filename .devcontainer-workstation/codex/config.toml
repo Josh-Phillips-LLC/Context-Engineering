@@ -22,7 +22,7 @@ web_search = "live"
 inherit = "core"
 ignore_default_excludes = false
 exclude = ["AWS_*", "AZURE_*", "*_SESSION_*"]
-include_only = ["PATH", "HOME", "LANG", "LC_*", "TERM", "TMPDIR", "CODEX_HOME", "OPENAI_API_KEY", "GH_TOKEN"]
+include_only = ["PATH", "HOME", "LANG", "LC_*", "TERM", "TMPDIR", "CODEX_HOME", "OPENAI_API_KEY"]
 set = { GIT_TERMINAL_PROMPT = "0" }
 experimental_use_profile = false
 
