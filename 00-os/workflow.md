@@ -37,6 +37,11 @@
 ## Artifact Flow
 - Session Canvas → Publishable Extract → Repo Canvas
 
+## Role Creation Workflow
+- Canonical execution template: `10-templates/agent-work-orders/role-creation-work-order.md`
+- GitHub issue launcher: `.github/ISSUE_TEMPLATE/role-creation-request.md`
+- Use this pair for end-to-end role rollout work (charter and source definitions through role-repo sync and container publish verification).
+
 ## TODO
 - Add release cadence (weekly/monthly) if needed.
 - Define acceptance criteria for each artifact type.
