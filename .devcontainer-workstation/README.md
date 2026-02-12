@@ -26,6 +26,15 @@ fi
 export GH_TOKEN="<your_pat>"
 export WORKSTATION_DEBUG="true" # optional: verbose init-workstation logging
 
+# Optional: role GitHub App auth (preferred for role-attributable actions)
+# ROLE_GITHUB_AUTH_MODE defaults to "app" in role profiles. If you are not
+# providing App credentials, set ROLE_GITHUB_AUTH_MODE="user" to skip.
+# The private key path must be mounted into the container (file path only).
+# export ROLE_GITHUB_AUTH_MODE="app"
+# export ROLE_GITHUB_APP_ID="<app-id>"
+# export ROLE_GITHUB_APP_INSTALLATION_ID="<installation-id>"
+# export ROLE_GITHUB_APP_PRIVATE_KEY_PATH="/run/secrets/role_github_app_private_key"
+
 # Default role-scoped startup (Implementation Specialist)
 $COMPOSE_CMD down
 $COMPOSE_CMD up -d --build implementation-workstation
@@ -90,6 +99,15 @@ If you exported `GH_TOKEN` for startup bootstrap, clear it after the container i
 ```bash
 unset GH_TOKEN
 ```
+
+If role GitHub App auth is configured, verify the role identity inside the container:
+
+```bash
+gh auth status --hostname github.com
+gh api /user --jq '.login'
+```
+
+If App auth variables are missing, startup logs a warning and continues without App auth.
 
 Use this only if you want a full reset of persisted container data:
 

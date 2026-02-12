@@ -141,6 +141,10 @@ for cmd in gh git python3; do
   fi
 done
 
+if [ -z "${GH_TOKEN:-}" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
+  export GH_TOKEN="$GITHUB_TOKEN"
+fi
+
 if [ -z "${GH_TOKEN:-}" ] && [ -z "${GITHUB_TOKEN:-}" ]; then
   if ! gh auth status --hostname github.com >/dev/null 2>&1; then
     echo "GitHub CLI not authenticated. Run: gh auth login" >&2

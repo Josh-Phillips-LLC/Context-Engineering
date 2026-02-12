@@ -182,15 +182,30 @@ Behavior:
 
 Required secret:
 
-- `ROLE_REPO_SYNC_TOKEN`
+- `IMPLEMENTATION_SPECIALIST_APP_ID`
+- `IMPLEMENTATION_SPECIALIST_APP_PRIVATE_KEY`
+- `COMPLIANCE_OFFICER_APP_ID`
+- `COMPLIANCE_OFFICER_APP_PRIVATE_KEY`
+- `SYSTEMS_ARCHITECT_APP_ID`
+- `SYSTEMS_ARCHITECT_APP_PRIVATE_KEY`
 
-`ROLE_REPO_SYNC_TOKEN` should be a token with access to target role repositories and permissions to push branches and open/edit pull requests.
+These secrets must map to GitHub Apps installed on the target role repositories. The sync workflow mints a short-lived installation token per role and uses it as `GH_TOKEN` for `gh` and git operations.
 
 Optional variable:
 
 - `ROLE_REPO_OWNER`
 
 If `ROLE_REPO_OWNER` is unset, workflow defaults to `github.repository_owner`.
+
+Verification (audit):
+
+- Check workflow logs for the `Configure git auth for gh operations` step and confirm `gh auth status` reports the expected role App identity.
+- Review the sync PR actor in the role repo; it should show the role App identity rather than a shared human account.
+
+Failure modes:
+
+- Missing role App secrets will stop the workflow with a missing token error.
+- If the App is not installed on a target role repo, token minting will fail.
 
 ## GitHub Actions GHCR Publish Path
 

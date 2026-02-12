@@ -63,13 +63,16 @@ jobs:
         include:
           - role_slug: implementation-specialist
             repo_name: context-engineering-role-implementation-specialist
+            app_id_secret: IMPLEMENTATION_SPECIALIST_APP_ID
+            private_key_secret: IMPLEMENTATION_SPECIALIST_APP_PRIVATE_KEY
           - role_slug: compliance-officer
             repo_name: context-engineering-role-compliance-officer
+            app_id_secret: COMPLIANCE_OFFICER_APP_ID
+            private_key_secret: COMPLIANCE_OFFICER_APP_PRIVATE_KEY
           - role_slug: systems-architect
             repo_name: context-engineering-role-systems-architect
-
-    env:
-      GH_TOKEN: ${{ secrets.ROLE_REPO_SYNC_TOKEN }}
+            app_id_secret: SYSTEMS_ARCHITECT_APP_ID
+            private_key_secret: SYSTEMS_ARCHITECT_APP_PRIVATE_KEY
 
     steps:
       - name: Evaluate matrix role selection
@@ -86,26 +89,6 @@ jobs:
             echo "run_sync=false" >> "$GITHUB_OUTPUT"
             echo "Skipping matrix role $MATRIX_ROLE for requested role $REQUESTED_ROLE"
           fi
-
-      - name: Validate sync token is configured
-        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
-        run: |
-          set -euo pipefail
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "Missing secret ROLE_REPO_SYNC_TOKEN"
-            exit 1
-          fi
-
-      - name: Checkout repository
-        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
-        uses: actions/checkout@v4
-
-      - name: Configure git auth for gh operations
-        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
-        run: |
-          set -euo pipefail
-          gh auth status --hostname github.com
-          gh auth setup-git
 
       - name: Resolve target owner
         if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
@@ -129,9 +112,44 @@ jobs:
           fi
           echo "owner=$owner" >> "$GITHUB_OUTPUT"
 
+      - name: Create role GitHub App token
+        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
+        id: app_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets[matrix.app_id_secret] }}
+          private-key: ${{ secrets[matrix.private_key_secret] }}
+          owner: ${{ steps.owner.outputs.owner }}
+          repositories: ${{ matrix.repo_name }}
+
+      - name: Validate sync token is configured
+        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "Missing role GitHub App token (check role app secrets)."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
+        uses: actions/checkout@v4
+
+      - name: Configure git auth for gh operations
+        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+        run: |
+          set -euo pipefail
+          gh auth status --hostname github.com
+          gh auth setup-git
+
       - name: Sync role repository
         if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
         env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
           SOURCE_REF_INPUT: ${{ github.event.inputs.source_ref }}
           DRY_RUN_INPUT: ${{ github.event.inputs.dry_run }}
           NO_PR_INPUT: ${{ github.event.inputs.no_pr }}
