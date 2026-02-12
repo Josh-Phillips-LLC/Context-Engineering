@@ -35,6 +35,13 @@ For exploratory ideas, options, and future-looking notes, see `canvas.md`.
 - Operate primarily on repo-local, public-safe context
 - Do not retain long-term memory; context must be supplied
 
+### Systems Architect (systems planning and architecture role)
+
+- Designs system-level architecture and implementation paths
+- Translates objectives into architecture options, trade-offs, and sequencing
+- Defines integration boundaries and interface expectations
+- Recommends solutions without approval or merge authority
+
 ### Business Analyst (proposal and analysis role)
 
 - Performs exploratory analysis and planning
@@ -55,6 +62,7 @@ The canonical role vocabulary for this repo is:
 - AI Governance Manager
 - Compliance Officer
 - Implementation Specialist
+- Systems Architect
 - Business Analyst
 
 Use canonical role names in PR metadata, labels, approvals, and documentation.
@@ -326,6 +334,7 @@ Use a clear prefix in commit messages:
 - `[Compliance Officer]` — review-driven or corrective changes based on compliance analysis
 - `[AI Governance Manager]` — context-system ownership and curation changes
 - `[Business Analyst]` — proposal or planning artifacts
+- `[Systems Architect]` — system architecture and implementation path design
 - `[Executive Sponsor]` — approval decisions or direct edits by the sponsor
 
 Example:
@@ -340,7 +349,7 @@ Example:
 
 Every PR description must include the following fields (exact keys), so humans and automation can parse intent reliably:
 
-- `Primary-Role: Executive Sponsor|AI Governance Manager|Compliance Officer|Business Analyst|Implementation Specialist`
+- `Primary-Role: Executive Sponsor|AI Governance Manager|Compliance Officer|Business Analyst|Implementation Specialist|Systems Architect`
 - `Reviewed-By-Role: Compliance Officer|Executive Sponsor|N/A`
 - `Executive-Sponsor-Approval: Required|Not-Required|Provided`
 
@@ -357,6 +366,7 @@ Labels make role and status visible at a glance and must be applied on every PR.
 - `role:compliance-officer`
 - `role:business-analyst`
 - `role:implementation-specialist`
+- `role:systems-architect`
 
 **Optional:**
 

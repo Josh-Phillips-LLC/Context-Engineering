@@ -18,7 +18,7 @@ labels: ["change-request"]
 - 
 
 ## Role Attribution
-- **Proposed Implementer:** (Implementation Specialist / Business Analyst / AI Governance Manager)
+- **Proposed Implementer:** (Implementation Specialist / Systems Architect / Business Analyst / AI Governance Manager)
 - **Expected Reviewer:** (Compliance Officer / Executive Sponsor)
 
 ## Notes
