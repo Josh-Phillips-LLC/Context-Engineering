@@ -26,6 +26,7 @@ on:
           - all
           - implementation-specialist
           - compliance-officer
+          - systems-architect
       owner:
         description: Optional GitHub owner override
         required: false
@@ -59,6 +60,8 @@ jobs:
             repo_name: context-engineering-role-implementation-specialist
           - role_slug: compliance-officer
             repo_name: context-engineering-role-compliance-officer
+          - role_slug: systems-architect
+            repo_name: context-engineering-role-systems-architect
 
     env:
       GH_TOKEN: ${{ secrets.ROLE_REPO_SYNC_TOKEN }}
