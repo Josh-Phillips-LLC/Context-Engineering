@@ -45,6 +45,11 @@ on:
         required: false
         type: boolean
         default: false
+      auto_merge:
+        description: Request GitHub auto-merge on sync PRs
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -130,12 +135,17 @@ jobs:
           SOURCE_REF_INPUT: ${{ github.event.inputs.source_ref }}
           DRY_RUN_INPUT: ${{ github.event.inputs.dry_run }}
           NO_PR_INPUT: ${{ github.event.inputs.no_pr }}
+          AUTO_MERGE_INPUT: ${{ github.event.inputs.auto_merge }}
           GIT_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           source_ref="$SOURCE_REF_INPUT"
           if [ -z "$source_ref" ]; then
             source_ref="$(printf '%s' "$GIT_SHA" | cut -c1-7)"
+          fi
+          auto_merge="$AUTO_MERGE_INPUT"
+          if [ -z "$auto_merge" ]; then
+            auto_merge="true"
           fi
 
           args=(
@@ -151,6 +161,10 @@ jobs:
 
           if [ "$NO_PR_INPUT" = "true" ]; then
             args+=(--no-pr)
+          fi
+
+          if [ "$auto_merge" = "true" ] && [ "$DRY_RUN_INPUT" != "true" ] && [ "$NO_PR_INPUT" != "true" ]; then
+            args+=(--auto-merge)
           fi
 
           10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh "${args[@]}"

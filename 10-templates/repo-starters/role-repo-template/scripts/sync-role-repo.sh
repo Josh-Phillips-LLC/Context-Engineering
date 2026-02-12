@@ -14,6 +14,7 @@ Usage:
     [--work-dir <work-dir>] \
     [--sync-branch <sync-branch>] \
     [--pr-title <pr-title>] \
+    [--auto-merge] \
     [--no-pr] \
     [--dry-run]
 
@@ -29,6 +30,7 @@ Optional:
   --work-dir      Temporary workspace root
   --sync-branch   Defaults to: sync/role-repo/<role-slug>
   --pr-title      Defaults to role sync title
+  --auto-merge    Best-effort request GitHub auto-merge on the sync PR
   --no-pr         Sync branch only, do not create/update PR
   --dry-run       Do everything except git push / PR write
 
@@ -57,6 +59,7 @@ SYNC_BRANCH=""
 PR_TITLE=""
 CREATE_PR="true"
 DRY_RUN="false"
+AUTO_MERGE="false"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -95,6 +98,10 @@ while [ "$#" -gt 0 ]; do
     --pr-title)
       PR_TITLE="$2"
       shift 2
+      ;;
+    --auto-merge)
+      AUTO_MERGE="true"
+      shift
       ;;
     --no-pr)
       CREATE_PR="false"
@@ -285,5 +292,51 @@ fi
 
 # Best-effort labeling. If labels are missing in target repos, do not fail sync.
 gh pr edit --repo "$FULL_REPO" "$pr_number" --add-label "role:implementation-specialist" --add-label "status:needs-review" >/dev/null 2>&1 || true
+
+if [ "$AUTO_MERGE" = "true" ]; then
+  pr_meta_file="$(mktemp "/tmp/${ROLE_SLUG}-pr-meta-XXXXXX.json")"
+  if gh pr view --repo "$FULL_REPO" "$pr_number" --json state,isDraft,mergeStateStatus >"$pr_meta_file" 2>/dev/null; then
+    pr_state="$(python3 - <<'PY' "$pr_meta_file"
+import json
+import sys
+
+with open(sys.argv[1], "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+state = data.get("state", "")
+is_draft = bool(data.get("isDraft", False))
+merge_state = data.get("mergeStateStatus", "")
+print(f"{state}|{str(is_draft).lower()}|{merge_state}")
+PY
+)"
+    IFS='|' read -r pr_state_value pr_draft_value pr_merge_state <<<"$pr_state"
+    mergeable="false"
+    case "$pr_merge_state" in
+      CLEAN|HAS_HOOKS|UNSTABLE)
+        mergeable="true"
+        ;;
+    esac
+
+    if [ "$pr_state_value" != "OPEN" ]; then
+      echo "Auto-merge skipped for ${FULL_REPO} PR #${pr_number}: PR state is ${pr_state_value}."
+    elif [ "$pr_draft_value" = "true" ]; then
+      echo "Auto-merge skipped for ${FULL_REPO} PR #${pr_number}: PR is draft."
+    elif [ "$mergeable" != "true" ]; then
+      echo "Auto-merge skipped for ${FULL_REPO} PR #${pr_number}: mergeStateStatus=${pr_merge_state}."
+    else
+      merge_err_file="$(mktemp "/tmp/${ROLE_SLUG}-pr-merge-XXXXXX.err")"
+      if gh pr merge --repo "$FULL_REPO" "$pr_number" --auto --squash --delete-branch >/dev/null 2>"$merge_err_file"; then
+        echo "Auto-merge enabled for ${FULL_REPO} PR #${pr_number}."
+      else
+        merge_err_msg="$(tr '\n' ' ' < "$merge_err_file" | sed -E 's/[[:space:]]+/ /g')"
+        echo "Auto-merge request failed (non-fatal) for ${FULL_REPO} PR #${pr_number}: ${merge_err_msg}"
+      fi
+      rm -f "$merge_err_file"
+    fi
+  else
+    echo "Auto-merge skipped for ${FULL_REPO} PR #${pr_number}: unable to query PR metadata."
+  fi
+  rm -f "$pr_meta_file"
+fi
 
 echo "Synced role repo and opened/updated PR: https://github.com/${FULL_REPO}/pull/${pr_number}"

@@ -141,6 +141,7 @@ Optional args:
 - `--sync-branch` (defaults to `sync/role-repo/<role-slug>`)
 - `--pr-title`
 - `--work-dir`
+- `--auto-merge` (best-effort request GitHub auto-merge on sync PR)
 - `--no-pr`
 - `--dry-run`
 
@@ -149,7 +150,8 @@ Example:
 ```bash
 10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh \
   --role-slug implementation-specialist \
-  --owner Josh-Phillips-LLC
+  --owner Josh-Phillips-LLC \
+  --auto-merge
 ```
 
 Dry-run example:
@@ -175,6 +177,8 @@ Behavior:
   - `implementation-specialist`
   - `compliance-officer`
   - `systems-architect`
+- Requests auto-merge on generated sync PRs by default (unless `no_pr`/`dry_run` is used or manual `auto_merge` input is disabled).
+- Auto-merge request is best-effort and non-fatal; sync still succeeds if repo policy blocks auto-merge.
 
 Required secret:
 
