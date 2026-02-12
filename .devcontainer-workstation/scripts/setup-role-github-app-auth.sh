@@ -48,24 +48,25 @@ unsigned_token="${header_b64}.${payload_b64}"
 signature="$(printf '%s' "$unsigned_token" | openssl dgst -sha256 -sign "$ROLE_GITHUB_APP_PRIVATE_KEY_PATH" | base64url)"
 app_jwt="${unsigned_token}.${signature}"
 
-installation_token="$(env -u GH_TOKEN -u GITHUB_TOKEN gh api \
-  --method POST \
+installation_token_response="$(curl -fsS \
+  -X POST \
   -H "Authorization: Bearer ${app_jwt}" \
   -H "Accept: application/vnd.github+json" \
-  "/app/installations/${ROLE_GITHUB_APP_INSTALLATION_ID}/access_tokens" \
-  --jq '.token' \
+  "https://api.github.com/app/installations/${ROLE_GITHUB_APP_INSTALLATION_ID}/access_tokens" \
 )"
+installation_token="$(printf '%s' "$installation_token_response" | jq -r '.token // empty')"
 
 if [ -z "$installation_token" ]; then
   echo "Failed to mint GitHub App installation token." >&2
+  printf '%s\n' "$installation_token_response" >&2
   exit 1
 fi
 
-printf '%s' "$installation_token" | gh auth login --hostname github.com --git-protocol https --with-token >/dev/null
+printf '%s' "$installation_token" | env -u GH_TOKEN -u GITHUB_TOKEN gh auth login --hostname github.com --git-protocol https --with-token >/dev/null
 
-gh auth setup-git >/dev/null
+env -u GH_TOKEN -u GITHUB_TOKEN gh auth setup-git >/dev/null
 
-principal="$(gh api /user --jq '.login' 2>/dev/null || true)"
+principal="$(env -u GH_TOKEN -u GITHUB_TOKEN gh api graphql -f query='query { viewer { login } }' --jq '.data.viewer.login' 2>/dev/null || true)"
 if [ -z "$principal" ]; then
   principal="unknown"
 fi
