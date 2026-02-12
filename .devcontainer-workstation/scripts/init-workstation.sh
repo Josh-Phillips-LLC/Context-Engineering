@@ -30,6 +30,7 @@ WORKSPACE_REPO_URL="${WORKSPACE_REPO_URL:-https://github.com/${WORKSPACE_REPO_OW
 WORKSPACE_REPO_DIR="${WORKSPACE_REPO_DIR:-/workspace/Projects/${WORKSPACE_REPO_NAME_DEFAULT}}"
 AUTO_CLONE_WORKSPACE_REPO="${AUTO_CLONE_WORKSPACE_REPO:-true}"
 ROLE_GITHUB_APP_AUTH_SCRIPT="${ROLE_GITHUB_APP_AUTH_SCRIPT:-${SCRIPT_DIR}/setup-role-github-app-auth.sh}"
+GH_BOOTSTRAP_TOKEN="${GH_BOOTSTRAP_TOKEN:-}"
 ROLE_GITHUB_AUTH_MODE_RUNTIME="${ROLE_GITHUB_AUTH_MODE:-}"
 ROLE_GITHUB_APP_ID_RUNTIME="${ROLE_GITHUB_APP_ID:-}"
 ROLE_GITHUB_APP_INSTALLATION_ID_RUNTIME="${ROLE_GITHUB_APP_INSTALLATION_ID:-}"
@@ -295,13 +296,17 @@ if [ "${ROLE_GITHUB_AUTH_MODE:-}" = "app" ]; then
   fi
 fi
 
-if [ -n "${GH_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+if [ "${ROLE_GITHUB_AUTH_MODE:-}" = "app" ] && [ -n "${GH_BOOTSTRAP_TOKEN:-}" ]; then
+  echo "Warning: GH_BOOTSTRAP_TOKEN is ignored when ROLE_GITHUB_AUTH_MODE=app to preserve role-attributed GitHub App identity." >&2
+fi
+
+if [ "${ROLE_GITHUB_AUTH_MODE:-}" != "app" ] && [ -n "${GH_BOOTSTRAP_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
   if ! gh auth status --hostname github.com >/dev/null 2>&1; then
-    if printf '%s' "$GH_TOKEN" | env -u GH_TOKEN gh auth login --hostname github.com --git-protocol https --with-token >/dev/null 2>&1; then
+    if printf '%s' "$GH_BOOTSTRAP_TOKEN" | env -u GH_TOKEN -u GITHUB_TOKEN gh auth login --hostname github.com --git-protocol https --with-token >/dev/null 2>&1; then
       gh auth setup-git >/dev/null 2>&1 || true
-      echo "Initialized GitHub auth from GH_TOKEN."
+      echo "Initialized GitHub auth from GH_BOOTSTRAP_TOKEN."
     else
-      echo "Warning: failed to initialize GitHub auth from GH_TOKEN." >&2
+      echo "Warning: failed to initialize GitHub auth from GH_BOOTSTRAP_TOKEN." >&2
     fi
   fi
 fi

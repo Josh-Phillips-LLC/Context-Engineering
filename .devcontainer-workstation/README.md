@@ -20,15 +20,16 @@ else
   COMPOSE_CMD="docker-compose"
 fi
 
-# Optional: set this before startup when the workspace repo is private
-# or you want non-interactive auth/auto-clone on first boot.
-
-export GH_TOKEN="<your_pat>"
+# Optional: set this before startup when ROLE_GITHUB_AUTH_MODE=user and
+# the workspace repo is private or you want non-interactive first-boot auth.
+export GH_BOOTSTRAP_TOKEN="<your_pat>"
 export WORKSTATION_DEBUG="true" # optional: verbose init-workstation logging
 
 # Optional: role GitHub App auth (preferred for role-attributable actions)
 # ROLE_GITHUB_AUTH_MODE defaults to "app" in role profiles. If you are not
 # providing App credentials, set ROLE_GITHUB_AUTH_MODE="user" to skip.
+# Keep GH_TOKEN/GITHUB_TOKEN unset in app mode; those env vars override
+# role-app identity for gh/MCP calls when present in container env.
 # The private key path must be mounted into the container (file path only).
 # export ROLE_GITHUB_AUTH_MODE="app"
 # export ROLE_GITHUB_APP_ID="<app-id>"
@@ -94,10 +95,10 @@ docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-w
 docker buildx imagetools inspect ghcr.io/josh-phillips-llc/context-engineering-workstation-systems-architect:latest
 ```
 
-If you exported `GH_TOKEN` for startup bootstrap, clear it after the container is running:
+If you exported `GH_BOOTSTRAP_TOKEN` for startup bootstrap, clear it after the container is running:
 
 ```bash
-unset GH_TOKEN
+unset GH_BOOTSTRAP_TOKEN
 ```
 
 If role GitHub App auth is configured, verify the role identity inside the container:
@@ -167,7 +168,7 @@ docker exec -it implementation-workstation bash
 
 # One-time fallback auth inside container (HTTPS + PAT)
 read -s -p "GitHub PAT: " GH_PAT; echo
-printf '%s' "$GH_PAT" | env -u GH_TOKEN gh auth login --hostname github.com --git-protocol https --with-token
+printf '%s' "$GH_PAT" | env -u GH_TOKEN -u GITHUB_TOKEN gh auth login --hostname github.com --git-protocol https --with-token
 gh auth setup-git
 gh auth status
 unset GH_PAT

@@ -9,11 +9,15 @@ services:
       - implementation_git_config:/root/.config/git
       - implementation_codex_home:/root/.codex
     environment:
-      - GH_TOKEN=${GH_TOKEN:-}
+      - GH_BOOTSTRAP_TOKEN=${GH_BOOTSTRAP_TOKEN:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       - ROLE_PROFILE=${ROLE_PROFILE:-implementation-specialist}
+      - ROLE_GITHUB_AUTH_MODE=${ROLE_GITHUB_AUTH_MODE:-}
+      - ROLE_GITHUB_APP_ID=${ROLE_GITHUB_APP_ID:-}
+      - ROLE_GITHUB_APP_INSTALLATION_ID=${ROLE_GITHUB_APP_INSTALLATION_ID:-}
+      - ROLE_GITHUB_APP_PRIVATE_KEY_PATH=${ROLE_GITHUB_APP_PRIVATE_KEY_PATH:-}
       - WORKSPACE_REPO_OWNER=${WORKSPACE_REPO_OWNER:-Josh-Phillips-LLC}
       - WORKSPACE_REPO_URL=${IMPLEMENTATION_WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/context-engineering-role-implementation-specialist.git}
       - WORKSPACE_REPO_DIR=/workspace/Projects/${IMPLEMENTATION_WORKSPACE_REPO_DIR_NAME:-context-engineering-role-implementation-specialist}
@@ -38,11 +42,15 @@ services:
       - compliance_git_config:/root/.config/git
       - compliance_codex_home:/root/.codex
     environment:
-      - GH_TOKEN=${GH_TOKEN:-}
+      - GH_BOOTSTRAP_TOKEN=${GH_BOOTSTRAP_TOKEN:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       - ROLE_PROFILE=compliance-officer
+      - ROLE_GITHUB_AUTH_MODE=${ROLE_GITHUB_AUTH_MODE:-}
+      - ROLE_GITHUB_APP_ID=${ROLE_GITHUB_APP_ID:-}
+      - ROLE_GITHUB_APP_INSTALLATION_ID=${ROLE_GITHUB_APP_INSTALLATION_ID:-}
+      - ROLE_GITHUB_APP_PRIVATE_KEY_PATH=${ROLE_GITHUB_APP_PRIVATE_KEY_PATH:-}
       - WORKSPACE_REPO_OWNER=${WORKSPACE_REPO_OWNER:-Josh-Phillips-LLC}
       - WORKSPACE_REPO_URL=${COMPLIANCE_WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/context-engineering-role-compliance-officer.git}
       - WORKSPACE_REPO_DIR=/workspace/Projects/${COMPLIANCE_WORKSPACE_REPO_DIR_NAME:-context-engineering-role-compliance-officer}
@@ -67,11 +75,15 @@ services:
       - systems_architect_git_config:/root/.config/git
       - systems_architect_codex_home:/root/.codex
     environment:
-      - GH_TOKEN=${GH_TOKEN:-}
+      - GH_BOOTSTRAP_TOKEN=${GH_BOOTSTRAP_TOKEN:-}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - WORKSTATION_DEBUG=${WORKSTATION_DEBUG:-false}
       - CODEX_HOME=/root/.codex
       - ROLE_PROFILE=systems-architect
+      - ROLE_GITHUB_AUTH_MODE=${ROLE_GITHUB_AUTH_MODE:-}
+      - ROLE_GITHUB_APP_ID=${ROLE_GITHUB_APP_ID:-}
+      - ROLE_GITHUB_APP_INSTALLATION_ID=${ROLE_GITHUB_APP_INSTALLATION_ID:-}
+      - ROLE_GITHUB_APP_PRIVATE_KEY_PATH=${ROLE_GITHUB_APP_PRIVATE_KEY_PATH:-}
       - WORKSPACE_REPO_OWNER=${WORKSPACE_REPO_OWNER:-Josh-Phillips-LLC}
       - WORKSPACE_REPO_URL=${SYSTEMS_ARCHITECT_WORKSPACE_REPO_URL:-https://github.com/Josh-Phillips-LLC/context-engineering-role-systems-architect.git}
       - WORKSPACE_REPO_DIR=/workspace/Projects/${SYSTEMS_ARCHITECT_WORKSPACE_REPO_DIR_NAME:-context-engineering-role-systems-architect}
