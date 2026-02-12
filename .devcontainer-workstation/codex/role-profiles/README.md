@@ -23,6 +23,10 @@ Optional GitHub role auth values:
 - `ROLE_GITHUB_APP_INSTALLATION_ID`
 - `ROLE_GITHUB_APP_PRIVATE_KEY_PATH` (path to a mounted private key file)
 
+In workstation compose files, role-specific defaults for `ROLE_GITHUB_APP_ID` and
+`ROLE_GITHUB_APP_INSTALLATION_ID` may be provided per service so only the private key path
+needs runtime input for app-mode auth.
+
 Startup behavior:
 
 - Base config is seeded from `/etc/codex/config.toml` when `/root/.codex/config.toml` does not exist.
