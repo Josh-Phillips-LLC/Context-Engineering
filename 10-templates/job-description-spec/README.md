@@ -15,6 +15,12 @@ Structured source inputs for deterministic assembly of role-repo `AGENTS.md` fil
 - `roles/<role-slug>.json`
   - Role-specific requirements and protocol includes
 
+## Current role specs
+
+- `roles/compliance-officer.json`
+- `roles/implementation-specialist.json`
+- `roles/systems-architect.json`
+
 ## Required section keys
 
 Role files must provide or inherit values for these keys:
