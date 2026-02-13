@@ -7,6 +7,38 @@ It supports role-scoped startup for:
 - `compliance-workstation` (`Compliance Officer` profile)
 - `systems-architect-workstation` (`Systems Architect` profile)
 
+## 0) Recommended launcher (prompted role/auth/PEM)
+
+Use the host-side launcher script to avoid manual compose/env wiring:
+
+```bash
+cd /path/to/Context-Engineering/.devcontainer-workstation
+./scripts/start-role-workstation.sh
+```
+
+The launcher prompts for:
+
+- Image source (`ghcr` or `local`)
+- Role
+- Auth mode (`app` or `user`)
+- PEM path (required for `app` mode)
+
+For `app` mode, it automatically:
+
+- mounts the host PEM into the container as a compose secret
+- sets in-container key path to `/run/secrets/role_github_app_private_key`
+- clears `GH_TOKEN`/`GITHUB_TOKEN` for startup so role app identity is not overridden
+
+Non-interactive example:
+
+```bash
+./scripts/start-role-workstation.sh \
+  --source ghcr \
+  --role compliance \
+  --auth-mode app \
+  --pem-path /Users/<you>/Downloads/a-complianceofficer.private-key.pem
+```
+
 ## 1) Build and start from host
 
 Run these from your host machine terminal (not inside a container):
