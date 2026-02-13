@@ -23,6 +23,9 @@ The launcher prompts for:
 - Auth mode (`app` or `user`)
 - PEM path (required for `app` mode)
 
+After startup, the launcher checks `codex login status` in-container.
+If unauthenticated, it prompts whether to run `codex login --device-auth`.
+
 For `app` mode, it automatically:
 
 - mounts the host PEM into the container as a compose secret
