@@ -72,9 +72,14 @@ jobs:
         run: |
           set -euo pipefail
           expected_ref="$(git rev-parse --short HEAD)"
-          source_ref="$(grep -E "Source ref:" role-repo/AGENTS.md | head -1 | sed -E 's/.*Source ref: `([^`]+)`.*/\1/')"
-          if [ -z "$source_ref" ] || [ "$source_ref" = "unknown" ]; then
-            echo "Role repo AGENTS.md is missing a valid Source ref marker."
+          source_ref="$(grep -E "Source ref:" role-repo/AGENTS.md | head -1 | sed -E 's/.*Source ref: `([^`]+)`.*/\1/' || true)"
+          if [ -z "$source_ref" ]; then
+            echo "Role repo AGENTS.md is missing a Source ref marker."
+            echo "Run the sync-role-repos workflow to regenerate role repo artifacts."
+            exit 1
+          fi
+          if [ "$source_ref" = "unknown" ]; then
+            echo "Role repo AGENTS.md Source ref is set to 'unknown'."
             echo "Run the sync-role-repos workflow to regenerate role repo artifacts."
             exit 1
           fi
