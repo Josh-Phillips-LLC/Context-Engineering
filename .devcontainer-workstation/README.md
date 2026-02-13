@@ -151,6 +151,29 @@ gh api graphql -f query='{viewer{login}}' --jq '.data.viewer.login'
 
 If App auth variables are missing, startup logs a warning and continues without App auth.
 
+When `gh` starts failing later with `401 Bad credentials` (expired installation token), run the deterministic re-mint helper before issue/branch/PR flows:
+
+```bash
+/usr/local/bin/remint-role-github-app-auth.sh
+gh auth status --hostname github.com
+```
+
+The helper resolves role app metadata from runtime startup output at `/workspace/instructions/role-github-app-auth.env`.
+It defaults the key path to `/run/secrets/role_github_app_private_key` when not explicitly set.
+
+If re-mint cannot proceed, it emits explicit errors for:
+
+- missing role app metadata (`ROLE_GITHUB_APP_ID`, `ROLE_GITHUB_APP_INSTALLATION_ID`)
+- unreadable/missing PEM secret mount at resolved key path (defaults to `/run/secrets/role_github_app_private_key`)
+- non-interactive sessions (no TTY) where prompting is not possible
+
+Typical issue-first usage:
+
+```bash
+/usr/local/bin/remint-role-github-app-auth.sh
+gh issue develop <ISSUE_NUMBER> --checkout
+```
+
 Use this only if you want a full reset of persisted container data:
 
 ```bash
@@ -251,6 +274,7 @@ In addition, it generates adapter files at:
 
 - `/workspace/instructions/AGENTS.md`
 - `/workspace/instructions/copilot-instructions.md`
+- `/workspace/instructions/role-github-app-auth.env` (role app metadata for deterministic re-mint helper)
 
 Instruction source resolution order:
 
