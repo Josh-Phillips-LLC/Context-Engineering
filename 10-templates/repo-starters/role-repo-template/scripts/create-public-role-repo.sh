@@ -125,6 +125,64 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
+run_publishability_preflight() {
+  local target_dir="$1"
+  local -a scan_files=(
+    "AGENTS.md"
+    "README.md"
+    ".github/copilot-instructions.md"
+    ".vscode/settings.json"
+  )
+  local -a scan_paths=()
+  local -a missing=()
+  local -a patterns=(
+    "BEGIN (RSA|OPENSSH|EC|PGP) PRIVATE KEY"
+    "ghp_[A-Za-z0-9]{36}"
+    "github_pat_[A-Za-z0-9_]{50,}"
+    "xoxb-[0-9A-Za-z-]{10,}"
+    "sk-[A-Za-z0-9]{20,}"
+    "AKIA[0-9A-Z]{16}"
+    "ASIA[0-9A-Z]{16}"
+    "\\b10\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\b"
+    "\\b192\\.168\\.[0-9]{1,3}\\.[0-9]{1,3}\\b"
+    "\\b172\\.(1[6-9]|2[0-9]|3[0-1])\\.[0-9]{1,3}\\.[0-9]{1,3}\\b"
+    "\\.internal\\b"
+    "\\.corp\\b"
+    "\\.lan\\b"
+    "\\.local\\b"
+  )
+
+  for file in "${scan_files[@]}"; do
+    if [ -f "${target_dir}/${file}" ]; then
+      scan_paths+=("${target_dir}/${file}")
+    else
+      missing+=("${file}")
+    fi
+  done
+
+  if [ "${#missing[@]}" -gt 0 ]; then
+    echo "Publishability preflight failed: missing expected files in ${target_dir}." >&2
+    printf '%s\n' "Missing: ${missing[*]}" >&2
+    exit 1
+  fi
+
+  local violations="false"
+  local matches=""
+  for pattern in "${patterns[@]}"; do
+    matches="$(grep -REn -e "$pattern" "${scan_paths[@]}" || true)"
+    if [ -n "$matches" ]; then
+      echo "Publishability preflight failed. Disallowed pattern detected: $pattern" >&2
+      echo "$matches" >&2
+      violations="true"
+    fi
+  done
+
+  if [ "$violations" = "true" ]; then
+    echo "Resolve the flagged content before creating the role repository." >&2
+    exit 1
+  fi
+}
+
 if ! gh auth status --hostname github.com >/dev/null 2>&1; then
   echo "GitHub CLI is not authenticated. Run: gh auth login" >&2
   exit 1
@@ -168,6 +226,8 @@ if [ "$FORCE" = "true" ]; then
 fi
 
 "$RENDER_SCRIPT" "${render_args[@]}"
+
+run_publishability_preflight "$OUTPUT_DIR"
 
 if [ "$DRY_RUN" = "true" ]; then
   echo
