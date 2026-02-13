@@ -24,6 +24,8 @@ Use it for:
 
 Codex devcontainer startup currently materializes this composition into:
 
-- `<workspace>/.role.instructions.md`
+- `/workspace/instructions/role-instructions.md`
+- `/workspace/instructions/AGENTS.md`
+- `/workspace/instructions/copilot-instructions.md`
 
 Other runtimes should consume the same source files directly or generate equivalent runtime artifacts.
