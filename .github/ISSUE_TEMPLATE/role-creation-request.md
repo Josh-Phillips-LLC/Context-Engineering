@@ -24,6 +24,8 @@ labels: ["change-request"]
 - [ ] Add role profile env at `.devcontainer-workstation/codex/role-profiles/<role-slug>.env`
 - [ ] Wire role in `.devcontainer-workstation/docker-compose.yml`
 - [ ] Wire role in `.devcontainer-workstation/docker-compose.ghcr.yml`
+- [ ] Update launcher touchpoints in `.devcontainer-workstation/scripts/start-role-workstation.sh`
+- [ ] Update launcher guidance in `.devcontainer-workstation/README.md` if role lists/examples are present
 - [ ] Add role to `.github/workflows/sync-role-repos.yml` matrix
 - [ ] Add role to `.github/workflows/publish-role-workstation-images.yml` matrix
 - [ ] Create public role repo scaffold via `create-public-role-repo.sh`

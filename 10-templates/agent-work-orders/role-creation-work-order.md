@@ -21,6 +21,8 @@ List the **only** files/folders the Implementation Specialist may modify for thi
   - `.devcontainer-workstation/codex/role-profiles/<role-slug>.env`
   - `.devcontainer-workstation/docker-compose.yml`
   - `.devcontainer-workstation/docker-compose.ghcr.yml`
+  - `.devcontainer-workstation/scripts/start-role-workstation.sh`
+  - `.devcontainer-workstation/README.md`
   - `.github/workflows/sync-role-repos.yml`
   - `.github/workflows/publish-role-workstation-images.yml`
   - `10-templates/repo-starters/role-repo-template/**` (only if template source changes are explicitly required)
@@ -87,13 +89,17 @@ Provide deterministic edits and execution steps.
   - `.devcontainer-workstation/docker-compose.yml`
   - `.devcontainer-workstation/docker-compose.ghcr.yml`
 
-### 5) Add role to sync/publish workflow matrices
+### 5) Update workstation launcher touchpoints
+- Update role selection/mapping in `.devcontainer-workstation/scripts/start-role-workstation.sh`.
+- Update launcher guidance in `.devcontainer-workstation/README.md` if role-specific examples or role lists are included.
+
+### 6) Add role to sync/publish workflow matrices
 - Update role matrix entries in:
   - `.github/workflows/sync-role-repos.yml`
   - `.github/workflows/publish-role-workstation-images.yml`
 - Ensure role repo naming is consistent (`context-engineering-role-<role-slug>`).
 
-### 6) Run role onboarding preflight validator
+### 7) Run role onboarding preflight validator
 Run:
 ```bash
 10-templates/repo-starters/role-repo-template/scripts/validate-role-onboarding.sh \
@@ -101,7 +107,7 @@ Run:
 ```
 Address any missing touchpoints before continuing.
 
-### 7) Create public role repo and initial scaffold
+### 8) Create public role repo and initial scaffold
 Run:
 ```bash
 10-templates/repo-starters/role-repo-template/scripts/create-public-role-repo.sh \
@@ -109,7 +115,7 @@ Run:
   --owner <github-owner>
 ```
 
-### 8) Verify sync automation and role-repo PR
+### 9) Verify sync automation and role-repo PR
 Run sync workflow (manual or push-triggered) and verify:
 - Role sync job succeeds
 - Sync PR exists in role repo from `sync/role-repo/<role-slug>` to `main`
@@ -119,11 +125,11 @@ Run sync workflow (manual or push-triggered) and verify:
   - `.vscode/settings.json`
   - `README.md`
 
-### 9) Verify image publish and container usability
+### 10) Verify image publish and container usability
 Run publish workflow and verify role job succeeds.
 Validate published image pull/run for the new role profile and confirm instruction files resolve in runtime.
 
-### 10) Capture evidence in PR
+### 11) Capture evidence in PR
 Include run URLs and verification notes for:
 - Role repo creation
 - Sync workflow
@@ -138,6 +144,7 @@ Use checkboxes. Keep these binary.
 - [ ] Role job spec exists at `10-templates/job-description-spec/roles/<role-slug>.json`
 - [ ] Role profile env exists at `.devcontainer-workstation/codex/role-profiles/<role-slug>.env`
 - [ ] Role is wired in both compose files
+- [ ] Launcher touchpoints updated in `.devcontainer-workstation/scripts/start-role-workstation.sh` and `.devcontainer-workstation/README.md`
 - [ ] Role is wired in sync and publish workflow matrices
 - [ ] Public role repo exists at `<github-owner>/context-engineering-role-<role-slug>`
 - [ ] Sync workflow role job succeeded and produced/updated role-repo PR
