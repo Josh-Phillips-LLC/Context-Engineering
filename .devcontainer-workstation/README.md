@@ -283,6 +283,7 @@ Published GHCR role packages are role-repo driven:
 
 - Build pipeline fetches each role repo and uses role-repo `AGENTS.md` as runtime instruction source for that role image.
 - If role-repo source is unavailable in build context, image build falls back to repository-governed instruction sources in `Context-Engineering`.
+- Publish fails when the role-repo `AGENTS.md` `Source ref` does not match the current `Context-Engineering` commit; rerun sync and publish after the sync PR merges.
 - Governance remains authoritative in `Context-Engineering`; role repos are generated/synced distribution artifacts.
 
 To update the default Codex settings for this workstation config:

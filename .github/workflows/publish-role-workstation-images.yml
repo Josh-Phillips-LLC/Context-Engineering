@@ -68,6 +68,22 @@ jobs:
           test -f "role-repo/.github/copilot-instructions.md"
           test -f "role-repo/.vscode/settings.json"
 
+      - name: Validate role repository freshness
+        run: |
+          set -euo pipefail
+          expected_ref="$(git rev-parse --short HEAD)"
+          source_ref="$(grep -E "Source ref:" role-repo/AGENTS.md | head -1 | sed -E 's/.*Source ref: `([^`]+)`.*/\1/')"
+          if [ -z "$source_ref" ] || [ "$source_ref" = "unknown" ]; then
+            echo "Role repo AGENTS.md is missing a valid Source ref marker."
+            echo "Run the sync-role-repos workflow to regenerate role repo artifacts."
+            exit 1
+          fi
+          if [ "$source_ref" != "$expected_ref" ]; then
+            echo "Role repo AGENTS.md Source ref ($source_ref) does not match this commit ($expected_ref)."
+            echo "Sync role repos for this commit and rerun publish after the sync PR merges."
+            exit 1
+          fi
+
       - name: Prepare generated runtime role instructions
         id: role_repo_source
         run: |

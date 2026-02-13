@@ -222,6 +222,7 @@ Behavior:
   - `context-engineering-role-systems-architect`
 - Bakes role-repo `AGENTS.md` into `/etc/codex/runtime-role-instructions/<role>.md`.
 - Falls back to Context-Engineering instruction sources only when role-repo artifacts are unavailable in build context.
+- Fails publish if the role-repo `AGENTS.md` `Source ref` does not match the current `Context-Engineering` commit. Run the role-repo sync workflow and rerun publish after the sync PR merges.
 
 Naming and versioning conventions:
 
