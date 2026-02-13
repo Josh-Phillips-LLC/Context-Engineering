@@ -15,6 +15,8 @@ Usage:
     [--sync-branch <sync-branch>] \
     [--pr-title <pr-title>] \
     [--auto-merge] \
+    [--preflight-only] \
+    [--skip-preflight] \
     [--no-pr] \
     [--dry-run]
 
@@ -31,6 +33,8 @@ Optional:
   --sync-branch   Defaults to: sync/role-repo/<role-slug>
   --pr-title      Defaults to role sync title
   --auto-merge    Best-effort request GitHub auto-merge on the sync PR
+  --preflight-only Run publishability preflight and exit without syncing
+  --skip-preflight Skip publishability preflight checks
   --no-pr         Sync branch only, do not create/update PR
   --dry-run       Do everything except git push / PR write
 
@@ -60,6 +64,8 @@ PR_TITLE=""
 CREATE_PR="true"
 DRY_RUN="false"
 AUTO_MERGE="false"
+PREFLIGHT_ONLY="false"
+SKIP_PREFLIGHT="false"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -103,6 +109,14 @@ while [ "$#" -gt 0 ]; do
       AUTO_MERGE="true"
       shift
       ;;
+    --preflight-only)
+      PREFLIGHT_ONLY="true"
+      shift
+      ;;
+    --skip-preflight)
+      SKIP_PREFLIGHT="true"
+      shift
+      ;;
     --no-pr)
       CREATE_PR="false"
       shift
@@ -140,6 +154,67 @@ for cmd in gh git python3; do
     exit 1
   fi
 done
+
+run_publishability_preflight() {
+  local target_dir="$1"
+  local -a scan_files=(
+    "AGENTS.md"
+    "README.md"
+    ".github/copilot-instructions.md"
+    ".vscode/settings.json"
+  )
+  local -a scan_paths=()
+  local -a missing=()
+  local -a patterns=(
+    "BEGIN (RSA|OPENSSH|EC|PGP) PRIVATE KEY"
+    "ghp_[A-Za-z0-9]{36}"
+    "github_pat_[A-Za-z0-9_]{50,}"
+    "ghs_[A-Za-z0-9]{36}"
+    "ghu_[A-Za-z0-9]{36}"
+    "xoxb-[0-9A-Za-z-]{10,}"
+    "sk-[A-Za-z0-9_-]{20,}"
+    "sk_[A-Za-z0-9_-]{20,}"
+    "AKIA[0-9A-Z]{16}"
+    "ASIA[0-9A-Z]{16}"
+    "\\b10\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\b"
+    "\\b192\\.168\\.[0-9]{1,3}\\.[0-9]{1,3}\\b"
+    "\\b172\\.(1[6-9]|2[0-9]|3[0-1])\\.[0-9]{1,3}\\.[0-9]{1,3}\\b"
+    "\\.internal\\b"
+    "\\.corp\\b"
+    "\\.lan\\b"
+    "\\.local\\b"
+  )
+
+  for file in "${scan_files[@]}"; do
+    if [ -f "${target_dir}/${file}" ]; then
+      scan_paths+=("${target_dir}/${file}")
+    else
+      missing+=("${file}")
+    fi
+  done
+
+  if [ "${#missing[@]}" -gt 0 ]; then
+    echo "Publishability preflight failed: missing expected files in ${target_dir}." >&2
+    printf '%s\n' "Missing: ${missing[*]}" >&2
+    exit 1
+  fi
+
+  local violations="false"
+  local matches=""
+  for pattern in "${patterns[@]}"; do
+    matches="$(grep -REn -e "$pattern" "${scan_paths[@]}" || true)"
+    if [ -n "$matches" ]; then
+      echo "Publishability preflight failed. Disallowed pattern detected: $pattern" >&2
+      echo "$matches" >&2
+      violations="true"
+    fi
+  done
+
+  if [ "$violations" = "true" ]; then
+    echo "Resolve the flagged content before syncing the role repository." >&2
+    exit 1
+  fi
+}
 
 if [ -z "${GH_TOKEN:-}" ] && [ -n "${GITHUB_TOKEN:-}" ]; then
   export GH_TOKEN="$GITHUB_TOKEN"
@@ -200,6 +275,15 @@ if [ -n "$ROLE_NAME" ]; then
 fi
 
 "$RENDER_SCRIPT" "${render_args[@]}" >/dev/null
+
+if [ "$SKIP_PREFLIGHT" != "true" ]; then
+  run_publishability_preflight "$RENDER_DIR"
+fi
+
+if [ "$PREFLIGHT_ONLY" = "true" ]; then
+  echo "Publishability preflight succeeded for ${ROLE_SLUG}."
+  exit 0
+fi
 
 git clone "https://github.com/${FULL_REPO}.git" "$TARGET_DIR" --branch "$BASE_BRANCH" --single-branch >/dev/null
 

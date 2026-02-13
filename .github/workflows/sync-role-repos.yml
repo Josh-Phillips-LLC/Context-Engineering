@@ -146,6 +146,29 @@ jobs:
           gh auth status --hostname github.com
           gh auth setup-git
 
+      - name: Publishability preflight
+        if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          SOURCE_REF_INPUT: ${{ github.event.inputs.source_ref }}
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          source_ref="$SOURCE_REF_INPUT"
+          if [ -z "$source_ref" ]; then
+            source_ref="$(printf '%s' "$GIT_SHA" | cut -c1-7)"
+          fi
+
+          args=(
+            --role-slug "${{ matrix.role_slug }}"
+            --owner "${{ steps.owner.outputs.owner }}"
+            --repo-name "${{ matrix.repo_name }}"
+            --source-ref "$source_ref"
+            --preflight-only
+          )
+
+          10-templates/repo-starters/role-repo-template/scripts/sync-role-repo.sh "${args[@]}"
+
       - name: Sync role repository
         if: ${{ steps.role_filter.outputs.run_sync == 'true' }}
         env:
@@ -171,6 +194,7 @@ jobs:
             --owner "${{ steps.owner.outputs.owner }}"
             --repo-name "${{ matrix.repo_name }}"
             --source-ref "$source_ref"
+            --skip-preflight
           )
 
           if [ "$DRY_RUN_INPUT" = "true" ]; then

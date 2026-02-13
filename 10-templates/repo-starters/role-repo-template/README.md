@@ -182,6 +182,27 @@ Example:
   --role-slug implementation-specialist
 ```
 
+## Publishability Preflight Gate
+
+Role-repo create and sync automation run a publishability preflight gate before any publish action.
+The gate scans generated role-repo artifacts for disallowed patterns and fails fast when detected.
+
+Patterns checked:
+
+- Private key headers (RSA/OPENSSH/EC/PGP)
+- GitHub tokens (`ghp_`, `github_pat_`, `ghs_`, `ghu_`)
+- Slack bot tokens (`xoxb-`)
+- OpenAI API keys (`sk-`, `sk-proj-`, `sk_` with length guard)
+- AWS access key prefixes (`AKIA`, `ASIA`)
+- Private IP ranges (10/8, 172.16/12, 192.168/16)
+- Internal hostnames (`.internal`, `.corp`, `.lan`, `.local`)
+
+If the preflight fails:
+
+1. Remove or redact the flagged content from the role instruction sources.
+2. Regenerate role-repo artifacts.
+3. Rerun the create/sync automation.
+
 ## GitHub Actions Sync Automation
 
 Workflow:
