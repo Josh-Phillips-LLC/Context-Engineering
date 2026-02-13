@@ -19,6 +19,8 @@ Options:
 Notes:
   - If options are omitted, the script prompts interactively.
   - In app mode, --pem-path is required (or prompted).
+  - After startup, if Codex is unauthenticated, the script prompts
+    whether to run device auth.
   - The PEM is mounted as a compose secret at:
     /run/secrets/role_github_app_private_key
 EOF
@@ -246,12 +248,64 @@ if [ "$SOURCE" = "local" ]; then
 fi
 UP_ARGS+=("$SERVICE_NAME")
 
+has_interactive_tty() {
+  [ -t 0 ] && [ -t 1 ]
+}
+
+run_codex_auth_flow() {
+  if ! docker exec "$SERVICE_NAME" sh -lc 'command -v codex >/dev/null 2>&1'; then
+    echo "Warning: 'codex' CLI is not available in ${SERVICE_NAME}; skipping Codex auth flow." >&2
+    return 0
+  fi
+
+  if docker exec "$SERVICE_NAME" sh -lc 'codex login status >/dev/null 2>&1'; then
+    echo "Codex auth already active in ${SERVICE_NAME}."
+    return 0
+  fi
+
+  if ! has_interactive_tty; then
+    echo "Skipping Codex auth setup prompt in non-interactive shell."
+    echo "Run this manually after attach:"
+    echo "  docker exec -it ${SERVICE_NAME} sh -lc 'codex login --device-auth || codex login'"
+    return 0
+  fi
+
+  read -r -p "Codex is not authenticated in ${SERVICE_NAME}. Set up Codex auth now? [Y/n]: " codex_auth_choice
+  case "${codex_auth_choice:-y}" in
+    y|Y|yes|YES) ;;
+    *)
+      echo "Skipped Codex auth setup by operator choice."
+      return 0
+      ;;
+  esac
+
+  echo "Starting Codex device auth inside ${SERVICE_NAME}..."
+  if ! docker exec -it "$SERVICE_NAME" sh -lc 'if codex login --help 2>/dev/null | grep -q -- "--device-auth"; then codex login --device-auth; else codex login; fi'; then
+    echo "Warning: Codex device auth command failed." >&2
+    return 1
+  fi
+
+  if docker exec "$SERVICE_NAME" sh -lc 'codex login status >/dev/null 2>&1'; then
+    echo "Codex auth verified in ${SERVICE_NAME}."
+    echo "If VS Code chat still shows 'Sign in with ChatGPT', run: Developer: Reload Window"
+    return 0
+  fi
+
+  echo "Warning: Codex login completed but status check still failed in ${SERVICE_NAME}." >&2
+  echo "Run this manually to troubleshoot:" >&2
+  echo "  docker exec -it ${SERVICE_NAME} sh -lc 'codex login status'" >&2
+  return 1
+}
+
 echo "Starting ${SERVICE_NAME} (${ROLE_PROFILE}) using ${SOURCE}..."
 env "${ENV_ARGS[@]}" "${COMPOSE_CMD[@]}" "${COMPOSE_ARGS[@]}" "${UP_ARGS[@]}"
 
 if docker ps --filter "name=^/${SERVICE_NAME}$" --filter "status=running" --format '{{.Names}}' | grep -qx "$SERVICE_NAME"; then
   echo "Container is running: ${SERVICE_NAME}"
   echo "VS Code attach target: ${SERVICE_NAME}"
+  if ! run_codex_auth_flow; then
+    echo "Continuing without verified Codex auth."
+  fi
 else
   echo "Container failed to stay running: ${SERVICE_NAME}" >&2
   echo "Inspect logs with:" >&2
