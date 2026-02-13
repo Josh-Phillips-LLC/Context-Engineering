@@ -160,8 +160,8 @@ It defaults the key path to `/run/secrets/role_github_app_private_key` when not 
 
 If re-mint cannot proceed, it emits explicit errors for:
 
-- missing role app metadata (`ROLE_GITHUB_APP_ID`, `ROLE_GITHUB_APP_INSTALLATION_ID`, `ROLE_GITHUB_APP_PRIVATE_KEY_PATH`)
-- unreadable/missing PEM secret mount
+- missing role app metadata (`ROLE_GITHUB_APP_ID`, `ROLE_GITHUB_APP_INSTALLATION_ID`)
+- unreadable/missing PEM secret mount at resolved key path (defaults to `/run/secrets/role_github_app_private_key`)
 - non-interactive sessions (no TTY) where prompting is not possible
 
 Typical issue-first usage:
