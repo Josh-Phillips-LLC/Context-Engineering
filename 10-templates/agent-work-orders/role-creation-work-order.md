@@ -93,7 +93,15 @@ Provide deterministic edits and execution steps.
   - `.github/workflows/publish-role-workstation-images.yml`
 - Ensure role repo naming is consistent (`context-engineering-role-<role-slug>`).
 
-### 6) Create public role repo and initial scaffold
+### 6) Run role onboarding preflight validator
+Run:
+```bash
+10-templates/repo-starters/role-repo-template/scripts/validate-role-onboarding.sh \
+  --role-slug <role-slug>
+```
+Address any missing touchpoints before continuing.
+
+### 7) Create public role repo and initial scaffold
 Run:
 ```bash
 10-templates/repo-starters/role-repo-template/scripts/create-public-role-repo.sh \
@@ -101,7 +109,7 @@ Run:
   --owner <github-owner>
 ```
 
-### 7) Verify sync automation and role-repo PR
+### 8) Verify sync automation and role-repo PR
 Run sync workflow (manual or push-triggered) and verify:
 - Role sync job succeeds
 - Sync PR exists in role repo from `sync/role-repo/<role-slug>` to `main`
@@ -111,11 +119,11 @@ Run sync workflow (manual or push-triggered) and verify:
   - `.vscode/settings.json`
   - `README.md`
 
-### 8) Verify image publish and container usability
+### 9) Verify image publish and container usability
 Run publish workflow and verify role job succeeds.
 Validate published image pull/run for the new role profile and confirm instruction files resolve in runtime.
 
-### 9) Capture evidence in PR
+### 10) Capture evidence in PR
 Include run URLs and verification notes for:
 - Role repo creation
 - Sync workflow

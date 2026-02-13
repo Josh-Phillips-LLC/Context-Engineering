@@ -163,6 +163,25 @@ Dry-run example:
   --dry-run
 ```
 
+## Role Onboarding Preflight Validator
+
+Script:
+
+- `scripts/validate-role-onboarding.sh`
+
+This script checks required role onboarding touchpoints for a given role slug.
+
+Required args:
+
+- `--role-slug`
+
+Example:
+
+```bash
+10-templates/repo-starters/role-repo-template/scripts/validate-role-onboarding.sh \
+  --role-slug implementation-specialist
+```
+
 ## GitHub Actions Sync Automation
 
 Workflow:
