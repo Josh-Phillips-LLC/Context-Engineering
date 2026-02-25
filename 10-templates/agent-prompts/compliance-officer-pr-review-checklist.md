@@ -24,6 +24,12 @@ Canonical review brief and required PR Review Report format: `10-templates/compl
 - [ ] Templates/checklists used instead of long prose where applicable
 - [ ] TODOs added where human judgment is required
 
+## Regression Testing Gate
+- [ ] PR includes regression testing evidence aligned to `00-os/regression-testing.md`
+- [ ] Risk tier declared (`Low` / `Medium` / `High`)
+- [ ] Behavior changes include regression tests, or explicit no-test justification + follow-up issue
+- [ ] Flaky checks handled per policy (retry once max; unresolved flake linked before merge)
+
 ## Role Attribution Verification
 - [ ] Commit messages include role prefixes ([Implementation Specialist], [Compliance Officer], [AI Governance Manager], [Business Analyst], [Executive Sponsor])
 - [ ] PR title or labels identify the primary role
@@ -66,6 +72,3 @@ Label changes may be executed using GitHub UI, API/automation, or `gh`. If using
 
 Compliance Officer (Codex assignment) must request permission before executing shell commands.
 Compliance Officer (Codex assignment) must not merge the PR.
-
-## TODO
-- Add repo-specific gates (tests, lint, etc.).

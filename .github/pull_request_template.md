@@ -34,6 +34,19 @@ Allowed values:
 - [ ] Templates/checklists used instead of long prose where applicable
 - [ ] TODOs added where human judgment is required
 
+# Regression Testing (Required for behavior changes)
+- [ ] Risk tier declared (`Low` / `Medium` / `High`) per `00-os/regression-testing.md`
+- [ ] Behavior changes include regression tests, or explicit no-test justification + follow-up issue
+- [ ] Required checks for the declared tier passed
+- [ ] Flaky checks handled per policy (retry once max; unresolved flake linked before merge)
+
+Regression Testing Notes:
+- Risk tier:
+- Behavior change:
+- Tests/checks run:
+- No-test justification (if applicable):
+- Follow-up issue (if applicable):
+
 # Protected Changes Logic
 - [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → Executive Sponsor approval required
 - [ ] Plane A/B boundary changes detected → Executive Sponsor approval required

@@ -13,6 +13,7 @@
 - Every PR must map to an existing Issue.
 - Branch creation for Issue work must use `gh issue develop <ISSUE_NUMBER> --checkout` (no manual `git checkout -b`).
 - Issues must define objective, scope, constraints, and definition of done.
+- Behavior-changing PRs must include regression testing evidence per `00-os/regression-testing.md`.
 
 ## Issue/PR Triage
 - **Blocker**: must be resolved in the current PR before approval/merge.

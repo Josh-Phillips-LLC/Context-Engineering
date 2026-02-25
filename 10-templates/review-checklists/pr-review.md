@@ -15,6 +15,12 @@
 - [ ] Templates/checklists used instead of long prose where applicable
 - [ ] TODOs added where human judgment is required
 
+## Regression Testing Gate
+- [ ] PR includes regression testing evidence aligned to `00-os/regression-testing.md`
+- [ ] Risk tier declared (`Low` / `Medium` / `High`)
+- [ ] Behavior changes include regression tests, or explicit no-test justification + follow-up issue
+- [ ] Flaky checks handled per policy (retry once max; unresolved flake linked before merge)
+
 ## Role Attribution Verification
 - [ ] Commit messages include role prefixes ([Implementation Specialist], [Compliance Officer], [AI Governance Manager], [Business Analyst], [Executive Sponsor])
 - [ ] PR title or labels identify the primary role
@@ -32,6 +38,3 @@
 - [ ] Approve
 - [ ] Request changes (list blockers)
 - [ ] Escalate to Executive Sponsor
-
-## TODO
-- Add repo-specific gates (tests, lint, etc.).
