@@ -87,6 +87,33 @@ Runbooks provide step-by-step procedures for:
 
 **Related artifacts:** `00-os/governed-repos.yml`, `.context-engineering/governance.yml`, `00-os/scripts/validate-governance-ownership.py`
 
+### [Governance Label Bootstrap](./governance-label-bootstrap.md)
+
+**When to use:** Repository lacks canonical governance labels (`role:*`, `status:*`) required by review/label workflows
+
+**Scope:** Any repo entering governance adoption or receiving governance-driven PR review actions
+
+**Key processes:**
+- Deterministic and idempotent canonical label creation
+- Preflight readiness before role/status label operations
+- Post-bootstrap verification of required label set
+
+**Related script:** `00-os/scripts/bootstrap-governance-labels.sh`
+
+### [Split Repository Cutover and Rollback](./split-repository-cutover-and-rollback.md)
+
+**When to use:** Executing or auditing ADR 0002 split cutover, documenting rollback triggers, or validating legacy mixed-layout deprecation controls
+
+**Scope:** `Context-Engineering` legacy mixed-layout repo and split authority repos (`context-engineering-governance`, `context-engineering-implementation`)
+
+**Key processes:**
+- Freeze-point and change-routing enforcement during cutover
+- Split dependency/contract and role-sync verification checks
+- Rollback trigger criteria and temporary legacy execution restoration
+- Cutover evidence and closure documentation requirements
+
+**Related artifacts:** `REPOSITORY_SOURCE_OF_TRUTH_MAP.md`, `MIXED_LAYOUT_DEPRECATION_NOTICE.md`, `00-os/adr/0002-split-context-engineering-into-governance-and-implementation-repos.md`
+
 ---
 
 ## Runbook Standards

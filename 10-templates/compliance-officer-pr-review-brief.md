@@ -73,11 +73,32 @@ Verify that the PR:
 
 - Introduces **no secrets, tokens, internal hostnames, or personal data**
 - Does **not modify protected files** without explicit intent and justification
+- Declares ADR applicability for architecture/protected decisions (`ADR-Required: Yes|No`)
+- If ADR is required, includes `Primary-ADR` and `ADR-Status-At-Merge: Accepted|Exception`
+- If ADR status is `Exception`, includes explicit compensating evidence and Executive Sponsor approval signal
+- If replacing a decision, includes supersession traceability in PR metadata and reciprocal ADR metadata updates
 - Does **not introduce new top-level folders** without instruction
 - Keeps changes **scoped to the PR’s stated objective**
 - Prefers **templates and checklists over long prose**
 - Adds **TODOs** where human judgment or future work is required
 - Uses **canonical role terminology** in PR metadata, labels, and approval language (no legacy terms like CEO, Director of AI Context, role:CEO, CEO-Approval)
+
+### 3.1 ADR enforcement decision rule (deterministic)
+
+Determine whether ADR is required using these criteria:
+
+- ADR is required when the PR introduces or modifies architecture-level decisions.
+- ADR is required when the PR introduces or modifies operating-model decisions.
+- ADR is required when the PR impacts protected paths.
+
+When ADR is required, the Compliance Officer MUST issue **REQUEST CHANGES** (merge-blocking) if any required ADR evidence is missing:
+
+- ADR artifact present under `00-os/adr/`
+- Required ADR metadata keys and required sections per `00-os/adr/README.md`
+- Valid ADR lifecycle status for merge context per `00-os/adr/README.md`
+- Required issue/PR linkage and ADR traceability metadata in PR body (`ADR-Required`, `Primary-ADR`, `ADR-Status-At-Merge`, and supersession traceability when applicable)
+
+When ADR is not required, do not raise an ADR blocker.
 
 ---
 

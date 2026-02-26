@@ -2,12 +2,34 @@
 - 
 
 # Issue
-- Linked issue (must close):
-- Closes #
+- Linked issue (primary tracked issue):
+- Primary-Issue-Ref: Closes #
+- Additional issue references (optional):
+- Refs #
 
-# Issue-Backed Branching (Required)
-- [ ] Branch created via `gh issue develop <ISSUE_NUMBER> --checkout`
-- [ ] PR description links and closes the Issue (example: `Closes #<ISSUE_NUMBER>`)
+# Issue Linkage (Outcome-Based, Required)
+- [ ] Exactly one primary tracked issue is declared using `Primary-Issue-Ref: Closes #<ISSUE_NUMBER>` or `Primary-Issue-Ref: Refs #<ISSUE_NUMBER>`
+- [ ] Primary issue shows this PR in GitHub Development before merge, or an explicit exception with compensating evidence is documented
+- [ ] `gh issue develop <ISSUE_NUMBER> --checkout` was used where practical (recommended, not mandatory)
+
+# Development Linkage Evidence (Required)
+- Development-Linkage: Verified
+- Development-Linkage-Evidence:
+- If exception is required instead of verified linkage:
+  - Development-Linkage: Exception
+  - Development-Linkage-Evidence: <why linkage is blocked + compensating evidence>
+
+# ADR Linkage (Required for architecture/protected changes)
+- ADR-Required: No
+- Primary-ADR: N/A
+- ADR-Status-At-Merge: N/A
+- ADR-Exception-Evidence: N/A
+- ADR-Supersession-Traceability: N/A
+- Set `ADR-Required: Yes` when this PR introduces or changes architecture decisions, protected-path policy/process decisions, or operating-model structure.
+- `Primary-ADR` must reference an ADR artifact using either canonical filename (`0001-...`) or `ADR-<ID>`.
+- `ADR-Status-At-Merge` allowed values: `Accepted | Exception | N/A`.
+- If `ADR-Status-At-Merge: Exception`, provide explicit compensating evidence in `ADR-Exception-Evidence` and ensure Executive Sponsor approval is recorded before merge.
+- If this PR replaces a prior decision, set `ADR-Supersession-Traceability` to `Supersedes: <ADR-ID>` or `Superseded-By: <ADR-ID>` (otherwise `N/A`).
 
 # Machine-Readable Metadata (Required)
 Primary-Role: Implementation Specialist
@@ -50,6 +72,8 @@ Regression Testing Notes:
 # Protected Changes Logic
 - [ ] `governance.md`, `context-flow.md`, or `00-os/` touched → Executive Sponsor approval required
 - [ ] Plane A/B boundary changes detected → Executive Sponsor approval required
+- [ ] Architecture/protected decision changes include ADR linkage (`ADR-Required: Yes`, `Primary-ADR`, `ADR-Status-At-Merge`)
+- [ ] Replacing decisions include `ADR-Supersession-Traceability` and reciprocal ADR metadata updates
 
 # Low-Risk Fast-Track
 - [ ] Only low-risk paths changed (10-templates/, 30-vendor-notes/, new 20-canvases/)
