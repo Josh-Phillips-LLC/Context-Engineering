@@ -29,6 +29,7 @@ on:
           - compliance-officer
           - systems-architect
           - hr-ai-agent-specialist
+          - dispatcher
 # GENERATED:END:ROLE_CHOICES
       owner:
         description: Optional GitHub owner override
@@ -81,6 +82,10 @@ jobs:
             repo_name: context-engineering-role-hr-ai-agent-specialist
             app_id_secret: HR_AI_AGENT_SPECIALIST_APP_ID
             private_key_secret: HR_AI_AGENT_SPECIALIST_APP_PRIVATE_KEY
+          - role_slug: dispatcher
+            repo_name: context-engineering-role-dispatcher
+            app_id_secret: DISPATCHER_APP_ID
+            private_key_secret: DISPATCHER_APP_PRIVATE_KEY
 # GENERATED:END:ROLE_MATRIX
 
     steps:

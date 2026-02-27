@@ -122,6 +122,31 @@ roles:
     menu_order: 4
     menu_label: "hraias"
 
+  - slug: dispatcher
+    display_name: Dispatcher
+    shorthand: dispatcher
+    repo_name: context-engineering-role-dispatcher
+    git_identity:
+      name: a-dispatcher[bot]
+      email: 000000000+a-dispatcher[bot]@users.noreply.github.com
+
+    github_app:
+      app_id_secret: DISPATCHER_APP_ID
+      app_id_value: 0
+      private_key_secret: DISPATCHER_APP_PRIVATE_KEY
+      installation_id_secret: DISPATCHER_APP_INSTALLATION_ID
+      installation_id_value: 0
+      env_prefix: DISPATCHER
+
+    compose:
+      service_name: dispatcher-workstation
+      profile: dispatcher
+      image_suffix: dispatcher
+      volume_prefix: dispatcher
+
+    menu_order: 5
+    menu_label: "dispatcher"
+
 # Configuration templates for role wiring
 templates:
   workflow_sync_matrix_item: |

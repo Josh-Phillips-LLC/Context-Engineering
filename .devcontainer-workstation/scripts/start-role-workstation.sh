@@ -10,7 +10,7 @@ Usage:
   start-role-workstation.sh [options]
 
 Options:
-  --role <implementation|compliance|systems-architect|hraias>
+  --role <implementation|compliance|systems-architect|hraias|dispatcher>
   --auth-mode <app|user>
   --pem-path <host_path_to_pem>
   --source <ghcr|local>
@@ -57,6 +57,7 @@ normalize_role() {
     compliance|compliance-officer) echo "compliance" ;;
     systems-architect) echo "systems-architect" ;;
     hraias|hr-ai-agent-specialist) echo "hraias" ;;
+    dispatcher) echo "dispatcher" ;;
 # GENERATED:END:NORMALIZE_ROLE_CASES
     *) return 1 ;;
   esac
@@ -165,6 +166,7 @@ if [ -z "$ROLE" ]; then
   echo "  2) compliance"
   echo "  3) systems-architect"
   echo "  4) hraias"
+  echo "  5) dispatcher"
 # GENERATED:END:ROLE_MENU
   read -r -p "Choice [2]: " role_choice
   case "${role_choice:-2}" in
@@ -173,6 +175,7 @@ if [ -z "$ROLE" ]; then
     2) ROLE="compliance" ;;
     3) ROLE="systems-architect" ;;
     4) ROLE="hraias" ;;
+    5) ROLE="dispatcher" ;;
 # GENERATED:END:ROLE_MENU_CASE
     *)
       echo "Invalid role choice." >&2
@@ -212,6 +215,12 @@ case "$ROLE" in
     SERVICE_NAME="hr-ai-agent-specialist-workstation"
     PROFILE_NAME="hr-ai-agent-specialist"
     ROLE_ENV_PREFIX="HR_AI_AGENT_SPECIALIST"
+    ;;
+  dispatcher)
+    ROLE_PROFILE="dispatcher"
+    SERVICE_NAME="dispatcher-workstation"
+    PROFILE_NAME="dispatcher"
+    ROLE_ENV_PREFIX="DISPATCHER"
     ;;
 # GENERATED:END:ROLE_MAPPING_CASES
 esac

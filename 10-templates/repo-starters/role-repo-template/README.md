@@ -217,6 +217,8 @@ Behavior:
   - `implementation-specialist`
   - `compliance-officer`
   - `systems-architect`
+  - `hr-ai-agent-specialist`
+  - `dispatcher`
 - Requests auto-merge on generated sync PRs by default (unless `no_pr`/`dry_run` is used or manual `auto_merge` input is disabled).
 - Auto-merge request is best-effort and non-fatal; sync still succeeds if repo policy blocks auto-merge.
 
@@ -228,6 +230,10 @@ Required secret:
 - `COMPLIANCE_OFFICER_APP_PRIVATE_KEY`
 - `SYSTEMS_ARCHITECT_APP_ID`
 - `SYSTEMS_ARCHITECT_APP_PRIVATE_KEY`
+- `HR_AI_AGENT_SPECIALIST_APP_ID`
+- `HR_AI_AGENT_SPECIALIST_APP_PRIVATE_KEY`
+- `DISPATCHER_APP_ID`
+- `DISPATCHER_APP_PRIVATE_KEY`
 
 These secrets must map to GitHub Apps installed on the target role repositories. The sync workflow mints a short-lived installation token per role and uses it as `GH_TOKEN` for `gh` and git operations.
 
@@ -260,6 +266,8 @@ Behavior:
   - `context-engineering-role-implementation-specialist`
   - `context-engineering-role-compliance-officer`
   - `context-engineering-role-systems-architect`
+  - `context-engineering-role-hr-ai-agent-specialist`
+  - `context-engineering-role-dispatcher`
 - Bakes role-repo `AGENTS.md` into `/etc/codex/runtime-role-instructions/<role>.md`.
 - Falls back to Context-Engineering instruction sources only when role-repo artifacts are unavailable in build context.
 - Fails publish if the role-repo `AGENTS.md` `Source ref` does not match the current `Context-Engineering` commit. Run the role-repo sync workflow and rerun publish after the sync PR merges.

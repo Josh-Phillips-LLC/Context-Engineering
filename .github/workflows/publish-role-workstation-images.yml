@@ -47,6 +47,9 @@ jobs:
           - role_profile: hr-ai-agent-specialist
             image_suffix: hr-ai-agent-specialist
             role_repo: context-engineering-role-hr-ai-agent-specialist
+          - role_profile: dispatcher
+            image_suffix: dispatcher
+            role_repo: context-engineering-role-dispatcher
 # GENERATED:END:ROLE_MATRIX
 
     steps:

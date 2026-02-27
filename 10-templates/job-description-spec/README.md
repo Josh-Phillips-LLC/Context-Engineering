@@ -19,6 +19,8 @@ Structured source inputs for deterministic assembly of role-repo `AGENTS.md` fil
 ## Current role specs
 
 - `roles/compliance-officer.json`
+- `roles/dispatcher.json`
+- `roles/hr-ai-agent-specialist.json`
 - `roles/implementation-specialist.json`
 - `roles/systems-architect.json`
 
